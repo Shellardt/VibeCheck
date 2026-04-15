@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Vibe Check · Curated Cafe Solo Raya</title>
+  <!-- Bootstrap 5 + Icons + Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    body {
+      background: #f4f7fc;
+      transition: background 0.3s, color 0.2s;
+    }
+    body.dark-mode {
+      background: #0f172a;
+      color: #eef2ff;
+    }
+    body.dark-mode .card, body.dark-mode .bento-card, body.dark-mode .modal-content {
+      background: rgba(30, 41, 59, 0.85) !important;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #f1f5f9;
+    }
+    body.dark-mode .vibe-filter {
+      background: rgba(30, 41, 59, 0.7) !important;
+    }
+    .card, .bento-card {
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      border: 1px solid rgba(255,255,255,0.5);
+      transition: transform 0.2s ease, box-shadow 0.2s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+    }
+    .bento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15);
+    }
+    .vibe-filter {
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 60px;
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(4px);
+      font-weight: 600;
+    }
+    .vibe-filter.active {
+      background: #2b3b2c;
+      color: white;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+    }
+    .btn-electric {
+      background: #1e5af7;
+      border: none;
+      border-radius: 40px;
+      padding: 12px 24px;
+      font-weight: 600;
+      color: white;
+      transition: 0.2s;
+    }
+    .btn-electric:hover {
+      background: #0a44cc;
+      transform: scale(0.97);
+    }
+    .btn-outline-electric {
+      border: 1.5px solid #1e5af7;
+      border-radius: 40px;
+      background: transparent;
+      color: #1e5af7;
+      font-weight: 600;
+      padding: 10px 20px;
+    }
+    .cafe-card {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cafe-card.selected {
+      border: 2px solid #1e5af7;
+      background: rgba(30, 90, 247, 0.1);
+      transform: scale(1.02);
+    }
+    .cafe-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 20px;
+    }
+    .toast-custom {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1090;
+      background: #1e293b;
+      color: white;
+      border-radius: 60px;
+      padding: 10px 20px;
+      font-weight: 500;
+      opacity: 0;
+      transition: 0.2s;
+      pointer-events: none;
+    }
+    .screen {
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .badge-vibe {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .maps-link {
+      text-decoration: none;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app" class="container py-3" style="max-width: 600px; margin: auto;">
+  <div id="loginScreen" class="screen"></div>
+  <div id="registerScreen" class="screen d-none"></div>
+  <div id="dashboardScreen" class="screen d-none"></div>
+  <div id="profileScreen" class="screen d-none"></div>
+  <div id="cafeDetailScreen" class="screen d-none"></div>
+</div>
+
+<div id="globalToast" class="toast-custom">✨ Copied!</div>
+
+<script>
+  // ==================== STORAGE KEYS ====================
+  const STORAGE_USERS = "vibecheck_users";
+  const STORAGE_SESSION = "vibecheck_session";
+  const STORAGE_PREFS = "vibecheck_prefs";
+
+  // ==================== DATA CAFE SOLO RAYA ====================
+  const cafesData = [
+    {
+      id: 1,
+      name: "Kopi Nalar",
+      vibe: "nugas",
+      location: "Jl. Slamet Riyadi No. 45, Solo",
+      mapsUrl: "https://maps.google.com/?q=Kopi+Nalar+Solo",
+      description: "Tempat nongkrong favorit anak coding dengan suasana tenang dan wifi kenceng. Perfect buat nugas!",
+      image: "https://picsum.photos/id/20/400/300",
+      menu: [
+        { name: "Kopi Susu Gula Aren", price: 28000 },
+        { name: "Iced Latte", price: 32000 },
+        { name: "Matcha Latte", price: 35000 },
+        { name: "French Fries", price: 25000 },
+        { name: "Cheesecake", price: 39000 }
+      ],
+      taxRate: 0.11,
+      serviceCharge: 0.05,
+      facilities: { wifi: "⚡ 100Mbps", outlet: "🔌 8 plugs", mushola: "✅ Ada", noise: "🔇 Sunyi", clean: "⭐ 4.9", staff: "Ramah" }
+    },
+    {
+      id: 2,
+      name: "Space Talk",
+      vibe: "deeptalk",
+      location: "Jl. Dr. Rajiman No. 12, Solo",
+      mapsUrl: "https://maps.google.com/?q=Space+Talk+Solo",
+      description: "Cafe aesthetic dengan konsep ruang terbuka, cocok buat deep talk dan curhat sama bestie.",
+      image: "https://picsum.photos/id/26/400/300",
+      menu: [
+        { name: "Vietnamese Coffee", price: 32000 },
+        { name: "Honey Lemon Tea", price: 25000 },
+        { name: "Taro Latte", price: 33000 },
+        { name: "Spaghetti Aglio", price: 45000 },
+        { name: "Chocolate Lava", price: 35000 }
+      ],
+      taxRate: 0.10,
+      serviceCharge: 0.08,
+      facilities: { wifi: "🛜 50Mbps", outlet: "🔌 4 plugs", mushola: "✅ Ada", noise: "🎧 Musik pelan", clean: "⭐ 4.8", staff: "Baik" }
+    },
+    {
+      id: 3,
+      name: "Sundaze",
+      vibe: "party",
+      location: "Jl. Brigjen Sudiarto No. 88, Solo",
+      mapsUrl: "https://maps.google.com/?q=Sundaze+Solo",
+      description: "Tempat hits dengan live music setiap weekend. Vibesnya party banget!",
+      image: "https://picsum.photos/id/29/400/300",
+      menu: [
+        { name: "Espresso Martini", price: 55000 },
+        { name: "Mocktail Sunrise", price: 42000 },
+        { name: "Beer Bintang", price: 35000 },
+        { name: "Pizza Margherita", price: 65000 },
+        { name: "Chicken Wings", price: 48000 }
+      ],
+      taxRate: 0.11,
+      serviceCharge: 0.10,
+      facilities: { wifi: "📶 30Mbps", outlet: "🔌 2 plugs", mushola: "❌ Tidak", noise: "🔊 Berisik asik", clean: "⭐ 4.7", staff: "Cekatan" }
+    },
+    {
+      id: 4,
+      name: "Work & Wonder",
+      vibe: "nugas",
+      location: "Jl. MH Thamrin No. 23, Solo",
+      mapsUrl: "https://maps.google.com/?q=Work+and+Wonder+Solo",
+      description: "Co-working space plus cafe, fasilitas lengkap buat produktif.",
+      image: "https://picsum.photos/id/30/400/300",
+      menu: [
+        { name: "Long Black", price: 25000 },
+        { name: "Caramel Macchiato", price: 38000 },
+        { name: "Green Tea", price: 20000 },
+        { name: "Nasi Goreng", price: 35000 },
+        { name: "Sandwich", price: 28000 }
+      ],
+      taxRate: 0.11,
+      serviceCharge: 0.05,
+      facilities: { wifi: "🚀 Gigabit", outlet: "🔌 12 plugs", mushola: "✅+", noise: "Sunyi", clean: "⭐ 5.0", staff: "Friendly" }
+    },
+    {
+      id: 5,
+      name: "Obrol Factory",
+      vibe: "deeptalk",
+      location: "Jl. Ahmad Yani No. 67, Solo",
+      mapsUrl: "https://maps.google.com/?q=Obrol+Factory+Solo",
+      description: "Tempat ngobrol seru dengan konsep industrial, nyaman buat diskusi panjang.",
+      image: "https://picsum.photos/id/32/400/300",
+      menu: [
+        { name: "Butterscotch Latte", price: 35000 },
+        { name: "Matcha Frappe", price: 38000 },
+        { name: "Churros", price: 27000 },
+        { name: "Pasta Carbonara", price: 48000 },
+        { name: "Onion Rings", price: 22000 }
+      ],
+      taxRate: 0.10,
+      serviceCharge: 0.07,
+      facilities: { wifi: "🛜 70Mbps", outlet: "🔌 6 plugs", mushola: "✅", noise: "Ambient", clean: "⭐ 4.9", staff: "Warm" }
+    },
+    {
+      id: 6,
+      name: "Afterdark",
+      vibe: "party",
+      location: "Jl. Honggowongso No. 15, Solo",
+      mapsUrl: "https://maps.google.com/?q=Afterdark+Solo",
+      description: "Nightlife spot favorit Gen Z, DJ performance setiap malam minggu.",
+      image: "https://picsum.photos/id/36/400/300",
+      menu: [
+        { name: "Whiskey Sour", price: 65000 },
+        { name: "Mojito", price: 55000 },
+        { name: "French Fries", price: 25000 },
+        { name: "Burger", price: 45000 },
+        { name: "Nachos", price: 35000 }
+      ],
+      taxRate: 0.11,
+      serviceCharge: 0.12,
+      facilities: { wifi: "📱 20Mbps", outlet: "🔌 4 plugs", mushola: "❌", noise: "Loud Music", clean: "⭐ 4.6", staff: "Energy" }
+    }
+  ];
+
+  // Helper functions
+  function simpleHash(pw) {
+    let hash = 0;
+    for (let i = 0; i < pw.length; i++) {
+      hash = ((hash << 5) - hash) + pw.charCodeAt(i);
+      hash |= 0;
+    }
+    return hash.toString(16);
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('globalToast');
+    toast.innerText = msg;
+    toast.style.opacity = '1';
+    setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+  }
+
+  function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('d-none'));
+    document.getElementById(screenId).classList.remove('d-none');
+  }
+
+  // ==================== USER MANAGEMENT ====================
+  function initUsers() {
+    let users = localStorage.getItem(STORAGE_USERS);
+    if (!users) {
+      const defaultUsers = [
+        { id: "1", name: "Vibester", email: "vibe@check.com", passwordHash: simpleHash("vibe123"), vibeStats: { nugas: 70, deepTalk: 30, party: 0 } }
+      ];
+      localStorage.setItem(STORAGE_USERS, JSON.stringify(defaultUsers));
+    }
+  }
+
+  function getCurrentUser() {
+    const session = localStorage.getItem(STORAGE_SESSION);
+    if (!session) return null;
+    try {
+      const { userId } = JSON.parse(session);
+      const users = JSON.parse(localStorage.getItem(STORAGE_USERS) || "[]");
+      return users.find(u => u.id === userId) || null;
+    } catch(e) { return null; }
+  }
+
+  function saveSession(user) {
+    localStorage.setItem(STORAGE_SESSION, JSON.stringify({ userId: user.id, email: user.email, name: user.name }));
+  }
+
+  function clearSession() {
+    localStorage.removeItem(STORAGE_SESSION);
+  }
+
+  function updateUser(updatedUser) {
+    let users = JSON.parse(localStorage.getItem(STORAGE_USERS) || "[]");
+    const idx = users.findIndex(u => u.id === updatedUser.id);
+    if(idx !== -1) users[idx] = updatedUser;
+    localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+    const session = localStorage.getItem(STORAGE_SESSION);
+    if(session) {
+      const sess = JSON.parse(session);
+      if(sess.userId === updatedUser.id) saveSession(updatedUser);
+    }
+  }
+
+  // ==================== GLOBAL STATE ====================
+  let currentUser = null;
+  let activeMoodFilter = "nugas";
+  let selectedCafe = null;
+  let cartItems = [];
+
+  function loadUserPrefs() {
+    if(!currentUser) return;
+    const prefs = localStorage.getItem(STORAGE_PREFS + "_" + currentUser.id);
+    if(prefs) {
+      try {
+        const p = JSON.parse(prefs);
+        activeMoodFilter = p.activeMoodFilter || "nugas";
+        if(p.selectedCafeId) {
+          selectedCafe = cafesData.find(c => c.id === p.selectedCafeId);
+        }
+        cartItems = p.cartItems || [];
+        if(p.darkMode) document.body.classList.add('dark-mode');
+        else document.body.classList.remove('dark-mode');
+      } catch(e) {}
+    }
+  }
+
+  function savePrefs() {
+    if(!currentUser) return;
+    const darkMode = document.body.classList.contains('dark-mode');
+    const prefs = { 
+      activeMoodFilter, 
+      selectedCafeId: selectedCafe?.id || null,
+      cartItems, 
+      darkMode 
+    };
+    localStorage.setItem(STORAGE_PREFS + "_" + currentUser.id, JSON.stringify(prefs));
+  }
+
+  // ==================== RENDER LOGIN ====================
+  function renderLogin() {
+    const container = document.getElementById('loginScreen');
+    container.innerHTML = `
+      <div class="d-flex flex-column align-items-center justify-content-center min-vh-100">
+        <div class="card p-4 w-100 border-0" style="border-radius: 48px;">
+          <h2 class="fw-bold mb-1">Vibe Check</h2>
+          <p class="text-secondary">Cafe curator for Solo Raya ✨</p>
+          <form id="loginForm">
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control rounded-pill" id="loginEmail" placeholder="vibe@check.com" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control rounded-pill" id="loginPassword" required>
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="rememberMe">
+              <label class="form-check-label">Remember Me</label>
+            </div>
+            <button type="submit" class="btn-electric w-100">Login & vibe ➡</button>
+            <p class="text-center mt-3">No account? <a href="#" id="gotoRegisterBtn" class="text-decoration-none fw-bold">Create one</a></p>
+          </form>
+        </div>
+      </div>
+    `;
+    
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const pwd = document.getElementById('loginPassword').value;
+      const remember = document.getElementById('rememberMe').checked;
+      const users = JSON.parse(localStorage.getItem(STORAGE_USERS) || "[]");
+      const user = users.find(u => u.email === email && u.passwordHash === simpleHash(pwd));
+      
+      if(user) {
+        currentUser = user;
+        if(remember) saveSession(user);
+        else localStorage.setItem(STORAGE_SESSION, JSON.stringify({ userId: user.id, email: user.email, name: user.name }));
+        loadUserPrefs();
+        renderDashboard();
+        showToast(`Welcome back, ${user.name}! ✨`);
+      } else {
+        showToast("❌ Email atau password salah");
+      }
+    });
+    
+    document.getElementById('gotoRegisterBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      renderRegister();
+    });
+  }
+
+  function renderRegister() {
+    const container = document.getElementById('registerScreen');
+    container.classList.remove('d-none');
+    container.innerHTML = `
+      <div class="d-flex flex-column align-items-center justify-content-center min-vh-100">
+        <div class="card p-4 w-100 border-0" style="border-radius: 48px;">
+          <h2 class="fw-bold">Join the Vibe</h2>
+          <p class="text-secondary">Discover Solo's best cafes ✨</p>
+          <form id="registerForm">
+            <div class="mb-2">
+              <label>Nama</label>
+              <input type="text" class="form-control rounded-pill" id="regName" required>
+            </div>
+            <div class="mb-2">
+              <label>Email</label>
+              <input type="email" class="form-control rounded-pill" id="regEmail" required>
+            </div>
+            <div class="mb-3">
+              <label>Password (min 6)</label>
+              <input type="password" class="form-control rounded-pill" id="regPassword" required>
+            </div>
+            <button type="submit" class="btn-electric w-100">Register & vibe</button>
+            <p class="text-center mt-3">Sudah punya akun? <a href="#" id="gotoLoginFromReg" class="text-decoration-none">Login</a></p>
+          </form>
+        </div>
+      </div>
+    `;
+    
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const pwd = document.getElementById('regPassword').value;
+      
+      if(pwd.length < 6) { showToast("Password minimal 6 karakter"); return; }
+      if(!email.includes('@')) { showToast("Email tidak valid"); return; }
+      
+      let users = JSON.parse(localStorage.getItem(STORAGE_USERS) || "[]");
+      if(users.find(u => u.email === email)) { showToast("Email sudah terdaftar"); return; }
+      
+      const newUser = {
+        id: Date.now().toString(),
+        name: name,
+        email: email,
+        passwordHash: simpleHash(pwd),
+        vibeStats: { nugas: 60, deepTalk: 30, party: 10 }
+      };
+      users.push(newUser);
+      localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+      currentUser = newUser;
+      saveSession(newUser);
+      loadUserPrefs();
+      renderDashboard();
+      showToast(`Welcome to Vibe Check, ${name}! 🎉`);
+    });
+    
+    document.getElementById('gotoLoginFromReg').addEventListener('click', (e) => {
+      e.preventDefault();
+      showScreen('loginScreen');
+      renderLogin();
+    });
+  }
+
+  // ==================== CAFE DETAIL SCREEN ====================
+  function renderCafeDetail(cafe) {
+    showScreen('cafeDetailScreen');
+    const container = document.getElementById('cafeDetailScreen');
+    
+    container.innerHTML = `
+      <div class="mb-3">
+        <button id="backToDashBtn" class="btn btn-sm rounded-pill border-0 bg-white bg-opacity-50">
+          <i class="bi bi-arrow-left"></i> Back
+        </button>
+      </div>
+      <div class="card bento-card p-0 overflow-hidden">
+        <img src="${cafe.image}" class="cafe-img" alt="${cafe.name}">
+        <div class="p-4">
+          <h3 class="fw-bold">${cafe.name}</h3>
+          <div class="mb-2">
+            <span class="badge-vibe" style="background: ${cafe.vibe === 'nugas' ? '#86b3a2' : cafe.vibe === 'deeptalk' ? '#6c91b2' : '#f59e6b'}20; color: ${cafe.vibe === 'nugas' ? '#2d5a4a' : cafe.vibe === 'deeptalk' ? '#2c4f6e' : '#b45f2b'}">
+              ${cafe.vibe === 'nugas' ? '📚 Nugas' : cafe.vibe === 'deeptalk' ? '💬 Deep Talk' : '🎉 Party'}
+            </span>
+          </div>
+          <p class="text-secondary mb-2"><i class="bi bi-geo-alt"></i> ${cafe.location}</p>
+          <a href="${cafe.mapsUrl}" target="_blank" class="maps-link text-primary mb-3 d-inline-block">
+            <i class="bi bi-map"></i> Buka di Google Maps
+          </a>
+          <p class="mt-2">${cafe.description}</p>
+          
+          <h5 class="mt-4 mb-3"><i class="bi bi-building"></i> Fasilitas</h5>
+          <div class="row g-2 mb-4">
+            <div class="col-6">${cafe.facilities.wifi}</div>
+            <div class="col-6">${cafe.facilities.outlet}</div>
+            <div class="col-6">${cafe.facilities.mushola}</div>
+            <div class="col-6">${cafe.facilities.noise}</div>
+            <div class="col-6">${cafe.facilities.clean}</div>
+            <div class="col-6">Staf: ${cafe.facilities.staff}</div>
+          </div>
+          
+          <h5 class="mb-3"><i class="bi bi-menu-app"></i> Menu Rekomendasi</h5>
+          <div class="mb-3">
+            ${cafe.menu.map(item => `
+              <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                <span>${item.name}</span>
+                <span class="fw-bold">Rp ${item.price.toLocaleString()}</span>
+              </div>
+            `).join('')}
+          </div>
+          
+          <button id="selectCafeAndOrderBtn" class="btn-electric w-100">
+            <i class="bi bi-cart-plus"></i> Pilih Cafe Ini & Mulai Pesan
+          </button>
+        </div>
+      </div>
+    `;
+    
+    document.getElementById('backToDashBtn').addEventListener('click', () => renderDashboard());
+    document.getElementById('selectCafeAndOrderBtn').addEventListener('click', () => {
+      selectedCafe = cafe;
+      savePrefs();
+      renderDashboard();
+      showToast(`${cafe.name} dipilih! Silakan pesan menu ✨`);
+    });
+  }
+
+  // ==================== RENDER DASHBOARD ====================
+  function renderDashboard() {
+    showScreen('dashboardScreen');
+    const container = document.getElementById('dashboardScreen');
+    const filteredCafes = cafesData.filter(c => c.vibe === activeMoodFilter);
+    
+    // Calculate totals based on selected cafe
+    const totalMenuPrice = cartItems.reduce((sum, i) => sum + i.price, 0);
+    const taxRate = selectedCafe?.taxRate || 0.11;
+    const serviceCharge = selectedCafe?.serviceCharge || 0.05;
+    const tax = totalMenuPrice * taxRate;
+    const service = totalMenuPrice * serviceCharge;
+    const grandTotal = totalMenuPrice + tax + service;
+    
+    container.innerHTML = `
+      <div class="mb-3 d-flex justify-content-between align-items-center">
+        <h3 class="fw-bold">👋 Hey, ${currentUser.name.split(' ')[0]}!</h3>
+        <div class="d-flex gap-2">
+          <button id="darkModeToggleBtn" class="btn btn-sm rounded-pill border-0 bg-white bg-opacity-50"><i class="bi bi-moon-stars"></i></button>
+          <button id="profileBtnHeader" class="btn btn-sm rounded-pill border-0 bg-white bg-opacity-50"><i class="bi bi-person-circle"></i></button>
+          <button id="logoutHeaderBtn" class="btn btn-sm rounded-pill border-0 bg-white bg-opacity-50"><i class="bi bi-box-arrow-right"></i></button>
+        </div>
+      </div>
+      
+      <!-- Selected Cafe Banner -->
+      ${selectedCafe ? `
+        <div class="card bento-card p-3 mb-4" style="background: linear-gradient(135deg, #1e5af7, #0a44cc); color: white;">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <small class="opacity-75">Cafe yang sedang dikunjungi</small>
+              <h5 class="fw-bold mb-0">${selectedCafe.name}</h5>
+              <small><i class="bi bi-geo-alt"></i> ${selectedCafe.location}</small>
+            </div>
+            <button id="changeCafeBtn" class="btn btn-sm btn-light rounded-pill">Ganti Cafe</button>
+          </div>
+        </div>
+      ` : `
+        <div class="card bento-card p-3 mb-4 text-center">
+          <p class="mb-2">Belum pilih cafe nih! Yuk pilih cafe dulu biar bisa pesan ✨</p>
+          <small class="text-secondary">Klik salah satu cafe di bawah untuk memilih</small>
+        </div>
+      `}
+      
+      <!-- SMART MOOD FILTERS -->
+      <div class="d-flex gap-2 mb-4 overflow-auto pb-2">
+        <div class="vibe-filter ${activeMoodFilter === 'nugas' ? 'active' : ''}" data-mood="nugas" style="background:#e2f0e8;">📚 Nugas</div>
+        <div class="vibe-filter ${activeMoodFilter === 'deeptalk' ? 'active' : ''}" data-mood="deeptalk" style="background:#e6eefa;">💬 Deep Talk</div>
+        <div class="vibe-filter ${activeMoodFilter === 'party' ? 'active' : ''}" data-mood="party" style="background:#ffe1cc;">🎉 Party/Nongkrong</div>
+      </div>
+      
+      <!-- CAFE LIST BENTO GRID -->
+      <h5 class="mb-3">✨ Rekomendasi Cafe Solo Raya</h5>
+      <div class="row g-3 mb-4" id="cafeList">
+        ${filteredCafes.map(c => `
+          <div class="col-12">
+            <div class="card bento-card cafe-card ${selectedCafe?.id === c.id ? 'selected' : ''}" data-cafe-id="${c.id}">
+              <img src="${c.image}" class="cafe-img" style="height: 140px;" alt="${c.name}">
+              <div class="p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div>
+                    <h6 class="fw-bold mb-1">${c.name}</h6>
+                    <small class="text-secondary"><i class="bi bi-geo-alt"></i> ${c.location.split(',')[0]}</small>
+                  </div>
+                  <span class="badge-vibe" style="background: ${c.vibe === 'nugas' ? '#86b3a2' : c.vibe === 'deeptalk' ? '#6c91b2' : '#f59e6b'}20">
+                    ${c.vibe === 'nugas' ? '📚' : c.vibe === 'deeptalk' ? '💬' : '🎉'}
+                  </span>
+                </div>
+                <div class="mt-2 d-flex gap-2 flex-wrap">
+                  <small>${c.facilities.wifi}</small>
+                  <small>${c.facilities.outlet}</small>
+                  <small>${c.facilities.mushola}</small>
+                </div>
+                <button class="btn btn-sm btn-outline-electric w-100 mt-2 view-detail-btn" data-cafe-id="${c.id}">Lihat Detail</button>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      
+      <!-- TAX CALCULATOR + ORDER SECTION -->
+      <div class="card p-3 mb-4 bento-card">
+        <h5 class="mb-3"><i class="bi bi-receipt"></i> Transparansi Harga + Tax</h5>
+        ${selectedCafe ? `
+          <div class="mb-3">
+            <label class="form-label fw-bold">Pesan Menu di ${selectedCafe.name}</label>
+            <div class="row g-2">
+              <div class="col-8">
+                <select class="form-select rounded-pill" id="menuSelect">
+                  ${selectedCafe.menu.map(item => `<option value="${item.name}|${item.price}">${item.name} - Rp ${item.price.toLocaleString()}</option>`).join('')}
+                </select>
+              </div>
+              <div class="col-4">
+                <button id="addItemBtn" class="btn btn-electric w-100 py-2">+ Tambah</button>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3" id="cartList"></div>
+          <hr class="my-3">
+          <div class="d-flex justify-content-between"><span>Subtotal</span><span>Rp ${totalMenuPrice.toLocaleString()}</span></div>
+          <div class="d-flex justify-content-between"><span>Pajak ${(taxRate * 100)}%</span><span>Rp ${tax.toLocaleString()}</span></div>
+          <div class="d-flex justify-content-between"><span>Service ${(serviceCharge * 100)}%</span><span>Rp ${service.toLocaleString()}</span></div>
+          <div class="d-flex justify-content-between fw-bold fs-5 mt-2 pt-2 border-top"><span>Total Estimasi</span><span>Rp ${grandTotal.toLocaleString()}</span></div>
+          <button id="splitBillBtn" class="btn-outline-electric w-100 mt-3 ${cartItems.length === 0 ? 'disabled' : ''}" ${cartItems.length === 0 ? 'disabled' : ''}>
+            <i class="bi bi-people-fill"></i> Split Bill & Social Reminder
+          </button>
+        ` : `
+          <div class="text-center py-4 text-secondary">
+            <i class="bi bi-shop fs-1"></i>
+            <p class="mt-2">Pilih cafe terlebih dahulu untuk mulai memesan ✨</p>
+          </div>
+        `}
+      </div>
+    `;
+    
+    // Render cart items
+    if(selectedCafe) {
+      const cartDiv = document.getElementById('cartList');
+      function renderCart() {
+        if(!cartDiv) return;
+        if(cartItems.length === 0) {
+          cartDiv.innerHTML = '<div class="text-center text-secondary py-2">Belum ada pesanan</div>';
+          return;
+        }
+        cartDiv.innerHTML = cartItems.map((item, idx) => `
+          <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+            <span>${item.name}</span>
+            <div>
+              <span class="fw-bold me-3">Rp ${item.price.toLocaleString()}</span>
+              <i class="bi bi-trash3 text-danger" style="cursor:pointer" data-index="${idx}"></i>
+            </div>
+          </div>
+        `).join('');
+        
+        document.querySelectorAll('.bi-trash3').forEach(el => {
+          el.addEventListener('click', (e) => {
+            const idx = parseInt(el.dataset.index);
+            cartItems.splice(idx, 1);
+            savePrefs();
+            renderDashboard();
+          });
+        });
+      }
+      renderCart();
+      
+      document.getElementById('addItemBtn')?.addEventListener('click', () => {
+        const val = document.getElementById('menuSelect').value;
+        const [name, priceStr] = val.split('|');
+        const price = parseInt(priceStr);
+        cartItems.push({ name, price });
+        savePrefs();
+        renderDashboard();
+      });
+      
+      document.getElementById('splitBillBtn')?.addEventListener('click', () => {
+        if(cartItems.length === 0) {
+          showToast("Tambahkan pesanan dulu ya!");
+          return;
+        }
+        const total = cartItems.reduce((sum, i) => sum + i.price, 0);
+        const tax = total * taxRate;
+        const service = total * serviceCharge;
+        const grandTotal = total + tax + service;
+        showSplitBottomSheet(grandTotal);
+      });
+    }
+    
+    document.getElementById('changeCafeBtn')?.addEventListener('click', () => {
+      selectedCafe = null;
+      cartItems = [];
+      savePrefs();
+      renderDashboard();
+      showToast("Pilih cafe baru yuk!");
+    });
+    
+    // Cafe card click handlers
+    document.querySelectorAll('.cafe-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if(!e.target.classList.contains('view-detail-btn')) {
+          const cafeId = parseInt(card.dataset.cafeId);
+          const cafe = cafesData.find(c => c.id === cafeId);
+          if(cafe) {
+            selectedCafe = cafe;
+            cartItems = [];
+            savePrefs();
+            renderDashboard();
+            showToast(`${cafe.name} dipilih! Silakan pesan menu ✨`);
+          }
+        }
+      });
+    });
+    
+    document.querySelectorAll('.view-detail-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const cafeId = parseInt(btn.dataset.cafeId);
+        const cafe = cafesData.find(c => c.id === cafeId);
+        if(cafe) renderCafeDetail(cafe);
+      });
+    });
+    
+    document.querySelectorAll('.vibe-filter').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeMoodFilter = btn.dataset.mood;
+        savePrefs();
+        renderDashboard();
+      });
+    });
+    
+    document.getElementById('darkModeToggleBtn')?.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      savePrefs();
+    });
+    
+    document.getElementById('profileBtnHeader')?.addEventListener('click', () => renderProfile());
+    document.getElementById('logoutHeaderBtn')?.addEventListener('click', () => {
+      clearSession();
+      currentUser = null;
+      renderLogin();
+      showToast("Logged out! See you next time 👋");
+    });
+  }
+  
+  // ==================== SPLIT BILL BOTTOM SHEET ====================
+  function showSplitBottomSheet(total) {
+    const modalDiv = document.createElement('div');
+    modalDiv.className = 'modal fade';
+    modalDiv.innerHTML = `
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bottom-sheet p-3" style="border-radius: 32px;">
+          <div class="modal-header border-0">
+            <h5 class="modal-title">👥 Split Bill & Reminder</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <label class="fw-bold">Jumlah teman (termasuk kamu)</label>
+            <input type="number" id="splitCount" class="form-control rounded-pill mt-2" value="2" min="1">
+            <div class="mt-3 p-3 bg-light rounded-4 text-center">
+              <span class="text-secondary">Tagihan per orang:</span>
+              <div class="fs-3 fw-bold" id="perPerson">Rp ${(total/2).toLocaleString()}</div>
+            </div>
+            <button id="copyWAReminder" class="btn-electric w-100 mt-3">
+              <i class="bi bi-whatsapp"></i> Copy ke WhatsApp
+            </button>
+            <button id="simulateReminder" class="btn-outline-electric w-100 mt-2">
+              <i class="bi bi-bell"></i> Kirim Pengingat (Demo)
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modalDiv);
+    const modal = new bootstrap.Modal(modalDiv);
+    modal.show();
+    
+    const updateSplit = () => {
+      let cnt = parseInt(document.getElementById('splitCount').value) || 1;
+      const per = total / cnt;
+      document.getElementById('perPerson').innerText = `Rp ${per.toLocaleString()}`;
+    };
+    
+    document.getElementById('splitCount').addEventListener('input', updateSplit);
+    document.getElementById('copyWAReminder').addEventListener('click', () => {
+      const cnt = parseInt(document.getElementById('splitCount').value) || 1;
+      const per = total / cnt;
+      const msg = `🍽️ Vibe Check - ${selectedCafe?.name || 'Cafe'}\nTotal: Rp ${total.toLocaleString()}\nPer orang: Rp ${per.toLocaleString()}\nYuk segera bayar! ✨`;
+      navigator.clipboard.writeText(msg);
+      showToast("✅ Pesan disalin! Tempel di WhatsApp.");
+      modal.hide();
+    });
+    document.getElementById('simulateReminder').addEventListener('click', () => {
+      showToast("📱 Pengingat otomatis dikirim ke teman (simulasi)");
+    });
+    
+    modalDiv.addEventListener('hidden.bs.modal', () => modalDiv.remove());
+  }
+  
+  // ==================== RENDER PROFILE ====================
+  function renderProfile() {
+    showScreen('profileScreen');
+    const container = document.getElementById('profileScreen');
+    const stats = currentUser.vibeStats || { nugas: 60, deepTalk: 30, party: 10 };
+    
+    container.innerHTML = `
+      <div class="card p-4 bento-card">
+        <h4 class="mb-3"><i class="bi bi-graph-up"></i> Vibe-Meter Dashboard</h4>
+        <p class="text-secondary small">Bulan ini kamu ${stats.nugas}% Nugas, ${stats.deepTalk}% Deep Talk, ${stats.party}% Party</p>
+        <canvas id="vibeChart" width="300" height="150" style="max-height:160px"></canvas>
+        <hr class="my-4">
+        <h5 class="mb-3">Edit Profil</h5>
+        <div class="mb-3">
+          <label class="form-label">Nama</label>
+          <input type="text" id="editName" class="form-control rounded-pill" value="${currentUser.name}">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" id="editEmail" class="form-control rounded-pill" value="${currentUser.email}">
+        </div>
+        <button id="saveProfileBtn" class="btn-electric w-100">Simpan Perubahan</button>
+        <button id="backToDashBtn" class="btn-outline-electric w-100 mt-2">← Kembali ke Vibe</button>
+      </div>
+    `;
+    
+    const ctx = document.getElementById('vibeChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: { 
+        labels: ['Nugas', 'Deep Talk', 'Party'], 
+        datasets: [{ data: [stats.nugas, stats.deepTalk, stats.party], backgroundColor: ['#86b3a2', '#6c91b2', '#f59e6b'], borderWidth: 0 }]
+      },
+      options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { font: { family: 'Plus Jakarta Sans' } } } } }
+    });
+    
+    document.getElementById('saveProfileBtn').addEventListener('click', () => {
+      const newName = document.getElementById('editName').value;
+      const newEmail = document.getElementById('editEmail').value;
+      if(!newEmail.includes('@')) { showToast("Email tidak valid"); return; }
+      currentUser.name = newName;
+      currentUser.email = newEmail;
+      updateUser(currentUser);
+      showToast("Profil berhasil diupdate! ✨");
+      renderProfile();
+    });
+    
+    document.getElementById('backToDashBtn').addEventListener('click', () => renderDashboard());
+  }
+  
+  // ==================== INIT APP ====================
+  function initApp() {
+    initUsers();
+    const user = getCurrentUser();
+    if(user) {
+      currentUser = user;
+      loadUserPrefs();
+      renderDashboard();
+    } else {
+      renderLogin();
+    }
+  }
+  
+  window.initApp = initApp;
+  initApp();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  if('serviceWorker' in navigator) {
+    const swCode = `self.addEventListener('fetch', event => { event.respondWith(fetch(event.request).catch(() => new Response("Vibe Check - Offline mode", { status: 200, headers: { 'Content-Type': 'text/html' } }))); });`;
+    const blob = new Blob([swCode], {type: 'application/javascript'});
+    const url = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(url).then(reg => console.log("✅ PWA Service Worker registered")).catch(e => console.log("SW Error:", e));
+  }
+</script>
+</body>
+</html>
