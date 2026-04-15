@@ -7,7 +7,7 @@
   <!-- Bootstrap 5 + Icons + Fonts -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <!-- Google Font: Plus Jakarta Sans -->
+  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -18,6 +18,7 @@
     body {
       background: #f4f7fc;
       transition: background 0.3s, color 0.2s;
+      padding-bottom: 80px;
     }
     body.dark-mode {
       background: #0f172a;
@@ -32,17 +33,16 @@
     body.dark-mode .vibe-filter {
       background: rgba(30, 41, 59, 0.7) !important;
     }
+    body.dark-mode .bottom-nav {
+      background: rgba(30, 41, 59, 0.95) !important;
+      backdrop-filter: blur(20px);
+    }
     .card, .bento-card {
       background: rgba(255,255,255,0.75);
       backdrop-filter: blur(12px);
       border-radius: 32px;
       border: 1px solid rgba(255,255,255,0.5);
       transition: transform 0.2s ease, box-shadow 0.2s;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
-    }
-    .bento-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.15);
     }
     .vibe-filter {
       cursor: pointer;
@@ -56,7 +56,6 @@
     .vibe-filter.active {
       background: #2b3b2c;
       color: white;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
     }
     .btn-electric {
       background: #1e5af7;
@@ -77,7 +76,6 @@
       background: transparent;
       color: #1e5af7;
       font-weight: 600;
-      padding: 10px 20px;
     }
     .cafe-card {
       cursor: pointer;
@@ -86,17 +84,26 @@
     .cafe-card.selected {
       border: 2px solid #1e5af7;
       background: rgba(30, 90, 247, 0.1);
-      transform: scale(1.02);
     }
     .cafe-img {
       width: 100%;
-      height: 160px;
+      height: 140px;
       object-fit: cover;
       border-radius: 20px;
     }
+    .like-btn {
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .like-btn:hover {
+      transform: scale(1.1);
+    }
+    .like-btn.liked {
+      color: #ff4757;
+    }
     .toast-custom {
       position: fixed;
-      bottom: 20px;
+      bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 1090;
@@ -116,8 +123,49 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(0,0,0,0.05);
+      padding: 12px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+    }
+    body.dark-mode .bottom-nav {
+      background: rgba(30, 41, 59, 0.95);
+      border-top-color: rgba(255,255,255,0.1);
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: 0.2s;
+      opacity: 0.6;
+    }
+    .nav-item.active {
+      opacity: 1;
+      color: #1e5af7;
+    }
+    .nav-item i {
+      font-size: 24px;
+    }
+    .nav-item span {
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .history-card {
+      border-left: 4px solid #1e5af7;
+    }
     .badge-vibe {
-      padding: 6px 12px;
+      padding: 4px 10px;
       border-radius: 20px;
       font-size: 11px;
       font-weight: 600;
@@ -126,16 +174,52 @@
       text-decoration: none;
       font-size: 14px;
     }
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
   </style>
 </head>
 <body>
 
-<div id="app" class="container py-3" style="max-width: 600px; margin: auto;">
+<div id="app" style="max-width: 600px; margin: auto; position: relative;">
+  <!-- Auth Screens -->
   <div id="loginScreen" class="screen"></div>
   <div id="registerScreen" class="screen d-none"></div>
-  <div id="dashboardScreen" class="screen d-none"></div>
-  <div id="profileScreen" class="screen d-none"></div>
-  <div id="cafeDetailScreen" class="screen d-none"></div>
+  
+  <!-- Main App Screens (with bottom nav) -->
+  <div id="mainAppContainer" class="d-none">
+    <div class="container py-3" style="padding-bottom: 20px;">
+      <div id="homeScreen" class="screen"></div>
+      <div id="likesScreen" class="screen d-none"></div>
+      <div id="historyScreen" class="screen d-none"></div>
+      <div id="profileScreen" class="screen d-none"></div>
+      <div id="cafeDetailScreen" class="screen d-none"></div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+      <div class="nav-item" data-nav="home">
+        <i class="bi bi-house-door-fill"></i>
+        <span>Home</span>
+      </div>
+      <div class="nav-item" data-nav="likes">
+        <i class="bi bi-heart-fill"></i>
+        <span>Like</span>
+      </div>
+      <div class="nav-item" data-nav="history">
+        <i class="bi bi-clock-history"></i>
+        <span>History</span>
+      </div>
+      <div class="nav-item" data-nav="profile">
+        <i class="bi bi-person-fill"></i>
+        <span>Profile</span>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="globalToast" class="toast-custom">✨ Copied!</div>
@@ -145,6 +229,8 @@
   const STORAGE_USERS = "vibecheck_users";
   const STORAGE_SESSION = "vibecheck_session";
   const STORAGE_PREFS = "vibecheck_prefs";
+  const STORAGE_LIKES = "vibecheck_likes";
+  const STORAGE_HISTORY = "vibecheck_history";
 
   // ==================== DATA CAFE SOLO RAYA ====================
   const cafesData = [
@@ -281,9 +367,37 @@
     setTimeout(() => { toast.style.opacity = '0'; }, 2000);
   }
 
+  function showMainApp() {
+    document.getElementById('mainAppContainer').classList.remove('d-none');
+    document.getElementById('loginScreen').classList.add('d-none');
+    document.getElementById('registerScreen').classList.add('d-none');
+  }
+
+  function showLogin() {
+    document.getElementById('mainAppContainer').classList.add('d-none');
+    document.getElementById('loginScreen').classList.remove('d-none');
+    document.getElementById('registerScreen').classList.add('d-none');
+    renderLogin();
+  }
+
+  function showRegister() {
+    document.getElementById('mainAppContainer').classList.add('d-none');
+    document.getElementById('loginScreen').classList.add('d-none');
+    document.getElementById('registerScreen').classList.remove('d-none');
+    renderRegister();
+  }
+
   function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.add('d-none'));
+    document.querySelectorAll('#mainAppContainer .screen').forEach(s => s.classList.add('d-none'));
     document.getElementById(screenId).classList.remove('d-none');
+    
+    // Update bottom nav active state
+    const navMap = { homeScreen: 'home', likesScreen: 'likes', historyScreen: 'history', profileScreen: 'profile' };
+    const activeNav = navMap[screenId];
+    document.querySelectorAll('.nav-item').forEach(item => {
+      if (item.dataset.nav === activeNav) item.classList.add('active');
+      else item.classList.remove('active');
+    });
   }
 
   // ==================== USER MANAGEMENT ====================
@@ -327,6 +441,40 @@
     }
   }
 
+  // ==================== LIKES & HISTORY ====================
+  function getLikedCafes() {
+    const likes = localStorage.getItem(STORAGE_LIKES + "_" + currentUser?.id);
+    return likes ? JSON.parse(likes) : [];
+  }
+
+  function toggleLike(cafeId) {
+    let likes = getLikedCafes();
+    if (likes.includes(cafeId)) {
+      likes = likes.filter(id => id !== cafeId);
+      showToast("❤️ Dihapus dari favorit");
+    } else {
+      likes.push(cafeId);
+      showToast("👍 Ditambahkan ke favorit");
+    }
+    localStorage.setItem(STORAGE_LIKES + "_" + currentUser.id, JSON.stringify(likes));
+    return likes;
+  }
+
+  function isLiked(cafeId) {
+    return getLikedCafes().includes(cafeId);
+  }
+
+  function addToHistory(billData) {
+    let history = JSON.parse(localStorage.getItem(STORAGE_HISTORY + "_" + currentUser?.id) || "[]");
+    history.unshift({ ...billData, id: Date.now(), date: new Date().toLocaleString() });
+    if (history.length > 20) history.pop();
+    localStorage.setItem(STORAGE_HISTORY + "_" + currentUser.id, JSON.stringify(history));
+  }
+
+  function getHistory() {
+    return JSON.parse(localStorage.getItem(STORAGE_HISTORY + "_" + currentUser?.id) || "[]");
+  }
+
   // ==================== GLOBAL STATE ====================
   let currentUser = null;
   let activeMoodFilter = "nugas";
@@ -353,12 +501,7 @@
   function savePrefs() {
     if(!currentUser) return;
     const darkMode = document.body.classList.contains('dark-mode');
-    const prefs = { 
-      activeMoodFilter, 
-      selectedCafeId: selectedCafe?.id || null,
-      cartItems, 
-      darkMode 
-    };
+    const prefs = { activeMoodFilter, selectedCafeId: selectedCafe?.id || null, cartItems, darkMode };
     localStorage.setItem(STORAGE_PREFS + "_" + currentUser.id, JSON.stringify(prefs));
   }
 
@@ -366,7 +509,7 @@
   function renderLogin() {
     const container = document.getElementById('loginScreen');
     container.innerHTML = `
-      <div class="d-flex flex-column align-items-center justify-content-center min-vh-100">
+      <div class="auth-container">
         <div class="card p-4 w-100 border-0" style="border-radius: 48px;">
           <h2 class="fw-bold mb-1">Vibe Check</h2>
           <p class="text-secondary">Cafe curator for Solo Raya ✨</p>
@@ -384,7 +527,7 @@
               <label class="form-check-label">Remember Me</label>
             </div>
             <button type="submit" class="btn-electric w-100">Login & vibe ➡</button>
-            <p class="text-center mt-3">No account? <a href="#" id="gotoRegisterBtn" class="text-decoration-none fw-bold">Create one</a></p>
+            <p class="text-center mt-3">Belum punya akun? <a href="#" id="gotoRegisterBtn" class="text-decoration-none fw-bold">Daftar Sekarang</a></p>
           </form>
         </div>
       </div>
@@ -403,7 +546,8 @@
         if(remember) saveSession(user);
         else localStorage.setItem(STORAGE_SESSION, JSON.stringify({ userId: user.id, email: user.email, name: user.name }));
         loadUserPrefs();
-        renderDashboard();
+        showMainApp();
+        renderHome();
         showToast(`Welcome back, ${user.name}! ✨`);
       } else {
         showToast("❌ Email atau password salah");
@@ -412,37 +556,43 @@
     
     document.getElementById('gotoRegisterBtn').addEventListener('click', (e) => {
       e.preventDefault();
-      renderRegister();
+      showRegister();
     });
   }
 
   function renderRegister() {
     const container = document.getElementById('registerScreen');
-    container.classList.remove('d-none');
     container.innerHTML = `
-      <div class="d-flex flex-column align-items-center justify-content-center min-vh-100">
+      <div class="auth-container">
         <div class="card p-4 w-100 border-0" style="border-radius: 48px;">
+          <button id="backToLoginBtn" class="btn btn-sm rounded-pill border-0 mb-3" style="width: fit-content; background: rgba(0,0,0,0.05);">
+            <i class="bi bi-arrow-left"></i> Kembali ke Login
+          </button>
           <h2 class="fw-bold">Join the Vibe</h2>
           <p class="text-secondary">Discover Solo's best cafes ✨</p>
           <form id="registerForm">
             <div class="mb-2">
-              <label>Nama</label>
-              <input type="text" class="form-control rounded-pill" id="regName" required>
+              <label>Nama Lengkap</label>
+              <input type="text" class="form-control rounded-pill" id="regName" placeholder="Masukkan namamu" required>
             </div>
             <div class="mb-2">
               <label>Email</label>
-              <input type="email" class="form-control rounded-pill" id="regEmail" required>
+              <input type="email" class="form-control rounded-pill" id="regEmail" placeholder="email@example.com" required>
             </div>
             <div class="mb-3">
-              <label>Password (min 6)</label>
-              <input type="password" class="form-control rounded-pill" id="regPassword" required>
+              <label>Password (min 6 karakter)</label>
+              <input type="password" class="form-control rounded-pill" id="regPassword" placeholder="******" required>
             </div>
-            <button type="submit" class="btn-electric w-100">Register & vibe</button>
-            <p class="text-center mt-3">Sudah punya akun? <a href="#" id="gotoLoginFromReg" class="text-decoration-none">Login</a></p>
+            <button type="submit" class="btn-electric w-100">Daftar & vibe 🚀</button>
           </form>
         </div>
       </div>
     `;
+    
+    document.getElementById('backToLoginBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      showLogin();
+    });
     
     document.getElementById('registerForm').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -452,6 +602,7 @@
       
       if(pwd.length < 6) { showToast("Password minimal 6 karakter"); return; }
       if(!email.includes('@')) { showToast("Email tidak valid"); return; }
+      if(name.length === 0) { showToast("Nama tidak boleh kosong"); return; }
       
       let users = JSON.parse(localStorage.getItem(STORAGE_USERS) || "[]");
       if(users.find(u => u.email === email)) { showToast("Email sudah terdaftar"); return; }
@@ -468,34 +619,33 @@
       currentUser = newUser;
       saveSession(newUser);
       loadUserPrefs();
-      renderDashboard();
-      showToast(`Welcome to Vibe Check, ${name}! 🎉`);
-    });
-    
-    document.getElementById('gotoLoginFromReg').addEventListener('click', (e) => {
-      e.preventDefault();
-      showScreen('loginScreen');
-      renderLogin();
+      showMainApp();
+      renderHome();
+      showToast(`Selamat datang, ${name}! 🎉`);
     });
   }
 
-  // ==================== CAFE DETAIL SCREEN ====================
+  // ==================== CAFE DETAIL ====================
   function renderCafeDetail(cafe) {
     showScreen('cafeDetailScreen');
     const container = document.getElementById('cafeDetailScreen');
+    const liked = isLiked(cafe.id);
     
     container.innerHTML = `
-      <div class="mb-3">
-        <button id="backToDashBtn" class="btn btn-sm rounded-pill border-0 bg-white bg-opacity-50">
+      <div class="mb-3 d-flex justify-content-between align-items-center">
+        <button id="backFromDetailBtn" class="btn btn-sm rounded-pill border-0 bg-white bg-opacity-50">
           <i class="bi bi-arrow-left"></i> Back
         </button>
+        <div class="like-btn ${liked ? 'liked' : ''}" data-cafe-id="${cafe.id}">
+          <i class="bi ${liked ? 'bi-heart-fill' : 'bi-heart'} fs-3"></i>
+        </div>
       </div>
       <div class="card bento-card p-0 overflow-hidden">
-        <img src="${cafe.image}" class="cafe-img" alt="${cafe.name}">
+        <img src="${cafe.image}" class="cafe-img" style="height: 200px;" alt="${cafe.name}">
         <div class="p-4">
           <h3 class="fw-bold">${cafe.name}</h3>
           <div class="mb-2">
-            <span class="badge-vibe" style="background: ${cafe.vibe === 'nugas' ? '#86b3a2' : cafe.vibe === 'deeptalk' ? '#6c91b2' : '#f59e6b'}20; color: ${cafe.vibe === 'nugas' ? '#2d5a4a' : cafe.vibe === 'deeptalk' ? '#2c4f6e' : '#b45f2b'}">
+            <span class="badge-vibe" style="background: ${cafe.vibe === 'nugas' ? '#86b3a2' : cafe.vibe === 'deeptalk' ? '#6c91b2' : '#f59e6b'}20">
               ${cafe.vibe === 'nugas' ? '📚 Nugas' : cafe.vibe === 'deeptalk' ? '💬 Deep Talk' : '🎉 Party'}
             </span>
           </div>
@@ -503,8 +653,7 @@
           <a href="${cafe.mapsUrl}" target="_blank" class="maps-link text-primary mb-3 d-inline-block">
             <i class="bi bi-map"></i> Buka di Google Maps
           </a>
-          <p class="mt-2">${cafe.description}</p>
-          
+          <p>${cafe.description}</p>
           <h5 class="mt-4 mb-3"><i class="bi bi-building"></i> Fasilitas</h5>
           <div class="row g-2 mb-4">
             <div class="col-6">${cafe.facilities.wifi}</div>
@@ -514,104 +663,85 @@
             <div class="col-6">${cafe.facilities.clean}</div>
             <div class="col-6">Staf: ${cafe.facilities.staff}</div>
           </div>
-          
-          <h5 class="mb-3"><i class="bi bi-menu-app"></i> Menu Rekomendasi</h5>
-          <div class="mb-3">
-            ${cafe.menu.map(item => `
-              <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                <span>${item.name}</span>
-                <span class="fw-bold">Rp ${item.price.toLocaleString()}</span>
-              </div>
-            `).join('')}
-          </div>
-          
-          <button id="selectCafeAndOrderBtn" class="btn-electric w-100">
-            <i class="bi bi-cart-plus"></i> Pilih Cafe Ini & Mulai Pesan
-          </button>
+          <button id="selectCafeBtn" class="btn-electric w-100">Pilih Cafe Ini & Mulai Pesan</button>
         </div>
       </div>
     `;
     
-    document.getElementById('backToDashBtn').addEventListener('click', () => renderDashboard());
-    document.getElementById('selectCafeAndOrderBtn').addEventListener('click', () => {
+    document.getElementById('backFromDetailBtn').addEventListener('click', () => renderHome());
+    document.getElementById('selectCafeBtn').addEventListener('click', () => {
       selectedCafe = cafe;
       savePrefs();
-      renderDashboard();
-      showToast(`${cafe.name} dipilih! Silakan pesan menu ✨`);
+      renderHome();
+      showToast(`${cafe.name} dipilih! ✨`);
+    });
+    
+    document.querySelector('.like-btn').addEventListener('click', () => {
+      toggleLike(cafe.id);
+      renderCafeDetail(cafe);
     });
   }
 
-  // ==================== RENDER DASHBOARD ====================
-  function renderDashboard() {
-    showScreen('dashboardScreen');
-    const container = document.getElementById('dashboardScreen');
+  // ==================== RENDER HOME ====================
+  function renderHome() {
+    showScreen('homeScreen');
+    const container = document.getElementById('homeScreen');
     const filteredCafes = cafesData.filter(c => c.vibe === activeMoodFilter);
-    
-    // Calculate totals based on selected cafe
     const totalMenuPrice = cartItems.reduce((sum, i) => sum + i.price, 0);
     const taxRate = selectedCafe?.taxRate || 0.11;
     const serviceCharge = selectedCafe?.serviceCharge || 0.05;
     const tax = totalMenuPrice * taxRate;
     const service = totalMenuPrice * serviceCharge;
     const grandTotal = totalMenuPrice + tax + service;
+    const likedCafes = getLikedCafes();
     
     container.innerHTML = `
       <div class="mb-3 d-flex justify-content-between align-items-center">
         <h3 class="fw-bold">👋 Hey, ${currentUser.name.split(' ')[0]}!</h3>
-        <div class="d-flex gap-2">
-          <button id="darkModeToggleBtn" class="btn btn-sm rounded-pill border-0 bg-white bg-opacity-50"><i class="bi bi-moon-stars"></i></button>
-          <button id="profileBtnHeader" class="btn btn-sm rounded-pill border-0 bg-white bg-opacity-50"><i class="bi bi-person-circle"></i></button>
-          <button id="logoutHeaderBtn" class="btn btn-sm rounded-pill border-0 bg-white bg-opacity-50"><i class="bi bi-box-arrow-right"></i></button>
-        </div>
+        <button id="darkModeToggleBtn" class="btn btn-sm rounded-pill border-0 bg-white bg-opacity-50">
+          <i class="bi bi-moon-stars"></i>
+        </button>
       </div>
       
-      <!-- Selected Cafe Banner -->
       ${selectedCafe ? `
         <div class="card bento-card p-3 mb-4" style="background: linear-gradient(135deg, #1e5af7, #0a44cc); color: white;">
           <div class="d-flex justify-content-between align-items-center">
             <div>
-              <small class="opacity-75">Cafe yang sedang dikunjungi</small>
+              <small class="opacity-75">Sedang di</small>
               <h5 class="fw-bold mb-0">${selectedCafe.name}</h5>
-              <small><i class="bi bi-geo-alt"></i> ${selectedCafe.location}</small>
             </div>
-            <button id="changeCafeBtn" class="btn btn-sm btn-light rounded-pill">Ganti Cafe</button>
+            <button id="changeCafeBtn" class="btn btn-sm btn-light rounded-pill">Ganti</button>
           </div>
         </div>
       ` : `
         <div class="card bento-card p-3 mb-4 text-center">
-          <p class="mb-2">Belum pilih cafe nih! Yuk pilih cafe dulu biar bisa pesan ✨</p>
-          <small class="text-secondary">Klik salah satu cafe di bawah untuk memilih</small>
+          <p class="mb-0">Pilih cafe dulu yuk! ✨</p>
         </div>
       `}
       
-      <!-- SMART MOOD FILTERS -->
       <div class="d-flex gap-2 mb-4 overflow-auto pb-2">
-        <div class="vibe-filter ${activeMoodFilter === 'nugas' ? 'active' : ''}" data-mood="nugas" style="background:#e2f0e8;">📚 Nugas</div>
-        <div class="vibe-filter ${activeMoodFilter === 'deeptalk' ? 'active' : ''}" data-mood="deeptalk" style="background:#e6eefa;">💬 Deep Talk</div>
-        <div class="vibe-filter ${activeMoodFilter === 'party' ? 'active' : ''}" data-mood="party" style="background:#ffe1cc;">🎉 Party/Nongkrong</div>
+        <div class="vibe-filter ${activeMoodFilter === 'nugas' ? 'active' : ''}" data-mood="nugas">📚 Nugas</div>
+        <div class="vibe-filter ${activeMoodFilter === 'deeptalk' ? 'active' : ''}" data-mood="deeptalk">💬 Deep Talk</div>
+        <div class="vibe-filter ${activeMoodFilter === 'party' ? 'active' : ''}" data-mood="party">🎉 Party</div>
       </div>
       
-      <!-- CAFE LIST BENTO GRID -->
       <h5 class="mb-3">✨ Rekomendasi Cafe Solo Raya</h5>
       <div class="row g-3 mb-4" id="cafeList">
         ${filteredCafes.map(c => `
           <div class="col-12">
             <div class="card bento-card cafe-card ${selectedCafe?.id === c.id ? 'selected' : ''}" data-cafe-id="${c.id}">
-              <img src="${c.image}" class="cafe-img" style="height: 140px;" alt="${c.name}">
+              <img src="${c.image}" class="cafe-img" alt="${c.name}">
               <div class="p-3">
-                <div class="d-flex justify-content-between align-items-start">
-                  <div>
-                    <h6 class="fw-bold mb-1">${c.name}</h6>
-                    <small class="text-secondary"><i class="bi bi-geo-alt"></i> ${c.location.split(',')[0]}</small>
+                <div class="d-flex justify-content-between">
+                  <h6 class="fw-bold mb-1">${c.name}</h6>
+                  <div class="like-btn ${likedCafes.includes(c.id) ? 'liked' : ''}" data-cafe-id="${c.id}">
+                    <i class="bi ${likedCafes.includes(c.id) ? 'bi-heart-fill' : 'bi-heart'}"></i>
                   </div>
-                  <span class="badge-vibe" style="background: ${c.vibe === 'nugas' ? '#86b3a2' : c.vibe === 'deeptalk' ? '#6c91b2' : '#f59e6b'}20">
-                    ${c.vibe === 'nugas' ? '📚' : c.vibe === 'deeptalk' ? '💬' : '🎉'}
-                  </span>
                 </div>
+                <small class="text-secondary"><i class="bi bi-geo-alt"></i> ${c.location.split(',')[0]}</small>
                 <div class="mt-2 d-flex gap-2 flex-wrap">
                   <small>${c.facilities.wifi}</small>
                   <small>${c.facilities.outlet}</small>
-                  <small>${c.facilities.mushola}</small>
                 </div>
                 <button class="btn btn-sm btn-outline-electric w-100 mt-2 view-detail-btn" data-cafe-id="${c.id}">Lihat Detail</button>
               </div>
@@ -620,114 +750,81 @@
         `).join('')}
       </div>
       
-      <!-- TAX CALCULATOR + ORDER SECTION -->
       <div class="card p-3 mb-4 bento-card">
-        <h5 class="mb-3"><i class="bi bi-receipt"></i> Transparansi Harga + Tax</h5>
+        <h5 class="mb-3"><i class="bi bi-receipt"></i> Transparansi Harga</h5>
         ${selectedCafe ? `
           <div class="mb-3">
-            <label class="form-label fw-bold">Pesan Menu di ${selectedCafe.name}</label>
-            <div class="row g-2">
-              <div class="col-8">
-                <select class="form-select rounded-pill" id="menuSelect">
-                  ${selectedCafe.menu.map(item => `<option value="${item.name}|${item.price}">${item.name} - Rp ${item.price.toLocaleString()}</option>`).join('')}
-                </select>
-              </div>
-              <div class="col-4">
-                <button id="addItemBtn" class="btn btn-electric w-100 py-2">+ Tambah</button>
-              </div>
-            </div>
+            <select class="form-select rounded-pill" id="menuSelect">
+              ${selectedCafe.menu.map(item => `<option value="${item.name}|${item.price}">${item.name} - Rp ${item.price.toLocaleString()}</option>`).join('')}
+            </select>
+            <button id="addItemBtn" class="btn-electric w-100 mt-2">+ Tambah Pesanan</button>
           </div>
-          <div class="mt-3" id="cartList"></div>
-          <hr class="my-3">
+          <div id="cartList"></div>
+          <hr>
           <div class="d-flex justify-content-between"><span>Subtotal</span><span>Rp ${totalMenuPrice.toLocaleString()}</span></div>
-          <div class="d-flex justify-content-between"><span>Pajak ${(taxRate * 100)}%</span><span>Rp ${tax.toLocaleString()}</span></div>
-          <div class="d-flex justify-content-between"><span>Service ${(serviceCharge * 100)}%</span><span>Rp ${service.toLocaleString()}</span></div>
-          <div class="d-flex justify-content-between fw-bold fs-5 mt-2 pt-2 border-top"><span>Total Estimasi</span><span>Rp ${grandTotal.toLocaleString()}</span></div>
-          <button id="splitBillBtn" class="btn-outline-electric w-100 mt-3 ${cartItems.length === 0 ? 'disabled' : ''}" ${cartItems.length === 0 ? 'disabled' : ''}>
-            <i class="bi bi-people-fill"></i> Split Bill & Social Reminder
-          </button>
-        ` : `
-          <div class="text-center py-4 text-secondary">
-            <i class="bi bi-shop fs-1"></i>
-            <p class="mt-2">Pilih cafe terlebih dahulu untuk mulai memesan ✨</p>
-          </div>
-        `}
+          <div class="d-flex justify-content-between"><span>Pajak ${(taxRate*100)}%</span><span>Rp ${tax.toLocaleString()}</span></div>
+          <div class="d-flex justify-content-between"><span>Service ${(serviceCharge*100)}%</span><span>Rp ${service.toLocaleString()}</span></div>
+          <div class="d-flex justify-content-between fw-bold fs-5 mt-2"><span>Total</span><span>Rp ${grandTotal.toLocaleString()}</span></div>
+          <button id="splitBillBtn" class="btn-outline-electric w-100 mt-3" ${cartItems.length === 0 ? 'disabled' : ''}>Split Bill & Simpan ke History</button>
+        ` : '<p class="text-center py-3 text-secondary">Pilih cafe untuk mulai pesan ✨</p>'}
       </div>
     `;
     
-    // Render cart items
-    if(selectedCafe) {
+    // Cart rendering
+    if(selectedCafe && document.getElementById('cartList')) {
       const cartDiv = document.getElementById('cartList');
-      function renderCart() {
-        if(!cartDiv) return;
-        if(cartItems.length === 0) {
-          cartDiv.innerHTML = '<div class="text-center text-secondary py-2">Belum ada pesanan</div>';
-          return;
-        }
+      if(cartItems.length === 0) cartDiv.innerHTML = '<div class="text-center text-secondary py-2">Belum ada pesanan</div>';
+      else {
         cartDiv.innerHTML = cartItems.map((item, idx) => `
-          <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+          <div class="d-flex justify-content-between border-bottom py-2">
             <span>${item.name}</span>
-            <div>
-              <span class="fw-bold me-3">Rp ${item.price.toLocaleString()}</span>
-              <i class="bi bi-trash3 text-danger" style="cursor:pointer" data-index="${idx}"></i>
-            </div>
+            <span>Rp ${item.price.toLocaleString()} <i class="bi bi-trash3 text-danger" style="cursor:pointer" data-index="${idx}"></i></span>
           </div>
         `).join('');
-        
         document.querySelectorAll('.bi-trash3').forEach(el => {
           el.addEventListener('click', (e) => {
-            const idx = parseInt(el.dataset.index);
-            cartItems.splice(idx, 1);
+            cartItems.splice(parseInt(el.dataset.index), 1);
             savePrefs();
-            renderDashboard();
+            renderHome();
           });
         });
       }
-      renderCart();
-      
-      document.getElementById('addItemBtn')?.addEventListener('click', () => {
-        const val = document.getElementById('menuSelect').value;
-        const [name, priceStr] = val.split('|');
-        const price = parseInt(priceStr);
-        cartItems.push({ name, price });
-        savePrefs();
-        renderDashboard();
-      });
-      
-      document.getElementById('splitBillBtn')?.addEventListener('click', () => {
-        if(cartItems.length === 0) {
-          showToast("Tambahkan pesanan dulu ya!");
-          return;
-        }
-        const total = cartItems.reduce((sum, i) => sum + i.price, 0);
-        const tax = total * taxRate;
-        const service = total * serviceCharge;
-        const grandTotal = total + tax + service;
-        showSplitBottomSheet(grandTotal);
-      });
     }
+    
+    document.getElementById('addItemBtn')?.addEventListener('click', () => {
+      const val = document.getElementById('menuSelect').value;
+      const [name, priceStr] = val.split('|');
+      cartItems.push({ name, price: parseInt(priceStr) });
+      savePrefs();
+      renderHome();
+    });
+    
+    document.getElementById('splitBillBtn')?.addEventListener('click', () => {
+      if(cartItems.length === 0) return showToast("Tambah pesanan dulu!");
+      const total = cartItems.reduce((s, i) => s + i.price, 0);
+      const tax = total * (selectedCafe?.taxRate || 0.11);
+      const service = total * (selectedCafe?.serviceCharge || 0.05);
+      const grandTotal = total + tax + service;
+      showSplitBottomSheet(grandTotal, () => {
+        addToHistory({ cafeName: selectedCafe.name, items: [...cartItems], total: grandTotal, date: new Date().toLocaleString() });
+        cartItems = [];
+        savePrefs();
+        renderHome();
+      });
+    });
     
     document.getElementById('changeCafeBtn')?.addEventListener('click', () => {
       selectedCafe = null;
       cartItems = [];
       savePrefs();
-      renderDashboard();
-      showToast("Pilih cafe baru yuk!");
+      renderHome();
     });
     
-    // Cafe card click handlers
     document.querySelectorAll('.cafe-card').forEach(card => {
       card.addEventListener('click', (e) => {
-        if(!e.target.classList.contains('view-detail-btn')) {
-          const cafeId = parseInt(card.dataset.cafeId);
-          const cafe = cafesData.find(c => c.id === cafeId);
-          if(cafe) {
-            selectedCafe = cafe;
-            cartItems = [];
-            savePrefs();
-            renderDashboard();
-            showToast(`${cafe.name} dipilih! Silakan pesan menu ✨`);
-          }
+        if(!e.target.classList.contains('view-detail-btn') && !e.target.closest('.like-btn')) {
+          const cafe = cafesData.find(c => c.id === parseInt(card.dataset.cafeId));
+          if(cafe) { selectedCafe = cafe; cartItems = []; savePrefs(); renderHome(); showToast(`${cafe.name} dipilih!`); }
         }
       });
     });
@@ -735,101 +832,118 @@
     document.querySelectorAll('.view-detail-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const cafeId = parseInt(btn.dataset.cafeId);
-        const cafe = cafesData.find(c => c.id === cafeId);
+        const cafe = cafesData.find(c => c.id === parseInt(btn.dataset.cafeId));
         if(cafe) renderCafeDetail(cafe);
       });
     });
     
-    document.querySelectorAll('.vibe-filter').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activeMoodFilter = btn.dataset.mood;
-        savePrefs();
-        renderDashboard();
+    document.querySelectorAll('.like-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleLike(parseInt(btn.dataset.cafeId));
+        renderHome();
       });
+    });
+    
+    document.querySelectorAll('.vibe-filter').forEach(btn => {
+      btn.addEventListener('click', () => { activeMoodFilter = btn.dataset.mood; savePrefs(); renderHome(); });
     });
     
     document.getElementById('darkModeToggleBtn')?.addEventListener('click', () => {
       document.body.classList.toggle('dark-mode');
       savePrefs();
     });
-    
-    document.getElementById('profileBtnHeader')?.addEventListener('click', () => renderProfile());
-    document.getElementById('logoutHeaderBtn')?.addEventListener('click', () => {
-      clearSession();
-      currentUser = null;
-      renderLogin();
-      showToast("Logged out! See you next time 👋");
-    });
   }
   
-  // ==================== SPLIT BILL BOTTOM SHEET ====================
-  function showSplitBottomSheet(total) {
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal fade';
-    modalDiv.innerHTML = `
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bottom-sheet p-3" style="border-radius: 32px;">
-          <div class="modal-header border-0">
-            <h5 class="modal-title">👥 Split Bill & Reminder</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <label class="fw-bold">Jumlah teman (termasuk kamu)</label>
-            <input type="number" id="splitCount" class="form-control rounded-pill mt-2" value="2" min="1">
-            <div class="mt-3 p-3 bg-light rounded-4 text-center">
-              <span class="text-secondary">Tagihan per orang:</span>
-              <div class="fs-3 fw-bold" id="perPerson">Rp ${(total/2).toLocaleString()}</div>
-            </div>
-            <button id="copyWAReminder" class="btn-electric w-100 mt-3">
-              <i class="bi bi-whatsapp"></i> Copy ke WhatsApp
-            </button>
-            <button id="simulateReminder" class="btn-outline-electric w-100 mt-2">
-              <i class="bi bi-bell"></i> Kirim Pengingat (Demo)
-            </button>
-          </div>
+  // ==================== LIKES SCREEN ====================
+  function renderLikes() {
+    showScreen('likesScreen');
+    const container = document.getElementById('likesScreen');
+    const likedIds = getLikedCafes();
+    const likedCafes = cafesData.filter(c => likedIds.includes(c.id));
+    
+    container.innerHTML = `
+      <h4 class="fw-bold mb-3"><i class="bi bi-heart-fill text-danger"></i> Cafe Favoritmu</h4>
+      ${likedCafes.length === 0 ? `
+        <div class="card bento-card p-5 text-center">
+          <i class="bi bi-heart fs-1 text-secondary"></i>
+          <p class="mt-3">Belum ada cafe favorit. Yuk like cafe yang kamu suka! ✨</p>
         </div>
-      </div>
+      ` : `
+        <div class="row g-3">
+          ${likedCafes.map(c => `
+            <div class="col-12">
+              <div class="card bento-card p-2">
+                <div class="d-flex gap-3">
+                  <img src="${c.image}" style="width: 80px; height: 80px; border-radius: 20px; object-fit: cover;">
+                  <div class="flex-grow-1">
+                    <h6 class="fw-bold mb-1">${c.name}</h6>
+                    <small class="text-secondary">${c.location.split(',')[0]}</small>
+                    <div class="mt-2">
+                      <button class="btn btn-sm btn-outline-electric view-like-detail" data-id="${c.id}">Lihat Detail</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `}
     `;
-    document.body.appendChild(modalDiv);
-    const modal = new bootstrap.Modal(modalDiv);
-    modal.show();
     
-    const updateSplit = () => {
-      let cnt = parseInt(document.getElementById('splitCount').value) || 1;
-      const per = total / cnt;
-      document.getElementById('perPerson').innerText = `Rp ${per.toLocaleString()}`;
-    };
-    
-    document.getElementById('splitCount').addEventListener('input', updateSplit);
-    document.getElementById('copyWAReminder').addEventListener('click', () => {
-      const cnt = parseInt(document.getElementById('splitCount').value) || 1;
-      const per = total / cnt;
-      const msg = `🍽️ Vibe Check - ${selectedCafe?.name || 'Cafe'}\nTotal: Rp ${total.toLocaleString()}\nPer orang: Rp ${per.toLocaleString()}\nYuk segera bayar! ✨`;
-      navigator.clipboard.writeText(msg);
-      showToast("✅ Pesan disalin! Tempel di WhatsApp.");
-      modal.hide();
+    document.querySelectorAll('.view-like-detail').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cafe = cafesData.find(c => c.id === parseInt(btn.dataset.id));
+        if(cafe) renderCafeDetail(cafe);
+      });
     });
-    document.getElementById('simulateReminder').addEventListener('click', () => {
-      showToast("📱 Pengingat otomatis dikirim ke teman (simulasi)");
-    });
-    
-    modalDiv.addEventListener('hidden.bs.modal', () => modalDiv.remove());
   }
   
-  // ==================== RENDER PROFILE ====================
+  // ==================== HISTORY SCREEN ====================
+  function renderHistory() {
+    showScreen('historyScreen');
+    const container = document.getElementById('historyScreen');
+    const history = getHistory();
+    
+    container.innerHTML = `
+      <h4 class="fw-bold mb-3"><i class="bi bi-clock-history"></i> Riwayat Transaksi</h4>
+      ${history.length === 0 ? `
+        <div class="card bento-card p-5 text-center">
+          <i class="bi bi-receipt fs-1 text-secondary"></i>
+          <p class="mt-3">Belum ada riwayat. Yuk split bill dan transaksi akan tersimpan! ✨</p>
+        </div>
+      ` : `
+        ${history.map(h => `
+          <div class="card bento-card p-3 mb-3 history-card">
+            <div class="d-flex justify-content-between">
+              <h6 class="fw-bold">${h.cafeName}</h6>
+              <small class="text-secondary">${h.date}</small>
+            </div>
+            <div class="mt-2">
+              ${h.items.map(item => `<div class="d-flex justify-content-between small"><span>${item.name}</span><span>Rp ${item.price.toLocaleString()}</span></div>`).join('')}
+            </div>
+            <hr class="my-2">
+            <div class="d-flex justify-content-between fw-bold">
+              <span>Total</span>
+              <span>Rp ${h.total.toLocaleString()}</span>
+            </div>
+          </div>
+        `).join('')}
+      `}
+    `;
+  }
+  
+  // ==================== PROFILE SCREEN ====================
   function renderProfile() {
     showScreen('profileScreen');
     const container = document.getElementById('profileScreen');
     const stats = currentUser.vibeStats || { nugas: 60, deepTalk: 30, party: 10 };
     
     container.innerHTML = `
-      <div class="card p-4 bento-card">
-        <h4 class="mb-3"><i class="bi bi-graph-up"></i> Vibe-Meter Dashboard</h4>
-        <p class="text-secondary small">Bulan ini kamu ${stats.nugas}% Nugas, ${stats.deepTalk}% Deep Talk, ${stats.party}% Party</p>
-        <canvas id="vibeChart" width="300" height="150" style="max-height:160px"></canvas>
-        <hr class="my-4">
-        <h5 class="mb-3">Edit Profil</h5>
+      <div class="card bento-card p-4">
+        <h4 class="mb-3"><i class="bi bi-person-circle"></i> Profile</h4>
+        <canvas id="vibeChart" height="150"></canvas>
+        <hr>
         <div class="mb-3">
           <label class="form-label">Nama</label>
           <input type="text" id="editName" class="form-control rounded-pill" value="${currentUser.name}">
@@ -838,46 +952,94 @@
           <label class="form-label">Email</label>
           <input type="email" id="editEmail" class="form-control rounded-pill" value="${currentUser.email}">
         </div>
-        <button id="saveProfileBtn" class="btn-electric w-100">Simpan Perubahan</button>
-        <button id="backToDashBtn" class="btn-outline-electric w-100 mt-2">← Kembali ke Vibe</button>
+        <button id="saveProfileBtn" class="btn-electric w-100">Simpan</button>
+        <button id="logoutBtn" class="btn-outline-electric w-100 mt-2">Logout</button>
       </div>
     `;
     
     const ctx = document.getElementById('vibeChart').getContext('2d');
     new Chart(ctx, {
       type: 'doughnut',
-      data: { 
-        labels: ['Nugas', 'Deep Talk', 'Party'], 
-        datasets: [{ data: [stats.nugas, stats.deepTalk, stats.party], backgroundColor: ['#86b3a2', '#6c91b2', '#f59e6b'], borderWidth: 0 }]
-      },
-      options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom', labels: { font: { family: 'Plus Jakarta Sans' } } } } }
+      data: { labels: ['Nugas', 'Deep Talk', 'Party'], datasets: [{ data: [stats.nugas, stats.deepTalk, stats.party], backgroundColor: ['#86b3a2', '#6c91b2', '#f59e6b'] }] },
+      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
     });
     
     document.getElementById('saveProfileBtn').addEventListener('click', () => {
-      const newName = document.getElementById('editName').value;
-      const newEmail = document.getElementById('editEmail').value;
-      if(!newEmail.includes('@')) { showToast("Email tidak valid"); return; }
-      currentUser.name = newName;
-      currentUser.email = newEmail;
+      currentUser.name = document.getElementById('editName').value;
+      currentUser.email = document.getElementById('editEmail').value;
       updateUser(currentUser);
-      showToast("Profil berhasil diupdate! ✨");
+      showToast("Profil diupdate!");
       renderProfile();
     });
-    
-    document.getElementById('backToDashBtn').addEventListener('click', () => renderDashboard());
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      clearSession();
+      currentUser = null;
+      showLogin();
+    });
   }
   
-  // ==================== INIT APP ====================
+  function showSplitBottomSheet(total, onConfirm) {
+    const modalDiv = document.createElement('div');
+    modalDiv.className = 'modal fade';
+    modalDiv.innerHTML = `
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3" style="border-radius: 32px;">
+          <div class="modal-header border-0">
+            <h5 class="modal-title">👥 Split Bill</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <label>Jumlah orang</label>
+            <input type="number" id="splitCount" class="form-control rounded-pill" value="2" min="1">
+            <div class="mt-3 p-3 bg-light rounded-4 text-center">
+              <span>Per orang:</span>
+              <div class="fs-3 fw-bold" id="perPerson">Rp ${(total/2).toLocaleString()}</div>
+            </div>
+            <button id="confirmSplitBtn" class="btn-electric w-100 mt-3">Simpan ke History</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modalDiv);
+    const modal = new bootstrap.Modal(modalDiv);
+    modal.show();
+    
+    document.getElementById('splitCount').addEventListener('input', () => {
+      const cnt = parseInt(document.getElementById('splitCount').value) || 1;
+      document.getElementById('perPerson').innerText = `Rp ${(total/cnt).toLocaleString()}`;
+    });
+    document.getElementById('confirmSplitBtn').addEventListener('click', () => {
+      onConfirm();
+      modal.hide();
+      showToast("✅ Transaksi tersimpan di History!");
+      modalDiv.remove();
+    });
+    modalDiv.addEventListener('hidden.bs.modal', () => modalDiv.remove());
+  }
+  
+  // ==================== INIT ====================
   function initApp() {
     initUsers();
     const user = getCurrentUser();
     if(user) {
       currentUser = user;
       loadUserPrefs();
-      renderDashboard();
+      showMainApp();
+      renderHome();
     } else {
-      renderLogin();
+      showLogin();
     }
+    
+    // Bottom nav listeners
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const nav = item.dataset.nav;
+        if(nav === 'home') renderHome();
+        else if(nav === 'likes') renderLikes();
+        else if(nav === 'history') renderHistory();
+        else if(nav === 'profile') renderProfile();
+      });
+    });
   }
   
   window.initApp = initApp;
@@ -885,13 +1047,11 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
   if('serviceWorker' in navigator) {
-    const swCode = `self.addEventListener('fetch', event => { event.respondWith(fetch(event.request).catch(() => new Response("Vibe Check - Offline mode", { status: 200, headers: { 'Content-Type': 'text/html' } }))); });`;
+    const swCode = `self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response("Vibe Check - Offline"))));`;
     const blob = new Blob([swCode], {type: 'application/javascript'});
-    const url = URL.createObjectURL(blob);
-    navigator.serviceWorker.register(url).then(reg => console.log("✅ PWA Service Worker registered")).catch(e => console.log("SW Error:", e));
+    navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(console.log);
   }
 </script>
 </body>
