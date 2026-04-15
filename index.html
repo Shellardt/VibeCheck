@@ -236,7 +236,7 @@
   const cafesData = [
     {
       id: 1,
-      name: "Kopi Nalar",
+      name: "Kopi Nalla",
       vibe: "nugas",
       location: "Jl. Slamet Riyadi No. 45, Solo",
       mapsUrl: "https://maps.google.com/?q=Kopi+Nalar+Solo",
@@ -405,7 +405,7 @@
     let users = localStorage.getItem(STORAGE_USERS);
     if (!users) {
       const defaultUsers = [
-        { id: "1", name: "Vibester", email: "vibe@check.com", passwordHash: simpleHash("vibe123"), vibeStats: { nugas: 70, deepTalk: 30, party: 0 } }
+        { id: "1", name: "Vibester", email: "vibecheck@gmail.com", passwordHash: simpleHash("vibe123"), vibeStats: { nugas: 0, deepTalk: 0, party: 0 } }
       ];
       localStorage.setItem(STORAGE_USERS, JSON.stringify(defaultUsers));
     }
@@ -937,7 +937,7 @@
   function renderProfile() {
     showScreen('profileScreen');
     const container = document.getElementById('profileScreen');
-    const stats = currentUser.vibeStats || { nugas: 60, deepTalk: 30, party: 10 };
+    const stats = currentUser.vibeStats || { nugas: 0, deepTalk: 0, party: 0 };
     
     container.innerHTML = `
       <div class="card bento-card p-4">
