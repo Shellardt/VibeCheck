@@ -2,1057 +2,656 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Vibe Check · Curated Cafe Solo Raya</title>
-  <!-- Bootstrap 5 + Icons + Fonts -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ngafeeling — Mood-Mu, Cafe-Mu</title>
+  <!-- Bootstrap 5 & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Poppins', sans-serif;
+    }
+    :root {
+      --primary-blue: #1e3a8a;
+      --primary-blue-light: #3b82f6;
+      --bg-soft: #f0f7ff;
+      --cafe-accent: #1e3a8a;
     }
     body {
-      background: #f4f7fc;
-      transition: background 0.3s, color 0.2s;
-      padding-bottom: 80px;
+      background-color: #ffffff;
+      color: #1e293b;
+      transition: background-color 0.3s ease;
     }
-    body.dark-mode {
-      background: #0f172a;
-      color: #eef2ff;
+    .navbar {
+      background-color: #ffffff;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      padding: 0.8rem 0;
     }
-    body.dark-mode .card, body.dark-mode .bento-card, body.dark-mode .modal-content {
-      background: rgba(30, 41, 59, 0.85) !important;
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #f1f5f9;
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: var(--primary-blue) !important;
+      letter-spacing: -0.5px;
     }
-    body.dark-mode .vibe-filter {
-      background: rgba(30, 41, 59, 0.7) !important;
+    .navbar-brand span {
+      background: var(--primary-blue);
+      color: white;
+      border-radius: 12px;
+      padding: 0.1rem 0.6rem;
+      margin-right: 0.3rem;
+      font-size: 1.5rem;
     }
-    body.dark-mode .bottom-nav {
-      background: rgba(30, 41, 59, 0.95) !important;
-      backdrop-filter: blur(20px);
-    }
-    .card, .bento-card {
-      background: rgba(255,255,255,0.75);
-      backdrop-filter: blur(12px);
-      border-radius: 32px;
-      border: 1px solid rgba(255,255,255,0.5);
-      transition: transform 0.2s ease, box-shadow 0.2s;
-    }
-    .vibe-filter {
-      cursor: pointer;
+    .nav-link {
+      font-weight: 500;
+      color: #334155 !important;
+      margin: 0 0.2rem;
+      border-radius: 30px;
+      padding: 0.5rem 1rem !important;
       transition: all 0.2s;
-      border-radius: 60px;
-      padding: 10px 20px;
-      background: rgba(255,255,255,0.7);
-      backdrop-filter: blur(4px);
-      font-weight: 600;
     }
-    .vibe-filter.active {
-      background: #2b3b2c;
+    .nav-link:hover, .nav-link.active {
+      background-color: #e6efff;
+      color: var(--primary-blue) !important;
+    }
+    .btn-outline-primary {
+      border-color: var(--primary-blue);
+      color: var(--primary-blue);
+      border-radius: 30px;
+      font-weight: 500;
+      padding: 0.4rem 1.2rem;
+    }
+    .btn-outline-primary:hover {
+      background-color: var(--primary-blue);
       color: white;
     }
-    .btn-electric {
-      background: #1e5af7;
+    .btn-primary {
+      background-color: var(--primary-blue);
+      border-color: var(--primary-blue);
+      border-radius: 30px;
+      font-weight: 500;
+      padding: 0.5rem 1.5rem;
+    }
+    .btn-primary:hover {
+      background-color: #152c6b;
+      border-color: #152c6b;
+    }
+    .card {
       border: none;
-      border-radius: 40px;
-      padding: 12px 24px;
-      font-weight: 600;
-      color: white;
-      transition: 0.2s;
+      border-radius: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      transition: transform 0.2s, box-shadow 0.2s;
+      background: white;
+      height: 100%;
     }
-    .btn-electric:hover {
-      background: #0a44cc;
-      transform: scale(0.97);
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.08);
     }
-    .btn-outline-electric {
-      border: 1.5px solid #1e5af7;
-      border-radius: 40px;
-      background: transparent;
-      color: #1e5af7;
-      font-weight: 600;
+    .card-body {
+      padding: 1.8rem;
     }
     .cafe-card {
       cursor: pointer;
-      transition: all 0.2s;
+      border-left: 5px solid var(--cafe-accent);
     }
-    .cafe-card.selected {
-      border: 2px solid #1e5af7;
-      background: rgba(30, 90, 247, 0.1);
+    .cafe-card .card-title {
+      font-weight: 600;
+      color: #0f172a;
     }
-    .cafe-img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-      border-radius: 20px;
-    }
-    .like-btn {
+    .favorite-icon {
+      font-size: 1.6rem;
       cursor: pointer;
-      transition: transform 0.2s;
+      color: #cbd5e1;
+      transition: color 0.2s;
     }
-    .like-btn:hover {
-      transform: scale(1.1);
+    .favorite-icon.favorited {
+      color: #ef4444;
     }
-    .like-btn.liked {
-      color: #ff4757;
+    .section-title {
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+      font-size: 2rem;
     }
-    .toast-custom {
-      position: fixed;
-      bottom: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1090;
-      background: #1e293b;
-      color: white;
-      border-radius: 60px;
-      padding: 10px 20px;
+    .section-subtitle {
+      color: #475569;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+    .mood-badge {
+      background: #e6efff;
+      color: var(--primary-blue);
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
       font-weight: 500;
-      opacity: 0;
-      transition: 0.2s;
-      pointer-events: none;
+      font-size: 0.95rem;
+      display: inline-block;
+      margin: 0.3rem;
     }
-    .screen {
-      animation: fadeIn 0.3s ease;
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary-blue);
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(0,0,0,0.05);
-      padding: 12px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 1000;
-    }
-    body.dark-mode .bottom-nav {
-      background: rgba(30, 41, 59, 0.95);
-      border-top-color: rgba(255,255,255,0.1);
-    }
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
+    .blog-card {
+      border-left: 5px solid #10b981;
       cursor: pointer;
-      transition: 0.2s;
-      opacity: 0.6;
+      transition: background 0.2s;
     }
-    .nav-item.active {
-      opacity: 1;
-      color: #1e5af7;
+    .blog-card:hover {
+      background: #f0fdf4;
     }
-    .nav-item i {
-      font-size: 24px;
+    footer {
+      background: #0f172a;
+      color: #cbd5e1;
+      padding: 3rem 0 2rem;
+      margin-top: 5rem;
     }
-    .nav-item span {
-      font-size: 11px;
+    footer h5 {
+      color: white;
       font-weight: 600;
+      margin-bottom: 1.2rem;
     }
-    .history-card {
-      border-left: 4px solid #1e5af7;
-    }
-    .badge-vibe {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-    .maps-link {
+    footer a {
+      color: #94a3b8;
       text-decoration: none;
-      font-size: 14px;
+      transition: color 0.2s;
     }
-    .auth-container {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+    footer a:hover {
+      color: white;
+    }
+    .footer-logo {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: white;
+    }
+    .footer-logo span {
+      background: var(--primary-blue-light);
+      padding: 0.1rem 0.6rem;
+      border-radius: 12px;
+      margin-right: 0.3rem;
+    }
+    .page-section {
+      display: none;
+    }
+    .page-section.active {
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .section-title { font-size: 1.6rem; }
+      .navbar-brand { font-size: 1.3rem; }
+      .card-body { padding: 1.2rem; }
     }
   </style>
 </head>
 <body>
 
-<div id="app" style="max-width: 600px; margin: auto; position: relative;">
-  <!-- Auth Screens -->
-  <div id="loginScreen" class="screen"></div>
-  <div id="registerScreen" class="screen d-none"></div>
-  
-  <!-- Main App Screens (with bottom nav) -->
-  <div id="mainAppContainer" class="d-none">
-    <div class="container py-3" style="padding-bottom: 20px;">
-      <div id="homeScreen" class="screen"></div>
-      <div id="likesScreen" class="screen d-none"></div>
-      <div id="historyScreen" class="screen d-none"></div>
-      <div id="profileScreen" class="screen d-none"></div>
-      <div id="cafeDetailScreen" class="screen d-none"></div>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="#" onclick="switchPage('home')"><span>Nf</span> Ngafeeling</a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <i class="bi bi-list fs-2" style="color: var(--primary-blue);"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+        <li class="nav-item"><a class="nav-link active" href="#" onclick="switchPage('home')" id="nav-home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="switchPage('rekomendasi')" id="nav-rekomendasi">Rekomendasi</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="switchPage('about')" id="nav-about">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" onclick="switchPage('blog')" id="nav-blog">Blog</a></li>
+        <li class="nav-item ms-lg-3">
+          <a class="nav-link" href="#" onclick="switchPage('profil')" id="nav-profil">
+            <i class="bi bi-person-circle me-1"></i>Profil
+          </a>
+        </li>
+      </ul>
     </div>
-    
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-      <div class="nav-item" data-nav="home">
-        <i class="bi bi-house-door-fill"></i>
-        <span>Home</span>
+  </div>
+</nav>
+
+<!-- ========== PAGE: HOME ========== -->
+<div id="page-home" class="page-section active">
+  <div class="container py-5">
+    <!-- Hero -->
+    <div class="row align-items-center g-5 mb-5">
+      <div class="col-lg-7">
+        <h1 class="display-5 fw-bold" style="color: #0f172a;">Ngafeeling: <span style="color: var(--primary-blue);">Mood-Mu, Cafe-Mu.</span></h1>
+        <p class="lead mt-3" style="color: #334155;">Ngafeeling adalah platform kurasi kafe di Soloraya yang mencocokkan tempat nongkrongmu dengan suasana hati, lalu memastikan fasilitas yang tertulis memang benar-benar ada di lapangan.</p>
+        <div class="mt-4">
+          <span class="mood-badge"><i class="bi bi-check-circle-fill me-1"></i> Kurasi berdasarkan mood</span>
+          <span class="mood-badge"><i class="bi bi-check-circle-fill me-1"></i> Validasi fasilitas nyata</span>
+          <span class="mood-badge"><i class="bi bi-check-circle-fill me-1"></i> 10 rekomendasi kafe</span>
+          <span class="mood-badge"><i class="bi bi-check-circle-fill me-1"></i> Solo, Sukoharjo, Karanganyar</span>
+        </div>
       </div>
-      <div class="nav-item" data-nav="likes">
-        <i class="bi bi-heart-fill"></i>
-        <span>Like</span>
+      <div class="col-lg-5">
+        <div class="card p-4 text-center" style="background: var(--bg-soft); border-radius: 32px;">
+          <i class="bi bi-cup-hot fs-1" style="color: var(--primary-blue);"></i>
+          <h4 class="mt-3 fw-semibold">Lagi pengin suasana apa?</h4>
+          <p class="text-secondary">Pilih satu, kami tunjukkan arah kurasinya.</p>
+          <div class="row g-2">
+            <div class="col-6"><div class="mood-badge w-100"><i class="bi bi-laptop me-1"></i> Fokus kerja</div></div>
+            <div class="col-6"><div class="mood-badge w-100"><i class="bi bi-moon me-1"></i> Healing sendiri</div></div>
+            <div class="col-6"><div class="mood-badge w-100"><i class="bi bi-people me-1"></i> Nongkrong rame</div></div>
+            <div class="col-6"><div class="mood-badge w-100"><i class="bi bi-heart me-1"></i> Quality time</div></div>
+          </div>
+          <div class="mt-3 small text-start">
+            <p class="mb-1"><strong>Fokus kerja:</strong> area senyap, colokan, WiFi >40 Mbps.</p>
+            <p class="mb-1"><strong>Healing sendiri:</strong> musik pelan, cahaya hangat, meja tunggal.</p>
+            <p class="mb-1"><strong>Nongkrong rame:</strong> meja besar, jam tutup larut, parkir luas.</p>
+            <p class="mb-0"><strong>Quality time:</strong> meja berjarak, tenang, menu non-kopi lengkap.</p>
+          </div>
+        </div>
       </div>
-      <div class="nav-item" data-nav="history">
-        <i class="bi bi-clock-history"></i>
-        <span>History</span>
+    </div>
+
+    <!-- 2 Blog Rekomendasi -->
+    <div class="mt-5">
+      <h3 class="section-title">Dari blog Ngafeeling</h3>
+      <p class="section-subtitle">Catatan ringan seputar kebiasaan ngafe, kurasi mood, dan cara memesan tanpa ribet.</p>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card blog-card p-3" onclick="switchPage('blog')">
+            <div class="card-body">
+              <h5 class="fw-semibold">5 Tanda Kafe Cocok Buat Fokus Kerja</h5>
+              <p class="text-secondary small">Colokan, WiFi, dan kebisingan — ini yang paling menentukan.</p>
+              <span class="text-success fw-medium">Baca selengkapnya <i class="bi bi-arrow-right"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card blog-card p-3" onclick="switchPage('blog')">
+            <div class="card-body">
+              <h5 class="fw-semibold">Cara Memesan di Kafe Tanpa Ribet</h5>
+              <p class="text-secondary small">Split-bill otomatis dan tips memesan untuk rombongan.</p>
+              <span class="text-success fw-medium">Baca selengkapnya <i class="bi bi-arrow-right"></i></span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="nav-item" data-nav="profile">
-        <i class="bi bi-person-fill"></i>
-        <span>Profile</span>
+      <div class="mt-4 text-center">
+        <a href="#" onclick="switchPage('blog')" class="btn btn-outline-primary">Lihat 3 blog lainnya <i class="bi bi-arrow-right"></i></a>
+      </div>
+    </div>
+
+    <!-- CTA WhatsApp -->
+    <div class="row mt-5 pt-4">
+      <div class="col-12 text-center">
+        <div class="card p-5" style="background: var(--bg-soft); border-radius: 32px;">
+          <h3 class="fw-bold">Sudah tahu mood-mu hari ini?</h3>
+          <p class="lead">Kirim mood dan lokasimu, tim Ngafeeling bantu pilihkan kafenya untuk kamu.</p>
+          <a href="https://wa.me/6287705339063?text=Halo%20Ngafeeling%2C%20saya%20mau%20cari%20cafe%20sesuai%20mood%20saya" target="_blank" class="btn btn-primary btn-lg"><i class="bi bi-whatsapp me-2"></i>Chat WhatsApp — 0877-0533-9063</a>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<div id="globalToast" class="toast-custom">✨ Copied!</div>
+<!-- ========== PAGE: REKOMENDASI ========== -->
+<div id="page-rekomendasi" class="page-section">
+  <div class="container py-5">
+    <h2 class="section-title">10 Rekomendasi Kafe Pilihan</h2>
+    <p class="section-subtitle">Klik salah satu kafe untuk melihat menu, suasana, dan kontak pemesanannya. Tampilan situs ini juga akan menyesuaikan warna kafe yang kamu pilih.</p>
+    <div class="row g-4" id="cafeGrid">
+      <!-- Diisi oleh JavaScript -->
+    </div>
+    <div id="cafeDetail" class="mt-5"></div>
+  </div>
+</div>
 
+<!-- ========== PAGE: ABOUT US ========== -->
+<div id="page-about" class="page-section">
+  <div class="container py-5">
+    <div class="row g-5">
+      <div class="col-lg-8 mx-auto">
+        <h2 class="section-title">Tentang Ngafeeling</h2>
+        <p class="lead">Ngafeeling lahir dari kebiasaan kecil yang sering bikin kesal: sudah jauh-jauh datang ke kafe, ternyata colokan penuh, WiFi lemot, atau suasananya terlalu ramai untuk mengerjakan tugas.</p>
+        <p>Kami mengkurasi kafe di Soloraya berdasarkan dua hal yang paling menentukan pengalaman: suasana yang kamu butuhkan hari itu, dan fasilitas yang benar-benar tersedia saat kami cek langsung. Setiap data punya tanggal validasi, jadi kamu tahu seberapa baru informasinya.</p>
+        <p>Setelah sampai di tempat, urusan pembayaran juga kami bantu rapikan lewat split-bill otomatis yang rinciannya bisa langsung dikirim ke grup.</p>
+        <p class="fst-italic fw-semibold fs-4 mt-4" style="color: var(--primary-blue);">“Mood-mu, Cafe-mu.”</p>
+        <div class="row mt-5 text-center g-4">
+          <div class="col-6 col-md-3"><div class="stat-number">3</div><div class="text-secondary">Kabupaten/Kota</div></div>
+          <div class="col-6 col-md-3"><div class="stat-number">4</div><div class="text-secondary">Mood utama</div></div>
+          <div class="col-6 col-md-3"><div class="stat-number">6</div><div class="text-secondary">Poin fasilitas</div></div>
+          <div class="col-6 col-md-3"><div class="stat-number">30 hr</div><div class="text-secondary">Siklus update</div></div>
+        </div>
+        <h4 class="mt-5 fw-semibold">Untuk siapa?</h4>
+        <p>Mahasiswa, pekerja remote, dan kelompok teman yang sering patungan, terutama di sekitar kampus dan pusat kota Solo.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE: BLOG ========== -->
+<div id="page-blog" class="page-section">
+  <div class="container py-5">
+    <h2 class="section-title">Dari blog Ngafeeling</h2>
+    <p class="section-subtitle">Catatan ringan seputar kebiasaan ngafe, kurasi mood, dan cara memesan tanpa ribet. Klik judulnya untuk baca versi lengkapnya.</p>
+    <div class="row g-4" id="blogGrid">
+      <!-- Diisi oleh JavaScript -->
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAGE: PROFIL ========== -->
+<div id="page-profil" class="page-section">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div id="profilNotLogged">
+          <div class="card p-5 text-center">
+            <i class="bi bi-person-circle fs-1" style="color: var(--primary-blue);"></i>
+            <h3 class="mt-3 fw-semibold">Masuk ke Ngafeeling</h3>
+            <p class="text-secondary">Silakan login untuk mengakses fitur favorit, edit profil, dan lainnya.</p>
+            <button class="btn btn-primary btn-lg mt-2" onclick="loginPrompt()">Login</button>
+          </div>
+        </div>
+        <div id="profilLogged" style="display: none;">
+          <div class="card p-4 mb-4">
+            <div class="d-flex align-items-center gap-3">
+              <i class="bi bi-person-circle fs-1" style="color: var(--primary-blue);"></i>
+              <div>
+                <h4 class="fw-semibold mb-0" id="profilNama">User</h4>
+                <p class="text-secondary mb-0" id="profilEmail">user@email.com</p>
+              </div>
+            </div>
+            <hr>
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-outline-primary" onclick="editProfil()"><i class="bi bi-pencil me-1"></i>Edit Profil</button>
+              <button class="btn btn-outline-primary" onclick="switchPage('favorit')"><i class="bi bi-heart me-1"></i>Cafe Favorit</button>
+              <button class="btn btn-outline-danger ms-auto" onclick="logout()"><i class="bi bi-box-arrow-right me-1"></i>Log Out</button>
+            </div>
+          </div>
+          <div id="favoritSection" style="display: none;">
+            <h4 class="fw-semibold mt-4">Cafe Favorit Kamu</h4>
+            <div id="favoritList" class="row g-3 mt-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="footer-logo"><span>Nf</span> Ngafeeling</div>
+        <p class="mt-3 small">Kurasi kafe berbasis mood dan fasilitas nyata untuk wilayah Soloraya, lengkap dengan split-bill otomatis.</p>
+      </div>
+      <div class="col-6 col-lg-2">
+        <h5>Navigasi</h5>
+        <ul class="list-unstyled">
+          <li><a href="#" onclick="switchPage('home')">Home</a></li>
+          <li><a href="#" onclick="switchPage('rekomendasi')">Rekomendasi</a></li>
+          <li><a href="#" onclick="switchPage('about')">About Us</a></li>
+          <li><a href="#" onclick="switchPage('blog')">Blog</a></li>
+          <li><a href="#" onclick="switchPage('profil')">Profil</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-lg-3">
+        <h5>Hubungi</h5>
+        <ul class="list-unstyled">
+          <li><a href="https://wa.me/6287705339063" target="_blank">WhatsApp — 0877-0533-9063</a></li>
+          <li><a href="mailto:ngafeelingmu@gmail.com">ngafeelingmu@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-3">
+        <h5>Sosial Media</h5>
+        <ul class="list-unstyled">
+          <li><a href="#">Instagram @ngafeeling.mu</a></li>
+          <li><a href="#">Facebook @Ngafeeling Mu</a></li>
+          <li><a href="#">TikTok @Ngafeeling</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr class="mt-4 border-secondary">
+    <div class="d-flex flex-wrap justify-content-between small">
+      <span>062302025 — Shella</span>
+      <span>© 2026 Ngafeeling · Soloraya, Jawa Tengah</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  // ==================== STORAGE KEYS ====================
-  const STORAGE_USERS = "vibecheck_users";
-  const STORAGE_SESSION = "vibecheck_session";
-  const STORAGE_PREFS = "vibecheck_prefs";
-  const STORAGE_LIKES = "vibecheck_likes";
-  const STORAGE_HISTORY = "vibecheck_history";
-
-  // ==================== DATA CAFE SOLO RAYA ====================
-  const cafesData = [
-    {
-      id: 1,
-      name: "Kopi Nalla",
-      vibe: "nugas",
-      location: "Jl. Slamet Riyadi No. 45, Solo",
-      mapsUrl: "https://maps.google.com/?q=Kopi+Nalar+Solo",
-      description: "Tempat nongkrong favorit anak coding dengan suasana tenang dan wifi kenceng. Perfect buat nugas!",
-      image: "https://picsum.photos/id/20/400/300",
-      menu: [
-        { name: "Kopi Susu Gula Aren", price: 28000 },
-        { name: "Iced Latte", price: 32000 },
-        { name: "Matcha Latte", price: 35000 },
-        { name: "French Fries", price: 25000 },
-        { name: "Cheesecake", price: 39000 }
-      ],
-      taxRate: 0.11,
-      serviceCharge: 0.05,
-      facilities: { wifi: "⚡ 100Mbps", outlet: "🔌 8 plugs", mushola: "✅ Ada", noise: "🔇 Sunyi", clean: "⭐ 4.9", staff: "Ramah" }
-    },
-    {
-      id: 2,
-      name: "Space Talk",
-      vibe: "deeptalk",
-      location: "Jl. Dr. Rajiman No. 12, Solo",
-      mapsUrl: "https://maps.google.com/?q=Space+Talk+Solo",
-      description: "Cafe aesthetic dengan konsep ruang terbuka, cocok buat deep talk dan curhat sama bestie.",
-      image: "https://picsum.photos/id/26/400/300",
-      menu: [
-        { name: "Vietnamese Coffee", price: 32000 },
-        { name: "Honey Lemon Tea", price: 25000 },
-        { name: "Taro Latte", price: 33000 },
-        { name: "Spaghetti Aglio", price: 45000 },
-        { name: "Chocolate Lava", price: 35000 }
-      ],
-      taxRate: 0.10,
-      serviceCharge: 0.08,
-      facilities: { wifi: "🛜 50Mbps", outlet: "🔌 4 plugs", mushola: "✅ Ada", noise: "🎧 Musik pelan", clean: "⭐ 4.8", staff: "Baik" }
-    },
-    {
-      id: 3,
-      name: "Sundaze",
-      vibe: "party",
-      location: "Jl. Brigjen Sudiarto No. 88, Solo",
-      mapsUrl: "https://maps.google.com/?q=Sundaze+Solo",
-      description: "Tempat hits dengan live music setiap weekend. Vibesnya party banget!",
-      image: "https://picsum.photos/id/29/400/300",
-      menu: [
-        { name: "Espresso Martini", price: 55000 },
-        { name: "Mocktail Sunrise", price: 42000 },
-        { name: "Beer Bintang", price: 35000 },
-        { name: "Pizza Margherita", price: 65000 },
-        { name: "Chicken Wings", price: 48000 }
-      ],
-      taxRate: 0.11,
-      serviceCharge: 0.10,
-      facilities: { wifi: "📶 30Mbps", outlet: "🔌 2 plugs", mushola: "❌ Tidak", noise: "🔊 Berisik asik", clean: "⭐ 4.7", staff: "Cekatan" }
-    },
-    {
-      id: 4,
-      name: "Work & Wonder",
-      vibe: "nugas",
-      location: "Jl. MH Thamrin No. 23, Solo",
-      mapsUrl: "https://maps.google.com/?q=Work+and+Wonder+Solo",
-      description: "Co-working space plus cafe, fasilitas lengkap buat produktif.",
-      image: "https://picsum.photos/id/30/400/300",
-      menu: [
-        { name: "Long Black", price: 25000 },
-        { name: "Caramel Macchiato", price: 38000 },
-        { name: "Green Tea", price: 20000 },
-        { name: "Nasi Goreng", price: 35000 },
-        { name: "Sandwich", price: 28000 }
-      ],
-      taxRate: 0.11,
-      serviceCharge: 0.05,
-      facilities: { wifi: "🚀 Gigabit", outlet: "🔌 12 plugs", mushola: "✅+", noise: "Sunyi", clean: "⭐ 5.0", staff: "Friendly" }
-    },
-    {
-      id: 5,
-      name: "Obrol Factory",
-      vibe: "deeptalk",
-      location: "Jl. Ahmad Yani No. 67, Solo",
-      mapsUrl: "https://maps.google.com/?q=Obrol+Factory+Solo",
-      description: "Tempat ngobrol seru dengan konsep industrial, nyaman buat diskusi panjang.",
-      image: "https://picsum.photos/id/32/400/300",
-      menu: [
-        { name: "Butterscotch Latte", price: 35000 },
-        { name: "Matcha Frappe", price: 38000 },
-        { name: "Churros", price: 27000 },
-        { name: "Pasta Carbonara", price: 48000 },
-        { name: "Onion Rings", price: 22000 }
-      ],
-      taxRate: 0.10,
-      serviceCharge: 0.07,
-      facilities: { wifi: "🛜 70Mbps", outlet: "🔌 6 plugs", mushola: "✅", noise: "Ambient", clean: "⭐ 4.9", staff: "Warm" }
-    },
-    {
-      id: 6,
-      name: "Afterdark",
-      vibe: "party",
-      location: "Jl. Honggowongso No. 15, Solo",
-      mapsUrl: "https://maps.google.com/?q=Afterdark+Solo",
-      description: "Nightlife spot favorit Gen Z, DJ performance setiap malam minggu.",
-      image: "https://picsum.photos/id/36/400/300",
-      menu: [
-        { name: "Whiskey Sour", price: 65000 },
-        { name: "Mojito", price: 55000 },
-        { name: "French Fries", price: 25000 },
-        { name: "Burger", price: 45000 },
-        { name: "Nachos", price: 35000 }
-      ],
-      taxRate: 0.11,
-      serviceCharge: 0.12,
-      facilities: { wifi: "📱 20Mbps", outlet: "🔌 4 plugs", mushola: "❌", noise: "Loud Music", clean: "⭐ 4.6", staff: "Energy" }
-    }
+  // ========== DATA CAFE (10 rekomendasi, masih placeholder) ==========
+  const cafes = [
+    { id: 1, name: "Kopi Senja", location: "Solo", mood: "Fokus kerja", color: "#1e3a8a", desc: "Area senyap, colokan banyak, WiFi cepat.", menu: ["Kopi Susu 20k", "Americano 18k", "Croissant 15k"], contact: "0812-3456-7890" },
+    { id: 2, name: "Ruang Teduh", location: "Sukoharjo", mood: "Healing sendiri", color: "#0f766e", desc: "Musik pelan, cahaya hangat, meja tunggal.", menu: ["Matcha Latte 25k", "Teh Serai 15k", "Cheesecake 22k"], contact: "0813-9876-5432" },
+    { id: 3, name: "Titik Kumpul", location: "Karanganyar", mood: "Nongkrong rame", color: "#b45309", desc: "Meja besar, buka sampai larut, parkir luas.", menu: ["Kopi Tubruk 12k", "Pisang Goreng 10k", "Es Teh 8k"], contact: "0857-1234-5678" },
+    { id: 4, name: "Selasar", location: "Solo", mood: "Quality time", color: "#7e22ce", desc: "Meja berjarak, tenang, menu non-kopi lengkap.", menu: ["Coklat Panas 22k", "Lemon Tea 18k", "Pasta 35k"], contact: "0821-3344-5566" },
+    { id: 5, name: "Pustaka Kafe", location: "Solo", mood: "Fokus kerja", color: "#1e3a8a", desc: "WiFi 50 Mbps, colokan di tiap meja, AC dingin.", menu: ["Espresso 15k", "Latte 22k", "Donat 10k"], contact: "0812-9988-7766" },
+    { id: 6, name: "Halaman Belakang", location: "Sukoharjo", mood: "Healing sendiri", color: "#0f766e", desc: "Taman kecil, musik akustik, sepi.", menu: ["Kopi Kelapa 24k", "Es Jeruk 12k", "Pisang Bakar 15k"], contact: "0856-4433-2211" },
+    { id: 7, name: "Balkon Kota", location: "Solo", mood: "Nongkrong rame", color: "#b45309", desc: "Rooftop, live music, kapasitas 50 orang.", menu: ["Mocktail 30k", "French Fries 20k", "Kopi 25k"], contact: "0813-1122-3344" },
+    { id: 8, name: "Ruang Duduk", location: "Karanganyar", mood: "Quality time", color: "#7e22ce", desc: "Sofa empuk, pencahayaan redup, tenang.", menu: ["Red Velvet 28k", "Matcha 26k", "Brownies 18k"], contact: "0821-5566-7788" },
+    { id: 9, name: "Kedai Kopi 88", location: "Solo", mood: "Fokus kerja", color: "#1e3a8a", desc: "Colokan melimpah, WiFi stabil, buka 24 jam.", menu: ["Kopi Hitam 10k", "Susu 12k", "Roti Bakar 15k"], contact: "0857-9988-1122" },
+    { id: 10, name: "Tepi Sungai", location: "Sukoharjo", mood: "Healing sendiri", color: "#0f766e", desc: "View sungai, angin sepoi, tempat duduk kayu.", menu: ["Kopi Jahe 20k", "Wedang Uwuh 15k", "Singkong 10k"], contact: "0812-3344-7788" }
   ];
 
-  // Helper functions
-  function simpleHash(pw) {
-    let hash = 0;
-    for (let i = 0; i < pw.length; i++) {
-      hash = ((hash << 5) - hash) + pw.charCodeAt(i);
-      hash |= 0;
-    }
-    return hash.toString(16);
-  }
+  // ========== DATA BLOG (5 blog) ==========
+  const blogs = [
+    { id: 1, title: "5 Tanda Kafe Cocok Buat Fokus Kerja", excerpt: "Colokan, WiFi, dan kebisingan — ini yang paling menentukan.", content: "Colokan yang banyak, WiFi di atas 40 Mbps, dan area senyap adalah tiga hal utama. Cek juga jam sibuk dan ketersediaan meja besar." },
+    { id: 2, title: "Cara Memesan di Kafe Tanpa Ribet", excerpt: "Split-bill otomatis dan tips memesan untuk rombongan.", content: "Gunakan fitur split-bill otomatis dari Ngafeeling untuk membagi tagihan secara adil. Pesan dulu sebelum ramai." },
+    { id: 3, title: "Mood Booster: Healing Sendiri di Kafe", excerpt: "Pilih tempat dengan musik pelan dan cahaya hangat.", content: "Cari kafe dengan pencahayaan warm, musik instrumental, dan meja tunggal yang tidak berdesakan." },
+    { id: 4, title: "Nongkrong Rame? Ini Kriteria Kafenya", excerpt: "Meja besar, jam tutup larut, parkir luas.", content: "Pastikan kafe punya area parkir yang cukup untuk rombongan, dan buka sampai jam 12 malam." },
+    { id: 5, title: "Quality Time: Kafe Tenang Tapi Tidak Sepi", excerpt: "Meja berjarak, menu non-kopi lengkap.", content: "Pilih kafe dengan tata letak meja berjarak, suasana tenang, dan variasi menu non-kopi yang banyak." }
+  ];
 
-  function showToast(msg) {
-    const toast = document.getElementById('globalToast');
-    toast.innerText = msg;
-    toast.style.opacity = '1';
-    setTimeout(() => { toast.style.opacity = '0'; }, 2000);
-  }
-
-  function showMainApp() {
-    document.getElementById('mainAppContainer').classList.remove('d-none');
-    document.getElementById('loginScreen').classList.add('d-none');
-    document.getElementById('registerScreen').classList.add('d-none');
-  }
-
-  function showLogin() {
-    document.getElementById('mainAppContainer').classList.add('d-none');
-    document.getElementById('loginScreen').classList.remove('d-none');
-    document.getElementById('registerScreen').classList.add('d-none');
-    renderLogin();
-  }
-
-  function showRegister() {
-    document.getElementById('mainAppContainer').classList.add('d-none');
-    document.getElementById('loginScreen').classList.add('d-none');
-    document.getElementById('registerScreen').classList.remove('d-none');
-    renderRegister();
-  }
-
-  function showScreen(screenId) {
-    document.querySelectorAll('#mainAppContainer .screen').forEach(s => s.classList.add('d-none'));
-    document.getElementById(screenId).classList.remove('d-none');
-    
-    // Update bottom nav active state
-    const navMap = { homeScreen: 'home', likesScreen: 'likes', historyScreen: 'history', profileScreen: 'profile' };
-    const activeNav = navMap[screenId];
-    document.querySelectorAll('.nav-item').forEach(item => {
-      if (item.dataset.nav === activeNav) item.classList.add('active');
-      else item.classList.remove('active');
-    });
-  }
-
-  // ==================== USER MANAGEMENT ====================
-  function initUsers() {
-    let users = localStorage.getItem(STORAGE_USERS);
-    if (!users) {
-      const defaultUsers = [
-        { id: "1", name: "Vibester", email: "vibecheck@gmail.com", passwordHash: simpleHash("vibe123"), vibeStats: { nugas: 0, deepTalk: 0, party: 0 } }
-      ];
-      localStorage.setItem(STORAGE_USERS, JSON.stringify(defaultUsers));
-    }
-  }
-
-  function getCurrentUser() {
-    const session = localStorage.getItem(STORAGE_SESSION);
-    if (!session) return null;
-    try {
-      const { userId } = JSON.parse(session);
-      const users = JSON.parse(localStorage.getItem(STORAGE_USERS) || "[]");
-      return users.find(u => u.id === userId) || null;
-    } catch(e) { return null; }
-  }
-
-  function saveSession(user) {
-    localStorage.setItem(STORAGE_SESSION, JSON.stringify({ userId: user.id, email: user.email, name: user.name }));
-  }
-
-  function clearSession() {
-    localStorage.removeItem(STORAGE_SESSION);
-  }
-
-  function updateUser(updatedUser) {
-    let users = JSON.parse(localStorage.getItem(STORAGE_USERS) || "[]");
-    const idx = users.findIndex(u => u.id === updatedUser.id);
-    if(idx !== -1) users[idx] = updatedUser;
-    localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
-    const session = localStorage.getItem(STORAGE_SESSION);
-    if(session) {
-      const sess = JSON.parse(session);
-      if(sess.userId === updatedUser.id) saveSession(updatedUser);
-    }
-  }
-
-  // ==================== LIKES & HISTORY ====================
-  function getLikedCafes() {
-    const likes = localStorage.getItem(STORAGE_LIKES + "_" + currentUser?.id);
-    return likes ? JSON.parse(likes) : [];
-  }
-
-  function toggleLike(cafeId) {
-    let likes = getLikedCafes();
-    if (likes.includes(cafeId)) {
-      likes = likes.filter(id => id !== cafeId);
-      showToast("❤️ Dihapus dari favorit");
-    } else {
-      likes.push(cafeId);
-      showToast("👍 Ditambahkan ke favorit");
-    }
-    localStorage.setItem(STORAGE_LIKES + "_" + currentUser.id, JSON.stringify(likes));
-    return likes;
-  }
-
-  function isLiked(cafeId) {
-    return getLikedCafes().includes(cafeId);
-  }
-
-  function addToHistory(billData) {
-    let history = JSON.parse(localStorage.getItem(STORAGE_HISTORY + "_" + currentUser?.id) || "[]");
-    history.unshift({ ...billData, id: Date.now(), date: new Date().toLocaleString() });
-    if (history.length > 20) history.pop();
-    localStorage.setItem(STORAGE_HISTORY + "_" + currentUser.id, JSON.stringify(history));
-  }
-
-  function getHistory() {
-    return JSON.parse(localStorage.getItem(STORAGE_HISTORY + "_" + currentUser?.id) || "[]");
-  }
-
-  // ==================== GLOBAL STATE ====================
+  // ========== STATE ==========
   let currentUser = null;
-  let activeMoodFilter = "nugas";
-  let selectedCafe = null;
-  let cartItems = [];
+  let favorites = [];
 
-  function loadUserPrefs() {
-    if(!currentUser) return;
-    const prefs = localStorage.getItem(STORAGE_PREFS + "_" + currentUser.id);
-    if(prefs) {
-      try {
-        const p = JSON.parse(prefs);
-        activeMoodFilter = p.activeMoodFilter || "nugas";
-        if(p.selectedCafeId) {
-          selectedCafe = cafesData.find(c => c.id === p.selectedCafeId);
-        }
-        cartItems = p.cartItems || [];
-        if(p.darkMode) document.body.classList.add('dark-mode');
-        else document.body.classList.remove('dark-mode');
-      } catch(e) {}
-    }
+  // ========== LOCALSTORAGE ==========
+  function loadFromStorage() {
+    const storedUser = localStorage.getItem('ngafeeling_user');
+    if (storedUser) currentUser = JSON.parse(storedUser);
+    const storedFav = localStorage.getItem('ngafeeling_favorites');
+    if (storedFav) favorites = JSON.parse(storedFav);
+  }
+  function saveUser() {
+    if (currentUser) localStorage.setItem('ngafeeling_user', JSON.stringify(currentUser));
+    else localStorage.removeItem('ngafeeling_user');
+  }
+  function saveFavorites() {
+    localStorage.setItem('ngafeeling_favorites', JSON.stringify(favorites));
   }
 
-  function savePrefs() {
-    if(!currentUser) return;
-    const darkMode = document.body.classList.contains('dark-mode');
-    const prefs = { activeMoodFilter, selectedCafeId: selectedCafe?.id || null, cartItems, darkMode };
-    localStorage.setItem(STORAGE_PREFS + "_" + currentUser.id, JSON.stringify(prefs));
+  // ========== PAGE SWITCHING ==========
+  function switchPage(page) {
+    document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+    const navMap = { home: 'nav-home', rekomendasi: 'nav-rekomendasi', about: 'nav-about', blog: 'nav-blog', profil: 'nav-profil' };
+    if (navMap[page]) document.getElementById(navMap[page]).classList.add('active');
+    if (page === 'profil') renderProfil();
+    if (page === 'rekomendasi') renderCafes();
+    if (page === 'blog') renderBlogs();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ==================== RENDER LOGIN ====================
-  function renderLogin() {
-    const container = document.getElementById('loginScreen');
-    container.innerHTML = `
-      <div class="auth-container">
-        <div class="card p-4 w-100 border-0" style="border-radius: 48px;">
-          <h2 class="fw-bold mb-1">Vibe Check</h2>
-          <p class="text-secondary">Cafe curator for Solo Raya ✨</p>
-          <form id="loginForm">
-            <div class="mb-3">
-              <label class="form-label">Email</label>
-              <input type="email" class="form-control rounded-pill" id="loginEmail" placeholder="vibe@check.com" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Password</label>
-              <input type="password" class="form-control rounded-pill" id="loginPassword" required>
-            </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="rememberMe">
-              <label class="form-check-label">Remember Me</label>
-            </div>
-            <button type="submit" class="btn-electric w-100">Login & vibe ➡</button>
-            <p class="text-center mt-3">Belum punya akun? <a href="#" id="gotoRegisterBtn" class="text-decoration-none fw-bold">Daftar Sekarang</a></p>
-          </form>
-        </div>
-      </div>
-    `;
-    
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim();
-      const pwd = document.getElementById('loginPassword').value;
-      const remember = document.getElementById('rememberMe').checked;
-      const users = JSON.parse(localStorage.getItem(STORAGE_USERS) || "[]");
-      const user = users.find(u => u.email === email && u.passwordHash === simpleHash(pwd));
-      
-      if(user) {
-        currentUser = user;
-        if(remember) saveSession(user);
-        else localStorage.setItem(STORAGE_SESSION, JSON.stringify({ userId: user.id, email: user.email, name: user.name }));
-        loadUserPrefs();
-        showMainApp();
-        renderHome();
-        showToast(`Welcome back, ${user.name}! ✨`);
-      } else {
-        showToast("❌ Email atau password salah");
-      }
-    });
-    
-    document.getElementById('gotoRegisterBtn').addEventListener('click', (e) => {
-      e.preventDefault();
-      showRegister();
-    });
-  }
-
-  function renderRegister() {
-    const container = document.getElementById('registerScreen');
-    container.innerHTML = `
-      <div class="auth-container">
-        <div class="card p-4 w-100 border-0" style="border-radius: 48px;">
-          <button id="backToLoginBtn" class="btn btn-sm rounded-pill border-0 mb-3" style="width: fit-content; background: rgba(0,0,0,0.05);">
-            <i class="bi bi-arrow-left"></i> Kembali ke Login
-          </button>
-          <h2 class="fw-bold">Join the Vibe</h2>
-          <p class="text-secondary">Discover Solo's best cafes ✨</p>
-          <form id="registerForm">
-            <div class="mb-2">
-              <label>Nama Lengkap</label>
-              <input type="text" class="form-control rounded-pill" id="regName" placeholder="Masukkan namamu" required>
-            </div>
-            <div class="mb-2">
-              <label>Email</label>
-              <input type="email" class="form-control rounded-pill" id="regEmail" placeholder="email@example.com" required>
-            </div>
-            <div class="mb-3">
-              <label>Password (min 6 karakter)</label>
-              <input type="password" class="form-control rounded-pill" id="regPassword" placeholder="******" required>
-            </div>
-            <button type="submit" class="btn-electric w-100">Daftar & vibe 🚀</button>
-          </form>
-        </div>
-      </div>
-    `;
-    
-    document.getElementById('backToLoginBtn').addEventListener('click', (e) => {
-      e.preventDefault();
-      showLogin();
-    });
-    
-    document.getElementById('registerForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('regName').value.trim();
-      const email = document.getElementById('regEmail').value.trim();
-      const pwd = document.getElementById('regPassword').value;
-      
-      if(pwd.length < 6) { showToast("Password minimal 6 karakter"); return; }
-      if(!email.includes('@')) { showToast("Email tidak valid"); return; }
-      if(name.length === 0) { showToast("Nama tidak boleh kosong"); return; }
-      
-      let users = JSON.parse(localStorage.getItem(STORAGE_USERS) || "[]");
-      if(users.find(u => u.email === email)) { showToast("Email sudah terdaftar"); return; }
-      
-      const newUser = {
-        id: Date.now().toString(),
-        name: name,
-        email: email,
-        passwordHash: simpleHash(pwd),
-        vibeStats: { nugas: 60, deepTalk: 30, party: 10 }
-      };
-      users.push(newUser);
-      localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
-      currentUser = newUser;
-      saveSession(newUser);
-      loadUserPrefs();
-      showMainApp();
-      renderHome();
-      showToast(`Selamat datang, ${name}! 🎉`);
-    });
-  }
-
-  // ==================== CAFE DETAIL ====================
-  function renderCafeDetail(cafe) {
-    showScreen('cafeDetailScreen');
-    const container = document.getElementById('cafeDetailScreen');
-    const liked = isLiked(cafe.id);
-    
-    container.innerHTML = `
-      <div class="mb-3 d-flex justify-content-between align-items-center">
-        <button id="backFromDetailBtn" class="btn btn-sm rounded-pill border-0 bg-white bg-opacity-50">
-          <i class="bi bi-arrow-left"></i> Back
-        </button>
-        <div class="like-btn ${liked ? 'liked' : ''}" data-cafe-id="${cafe.id}">
-          <i class="bi ${liked ? 'bi-heart-fill' : 'bi-heart'} fs-3"></i>
-        </div>
-      </div>
-      <div class="card bento-card p-0 overflow-hidden">
-        <img src="${cafe.image}" class="cafe-img" style="height: 200px;" alt="${cafe.name}">
-        <div class="p-4">
-          <h3 class="fw-bold">${cafe.name}</h3>
-          <div class="mb-2">
-            <span class="badge-vibe" style="background: ${cafe.vibe === 'nugas' ? '#86b3a2' : cafe.vibe === 'deeptalk' ? '#6c91b2' : '#f59e6b'}20">
-              ${cafe.vibe === 'nugas' ? '📚 Nugas' : cafe.vibe === 'deeptalk' ? '💬 Deep Talk' : '🎉 Party'}
-            </span>
-          </div>
-          <p class="text-secondary mb-2"><i class="bi bi-geo-alt"></i> ${cafe.location}</p>
-          <a href="${cafe.mapsUrl}" target="_blank" class="maps-link text-primary mb-3 d-inline-block">
-            <i class="bi bi-map"></i> Buka di Google Maps
-          </a>
-          <p>${cafe.description}</p>
-          <h5 class="mt-4 mb-3"><i class="bi bi-building"></i> Fasilitas</h5>
-          <div class="row g-2 mb-4">
-            <div class="col-6">${cafe.facilities.wifi}</div>
-            <div class="col-6">${cafe.facilities.outlet}</div>
-            <div class="col-6">${cafe.facilities.mushola}</div>
-            <div class="col-6">${cafe.facilities.noise}</div>
-            <div class="col-6">${cafe.facilities.clean}</div>
-            <div class="col-6">Staf: ${cafe.facilities.staff}</div>
-          </div>
-          <button id="selectCafeBtn" class="btn-electric w-100">Pilih Cafe Ini & Mulai Pesan</button>
-        </div>
-      </div>
-    `;
-    
-    document.getElementById('backFromDetailBtn').addEventListener('click', () => renderHome());
-    document.getElementById('selectCafeBtn').addEventListener('click', () => {
-      selectedCafe = cafe;
-      savePrefs();
-      renderHome();
-      showToast(`${cafe.name} dipilih! ✨`);
-    });
-    
-    document.querySelector('.like-btn').addEventListener('click', () => {
-      toggleLike(cafe.id);
-      renderCafeDetail(cafe);
-    });
-  }
-
-  // ==================== RENDER HOME ====================
-  function renderHome() {
-    showScreen('homeScreen');
-    const container = document.getElementById('homeScreen');
-    const filteredCafes = cafesData.filter(c => c.vibe === activeMoodFilter);
-    const totalMenuPrice = cartItems.reduce((sum, i) => sum + i.price, 0);
-    const taxRate = selectedCafe?.taxRate || 0.11;
-    const serviceCharge = selectedCafe?.serviceCharge || 0.05;
-    const tax = totalMenuPrice * taxRate;
-    const service = totalMenuPrice * serviceCharge;
-    const grandTotal = totalMenuPrice + tax + service;
-    const likedCafes = getLikedCafes();
-    
-    container.innerHTML = `
-      <div class="mb-3 d-flex justify-content-between align-items-center">
-        <h3 class="fw-bold">👋 Hey, ${currentUser.name.split(' ')[0]}!</h3>
-        <button id="darkModeToggleBtn" class="btn btn-sm rounded-pill border-0 bg-white bg-opacity-50">
-          <i class="bi bi-moon-stars"></i>
-        </button>
-      </div>
-      
-      ${selectedCafe ? `
-        <div class="card bento-card p-3 mb-4" style="background: linear-gradient(135deg, #1e5af7, #0a44cc); color: white;">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <small class="opacity-75">Sedang di</small>
-              <h5 class="fw-bold mb-0">${selectedCafe.name}</h5>
-            </div>
-            <button id="changeCafeBtn" class="btn btn-sm btn-light rounded-pill">Ganti</button>
-          </div>
-        </div>
-      ` : `
-        <div class="card bento-card p-3 mb-4 text-center">
-          <p class="mb-0">Pilih cafe dulu yuk! ✨</p>
-        </div>
-      `}
-      
-      <div class="d-flex gap-2 mb-4 overflow-auto pb-2">
-        <div class="vibe-filter ${activeMoodFilter === 'nugas' ? 'active' : ''}" data-mood="nugas">📚 Nugas</div>
-        <div class="vibe-filter ${activeMoodFilter === 'deeptalk' ? 'active' : ''}" data-mood="deeptalk">💬 Deep Talk</div>
-        <div class="vibe-filter ${activeMoodFilter === 'party' ? 'active' : ''}" data-mood="party">🎉 Party</div>
-      </div>
-      
-      <h5 class="mb-3">✨ Rekomendasi Cafe Solo Raya</h5>
-      <div class="row g-3 mb-4" id="cafeList">
-        ${filteredCafes.map(c => `
-          <div class="col-12">
-            <div class="card bento-card cafe-card ${selectedCafe?.id === c.id ? 'selected' : ''}" data-cafe-id="${c.id}">
-              <img src="${c.image}" class="cafe-img" alt="${c.name}">
-              <div class="p-3">
-                <div class="d-flex justify-content-between">
-                  <h6 class="fw-bold mb-1">${c.name}</h6>
-                  <div class="like-btn ${likedCafes.includes(c.id) ? 'liked' : ''}" data-cafe-id="${c.id}">
-                    <i class="bi ${likedCafes.includes(c.id) ? 'bi-heart-fill' : 'bi-heart'}"></i>
-                  </div>
-                </div>
-                <small class="text-secondary"><i class="bi bi-geo-alt"></i> ${c.location.split(',')[0]}</small>
-                <div class="mt-2 d-flex gap-2 flex-wrap">
-                  <small>${c.facilities.wifi}</small>
-                  <small>${c.facilities.outlet}</small>
-                </div>
-                <button class="btn btn-sm btn-outline-electric w-100 mt-2 view-detail-btn" data-cafe-id="${c.id}">Lihat Detail</button>
+  // ========== RENDER CAFE ==========
+  function renderCafes() {
+    const grid = document.getElementById('cafeGrid');
+    if (!grid) return;
+    grid.innerHTML = cafes.map(cafe => {
+      const isFav = favorites.includes(cafe.id);
+      return `
+        <div class="col-md-6 col-lg-4">
+          <div class="card cafe-card p-3" style="border-left-color: ${cafe.color};" onclick="showCafeDetail(${cafe.id})">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <h5 class="card-title">${cafe.name}</h5>
+                <i class="bi bi-heart${isFav ? '-fill' : ''} favorite-icon ${isFav ? 'favorited' : ''}" onclick="event.stopPropagation(); toggleFavorite(${cafe.id})"></i>
               </div>
+              <p class="text-secondary small mb-1"><i class="bi bi-geo-alt me-1"></i>${cafe.location} · ${cafe.mood}</p>
+              <p class="small mb-0">${cafe.desc}</p>
             </div>
           </div>
-        `).join('')}
-      </div>
-      
-      <div class="card p-3 mb-4 bento-card">
-        <h5 class="mb-3"><i class="bi bi-receipt"></i> Transparansi Harga</h5>
-        ${selectedCafe ? `
-          <div class="mb-3">
-            <select class="form-select rounded-pill" id="menuSelect">
-              ${selectedCafe.menu.map(item => `<option value="${item.name}|${item.price}">${item.name} - Rp ${item.price.toLocaleString()}</option>`).join('')}
-            </select>
-            <button id="addItemBtn" class="btn-electric w-100 mt-2">+ Tambah Pesanan</button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function showCafeDetail(id) {
+    const cafe = cafes.find(c => c.id === id);
+    if (!cafe) return;
+    document.documentElement.style.setProperty('--cafe-accent', cafe.color);
+    document.documentElement.style.setProperty('--primary-blue', cafe.color);
+    const detailDiv = document.getElementById('cafeDetail');
+    detailDiv.innerHTML = `
+      <div class="card p-4" style="border-left: 8px solid ${cafe.color};">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h3 class="fw-bold">${cafe.name}</h3>
+            <p class="text-secondary"><i class="bi bi-geo-alt me-1"></i>${cafe.location} · Mood: ${cafe.mood}</p>
           </div>
-          <div id="cartList"></div>
-          <hr>
-          <div class="d-flex justify-content-between"><span>Subtotal</span><span>Rp ${totalMenuPrice.toLocaleString()}</span></div>
-          <div class="d-flex justify-content-between"><span>Pajak ${(taxRate*100)}%</span><span>Rp ${tax.toLocaleString()}</span></div>
-          <div class="d-flex justify-content-between"><span>Service ${(serviceCharge*100)}%</span><span>Rp ${service.toLocaleString()}</span></div>
-          <div class="d-flex justify-content-between fw-bold fs-5 mt-2"><span>Total</span><span>Rp ${grandTotal.toLocaleString()}</span></div>
-          <button id="splitBillBtn" class="btn-outline-electric w-100 mt-3" ${cartItems.length === 0 ? 'disabled' : ''}>Split Bill & Simpan ke History</button>
-        ` : '<p class="text-center py-3 text-secondary">Pilih cafe untuk mulai pesan ✨</p>'}
+          <i class="bi bi-heart${favorites.includes(cafe.id) ? '-fill' : ''} favorite-icon fs-2 ${favorites.includes(cafe.id) ? 'favorited' : ''}" onclick="toggleFavorite(${cafe.id})"></i>
+        </div>
+        <p>${cafe.desc}</p>
+        <h5 class="mt-3">Menu Andalan</h5>
+        <ul class="list-unstyled row">
+          ${cafe.menu.map(m => `<li class="col-md-4"><i class="bi bi-check-circle-fill me-2" style="color:${cafe.color};"></i>${m}</li>`).join('')}
+        </ul>
+        <div class="mt-3">
+          <a href="#" class="btn btn-primary" onclick="event.preventDefault(); handlePesan(${cafe.id})"><i class="bi bi-whatsapp me-2"></i>Kontak Pesan — ${cafe.contact}</a>
+        </div>
       </div>
     `;
-    
-    // Cart rendering
-    if(selectedCafe && document.getElementById('cartList')) {
-      const cartDiv = document.getElementById('cartList');
-      if(cartItems.length === 0) cartDiv.innerHTML = '<div class="text-center text-secondary py-2">Belum ada pesanan</div>';
-      else {
-        cartDiv.innerHTML = cartItems.map((item, idx) => `
-          <div class="d-flex justify-content-between border-bottom py-2">
-            <span>${item.name}</span>
-            <span>Rp ${item.price.toLocaleString()} <i class="bi bi-trash3 text-danger" style="cursor:pointer" data-index="${idx}"></i></span>
-          </div>
-        `).join('');
-        document.querySelectorAll('.bi-trash3').forEach(el => {
-          el.addEventListener('click', (e) => {
-            cartItems.splice(parseInt(el.dataset.index), 1);
-            savePrefs();
-            renderHome();
-          });
-        });
+    detailDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // ========== FAVORIT ==========
+  function toggleFavorite(id) {
+    const idx = favorites.indexOf(id);
+    if (idx === -1) favorites.push(id);
+    else favorites.splice(idx, 1);
+    saveFavorites();
+    renderCafes();
+    const detailDiv = document.getElementById('cafeDetail');
+    if (detailDiv && detailDiv.innerHTML.includes('card')) {
+      const match = detailDiv.innerHTML.match(/<h3 class="fw-bold">([^<]+)<\/h3>/);
+      if (match) {
+        const cafeName = match[1];
+        const cafe = cafes.find(c => c.name === cafeName);
+        if (cafe) showCafeDetail(cafe.id);
       }
     }
-    
-    document.getElementById('addItemBtn')?.addEventListener('click', () => {
-      const val = document.getElementById('menuSelect').value;
-      const [name, priceStr] = val.split('|');
-      cartItems.push({ name, price: parseInt(priceStr) });
-      savePrefs();
-      renderHome();
-    });
-    
-    document.getElementById('splitBillBtn')?.addEventListener('click', () => {
-      if(cartItems.length === 0) return showToast("Tambah pesanan dulu!");
-      const total = cartItems.reduce((s, i) => s + i.price, 0);
-      const tax = total * (selectedCafe?.taxRate || 0.11);
-      const service = total * (selectedCafe?.serviceCharge || 0.05);
-      const grandTotal = total + tax + service;
-      showSplitBottomSheet(grandTotal, () => {
-        addToHistory({ cafeName: selectedCafe.name, items: [...cartItems], total: grandTotal, date: new Date().toLocaleString() });
-        cartItems = [];
-        savePrefs();
-        renderHome();
-      });
-    });
-    
-    document.getElementById('changeCafeBtn')?.addEventListener('click', () => {
-      selectedCafe = null;
-      cartItems = [];
-      savePrefs();
-      renderHome();
-    });
-    
-    document.querySelectorAll('.cafe-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        if(!e.target.classList.contains('view-detail-btn') && !e.target.closest('.like-btn')) {
-          const cafe = cafesData.find(c => c.id === parseInt(card.dataset.cafeId));
-          if(cafe) { selectedCafe = cafe; cartItems = []; savePrefs(); renderHome(); showToast(`${cafe.name} dipilih!`); }
+    if (document.getElementById('page-profil').classList.contains('active')) renderProfil();
+  }
+
+  // ========== HANDLE PESAN ==========
+  function handlePesan(cafeId) {
+    if (!currentUser) {
+      alert('Silakan login terlebih dahulu untuk memesan.');
+      switchPage('profil');
+      return;
+    }
+    const cafe = cafes.find(c => c.id === cafeId);
+    const pesan = `Halo ${cafe.name}, saya ${currentUser.name} ingin memesan menu. Mohon info ketersediaan.`;
+    window.open(`https://wa.me/62${cafe.contact.replace(/\D/g, '')}?text=${encodeURIComponent(pesan)}`, '_blank');
+  }
+
+  // ========== RENDER BLOG ==========
+  function renderBlogs() {
+    const grid = document.getElementById('blogGrid');
+    if (!grid) return;
+    grid.innerHTML = blogs.map(blog => `
+      <div class="col-md-6">
+        <div class="card blog-card p-3" onclick="alert('Fitur baca lengkap segera hadir!')">
+          <div class="card-body">
+            <h5 class="fw-semibold">${blog.title}</h5>
+            <p class="text-secondary small">${blog.excerpt}</p>
+            <span class="text-success fw-medium">Baca selengkapnya <i class="bi bi-arrow-right"></i></span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ========== LOGIN / PROFIL ==========
+  function loginPrompt() {
+    const name = prompt('Masukkan nama kamu:');
+    if (!name) return;
+    const email = prompt('Masukkan email kamu:');
+    if (!email) return;
+    currentUser = { name, email };
+    saveUser();
+    renderProfil();
+  }
+
+  function editProfil() {
+    if (!currentUser) return;
+    const name = prompt('Nama baru:', currentUser.name);
+    if (name) currentUser.name = name;
+    const email = prompt('Email baru:', currentUser.email);
+    if (email) currentUser.email = email;
+    saveUser();
+    renderProfil();
+  }
+
+  function logout() {
+    currentUser = null;
+    saveUser();
+    renderProfil();
+  }
+
+  function renderProfil() {
+    const notLogged = document.getElementById('profilNotLogged');
+    const logged = document.getElementById('profilLogged');
+    if (!notLogged || !logged) return;
+    if (currentUser) {
+      notLogged.style.display = 'none';
+      logged.style.display = 'block';
+      document.getElementById('profilNama').textContent = currentUser.name;
+      document.getElementById('profilEmail').textContent = currentUser.email;
+      const favList = document.getElementById('favoritList');
+      if (favList) {
+        if (favorites.length === 0) {
+          favList.innerHTML = '<p class="text-secondary">Belum ada cafe favorit.</p>';
+        } else {
+          favList.innerHTML = favorites.map(id => {
+            const cafe = cafes.find(c => c.id === id);
+            if (!cafe) return '';
+            return `<div class="col-md-6"><div class="card p-3" style="border-left: 5px solid ${cafe.color};"><h6 class="fw-semibold mb-1">${cafe.name}</h6><p class="small text-secondary mb-0">${cafe.location} · ${cafe.mood}</p></div></div>`;
+          }).join('');
         }
-      });
-    });
-    
-    document.querySelectorAll('.view-detail-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const cafe = cafesData.find(c => c.id === parseInt(btn.dataset.cafeId));
-        if(cafe) renderCafeDetail(cafe);
-      });
-    });
-    
-    document.querySelectorAll('.like-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleLike(parseInt(btn.dataset.cafeId));
-        renderHome();
-      });
-    });
-    
-    document.querySelectorAll('.vibe-filter').forEach(btn => {
-      btn.addEventListener('click', () => { activeMoodFilter = btn.dataset.mood; savePrefs(); renderHome(); });
-    });
-    
-    document.getElementById('darkModeToggleBtn')?.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      savePrefs();
-    });
-  }
-  
-  // ==================== LIKES SCREEN ====================
-  function renderLikes() {
-    showScreen('likesScreen');
-    const container = document.getElementById('likesScreen');
-    const likedIds = getLikedCafes();
-    const likedCafes = cafesData.filter(c => likedIds.includes(c.id));
-    
-    container.innerHTML = `
-      <h4 class="fw-bold mb-3"><i class="bi bi-heart-fill text-danger"></i> Cafe Favoritmu</h4>
-      ${likedCafes.length === 0 ? `
-        <div class="card bento-card p-5 text-center">
-          <i class="bi bi-heart fs-1 text-secondary"></i>
-          <p class="mt-3">Belum ada cafe favorit. Yuk like cafe yang kamu suka! ✨</p>
-        </div>
-      ` : `
-        <div class="row g-3">
-          ${likedCafes.map(c => `
-            <div class="col-12">
-              <div class="card bento-card p-2">
-                <div class="d-flex gap-3">
-                  <img src="${c.image}" style="width: 80px; height: 80px; border-radius: 20px; object-fit: cover;">
-                  <div class="flex-grow-1">
-                    <h6 class="fw-bold mb-1">${c.name}</h6>
-                    <small class="text-secondary">${c.location.split(',')[0]}</small>
-                    <div class="mt-2">
-                      <button class="btn btn-sm btn-outline-electric view-like-detail" data-id="${c.id}">Lihat Detail</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      `}
-    `;
-    
-    document.querySelectorAll('.view-like-detail').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const cafe = cafesData.find(c => c.id === parseInt(btn.dataset.id));
-        if(cafe) renderCafeDetail(cafe);
-      });
-    });
-  }
-  
-  // ==================== HISTORY SCREEN ====================
-  function renderHistory() {
-    showScreen('historyScreen');
-    const container = document.getElementById('historyScreen');
-    const history = getHistory();
-    
-    container.innerHTML = `
-      <h4 class="fw-bold mb-3"><i class="bi bi-clock-history"></i> Riwayat Transaksi</h4>
-      ${history.length === 0 ? `
-        <div class="card bento-card p-5 text-center">
-          <i class="bi bi-receipt fs-1 text-secondary"></i>
-          <p class="mt-3">Belum ada riwayat. Yuk split bill dan transaksi akan tersimpan! ✨</p>
-        </div>
-      ` : `
-        ${history.map(h => `
-          <div class="card bento-card p-3 mb-3 history-card">
-            <div class="d-flex justify-content-between">
-              <h6 class="fw-bold">${h.cafeName}</h6>
-              <small class="text-secondary">${h.date}</small>
-            </div>
-            <div class="mt-2">
-              ${h.items.map(item => `<div class="d-flex justify-content-between small"><span>${item.name}</span><span>Rp ${item.price.toLocaleString()}</span></div>`).join('')}
-            </div>
-            <hr class="my-2">
-            <div class="d-flex justify-content-between fw-bold">
-              <span>Total</span>
-              <span>Rp ${h.total.toLocaleString()}</span>
-            </div>
-          </div>
-        `).join('')}
-      `}
-    `;
-  }
-  
-  // ==================== PROFILE SCREEN ====================
-  function renderProfile() {
-    showScreen('profileScreen');
-    const container = document.getElementById('profileScreen');
-    const stats = currentUser.vibeStats || { nugas: 0, deepTalk: 0, party: 0 };
-    
-    container.innerHTML = `
-      <div class="card bento-card p-4">
-        <h4 class="mb-3"><i class="bi bi-person-circle"></i> Profile</h4>
-        <canvas id="vibeChart" height="150"></canvas>
-        <hr>
-        <div class="mb-3">
-          <label class="form-label">Nama</label>
-          <input type="text" id="editName" class="form-control rounded-pill" value="${currentUser.name}">
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Email</label>
-          <input type="email" id="editEmail" class="form-control rounded-pill" value="${currentUser.email}">
-        </div>
-        <button id="saveProfileBtn" class="btn-electric w-100">Simpan</button>
-        <button id="logoutBtn" class="btn-outline-electric w-100 mt-2">Logout</button>
-      </div>
-    `;
-    
-    const ctx = document.getElementById('vibeChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'doughnut',
-      data: { labels: ['Nugas', 'Deep Talk', 'Party'], datasets: [{ data: [stats.nugas, stats.deepTalk, stats.party], backgroundColor: ['#86b3a2', '#6c91b2', '#f59e6b'] }] },
-      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-    });
-    
-    document.getElementById('saveProfileBtn').addEventListener('click', () => {
-      currentUser.name = document.getElementById('editName').value;
-      currentUser.email = document.getElementById('editEmail').value;
-      updateUser(currentUser);
-      showToast("Profil diupdate!");
-      renderProfile();
-    });
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      clearSession();
-      currentUser = null;
-      showLogin();
-    });
-  }
-  
-  function showSplitBottomSheet(total, onConfirm) {
-    const modalDiv = document.createElement('div');
-    modalDiv.className = 'modal fade';
-    modalDiv.innerHTML = `
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content p-3" style="border-radius: 32px;">
-          <div class="modal-header border-0">
-            <h5 class="modal-title">👥 Split Bill</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <label>Jumlah orang</label>
-            <input type="number" id="splitCount" class="form-control rounded-pill" value="2" min="1">
-            <div class="mt-3 p-3 bg-light rounded-4 text-center">
-              <span>Per orang:</span>
-              <div class="fs-3 fw-bold" id="perPerson">Rp ${(total/2).toLocaleString()}</div>
-            </div>
-            <button id="confirmSplitBtn" class="btn-electric w-100 mt-3">Simpan ke History</button>
-          </div>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modalDiv);
-    const modal = new bootstrap.Modal(modalDiv);
-    modal.show();
-    
-    document.getElementById('splitCount').addEventListener('input', () => {
-      const cnt = parseInt(document.getElementById('splitCount').value) || 1;
-      document.getElementById('perPerson').innerText = `Rp ${(total/cnt).toLocaleString()}`;
-    });
-    document.getElementById('confirmSplitBtn').addEventListener('click', () => {
-      onConfirm();
-      modal.hide();
-      showToast("✅ Transaksi tersimpan di History!");
-      modalDiv.remove();
-    });
-    modalDiv.addEventListener('hidden.bs.modal', () => modalDiv.remove());
-  }
-  
-  // ==================== INIT ====================
-  function initApp() {
-    initUsers();
-    const user = getCurrentUser();
-    if(user) {
-      currentUser = user;
-      loadUserPrefs();
-      showMainApp();
-      renderHome();
+      }
     } else {
-      showLogin();
+      notLogged.style.display = 'block';
+      logged.style.display = 'none';
     }
-    
-    // Bottom nav listeners
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const nav = item.dataset.nav;
-        if(nav === 'home') renderHome();
-        else if(nav === 'likes') renderLikes();
-        else if(nav === 'history') renderHistory();
-        else if(nav === 'profile') renderProfile();
-      });
-    });
   }
-  
-  window.initApp = initApp;
-  initApp();
-</script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  if('serviceWorker' in navigator) {
-    const swCode = `self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response("Vibe Check - Offline"))));`;
-    const blob = new Blob([swCode], {type: 'application/javascript'});
-    navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(console.log);
+  function showFavoritSection() {
+    const sec = document.getElementById('favoritSection');
+    if (sec) sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
   }
+
+  const originalSwitchPage = switchPage;
+  switchPage = function(page) {
+    if (page === 'favorit') {
+      originalSwitchPage('profil');
+      document.getElementById('favoritSection').style.display = 'block';
+      renderProfil();
+      return;
+    }
+    originalSwitchPage(page);
+  };
+
+  // ========== INISIALISASI ==========
+  document.addEventListener('DOMContentLoaded', () => {
+    loadFromStorage();
+    renderCafes();
+    renderBlogs();
+    switchPage('home');
+    const favBtn = document.querySelector('button[onclick="switchPage(\'favorit\')"]');
+    if (favBtn) favBtn.onclick = () => { switchPage('favorit'); };
+  });
 </script>
 </body>
 </html>
