@@ -1,657 +1,998 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ngafeeling — Mood-Mu, Cafe-Mu</title>
-  <!-- Bootstrap 5 & Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <!-- Google Fonts: Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      font-family: 'Poppins', sans-serif;
-    }
-    :root {
-      --primary-blue: #1e3a8a;
-      --primary-blue-light: #3b82f6;
-      --bg-soft: #f0f7ff;
-      --cafe-accent: #1e3a8a;
-    }
-    body {
-      background-color: #ffffff;
-      color: #1e293b;
-      transition: background-color 0.3s ease;
-    }
-    .navbar {
-      background-color: #ffffff;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-      padding: 0.8rem 0;
-    }
-    .navbar-brand {
-      font-weight: 700;
-      font-size: 1.6rem;
-      color: var(--primary-blue) !important;
-      letter-spacing: -0.5px;
-    }
-    .navbar-brand span {
-      background: var(--primary-blue);
-      color: white;
-      border-radius: 12px;
-      padding: 0.1rem 0.6rem;
-      margin-right: 0.3rem;
-      font-size: 1.5rem;
-    }
-    .nav-link {
-      font-weight: 500;
-      color: #334155 !important;
-      margin: 0 0.2rem;
-      border-radius: 30px;
-      padding: 0.5rem 1rem !important;
-      transition: all 0.2s;
-    }
-    .nav-link:hover, .nav-link.active {
-      background-color: #e6efff;
-      color: var(--primary-blue) !important;
-    }
-    .btn-outline-primary {
-      border-color: var(--primary-blue);
-      color: var(--primary-blue);
-      border-radius: 30px;
-      font-weight: 500;
-      padding: 0.4rem 1.2rem;
-    }
-    .btn-outline-primary:hover {
-      background-color: var(--primary-blue);
-      color: white;
-    }
-    .btn-primary {
-      background-color: var(--primary-blue);
-      border-color: var(--primary-blue);
-      border-radius: 30px;
-      font-weight: 500;
-      padding: 0.5rem 1.5rem;
-    }
-    .btn-primary:hover {
-      background-color: #152c6b;
-      border-color: #152c6b;
-    }
-    .card {
-      border: none;
-      border-radius: 24px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-      transition: transform 0.2s, box-shadow 0.2s;
-      background: white;
-      height: 100%;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 32px rgba(0,0,0,0.08);
-    }
-    .card-body {
-      padding: 1.8rem;
-    }
-    .cafe-card {
-      cursor: pointer;
-      border-left: 5px solid var(--cafe-accent);
-    }
-    .cafe-card .card-title {
-      font-weight: 600;
-      color: #0f172a;
-    }
-    .favorite-icon {
-      font-size: 1.6rem;
-      cursor: pointer;
-      color: #cbd5e1;
-      transition: color 0.2s;
-    }
-    .favorite-icon.favorited {
-      color: #ef4444;
-    }
-    .section-title {
-      font-weight: 700;
-      color: #0f172a;
-      margin-bottom: 0.5rem;
-      font-size: 2rem;
-    }
-    .section-subtitle {
-      color: #475569;
-      margin-bottom: 2rem;
-      font-size: 1.1rem;
-    }
-    .mood-badge {
-      background: #e6efff;
-      color: var(--primary-blue);
-      padding: 0.5rem 1.2rem;
-      border-radius: 30px;
-      font-weight: 500;
-      font-size: 0.95rem;
-      display: inline-block;
-      margin: 0.3rem;
-    }
-    .stat-number {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: var(--primary-blue);
-    }
-    .blog-card {
-      border-left: 5px solid #10b981;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .blog-card:hover {
-      background: #f0fdf4;
-    }
-    footer {
-      background: #0f172a;
-      color: #cbd5e1;
-      padding: 3rem 0 2rem;
-      margin-top: 5rem;
-    }
-    footer h5 {
-      color: white;
-      font-weight: 600;
-      margin-bottom: 1.2rem;
-    }
-    footer a {
-      color: #94a3b8;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    footer a:hover {
-      color: white;
-    }
-    .footer-logo {
-      font-weight: 700;
-      font-size: 1.8rem;
-      color: white;
-    }
-    .footer-logo span {
-      background: var(--primary-blue-light);
-      padding: 0.1rem 0.6rem;
-      border-radius: 12px;
-      margin-right: 0.3rem;
-    }
-    .page-section {
-      display: none;
-    }
-    .page-section.active {
-      display: block;
-    }
-    @media (max-width: 768px) {
-      .section-title { font-size: 1.6rem; }
-      .navbar-brand { font-size: 1.3rem; }
-      .card-body { padding: 1.2rem; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ngafeeling App — Mood-Mu, Cafe-Mu</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary-blue: #1e3a8a;
+  --primary-blue-light: #3b82f6;
+  --bg-soft: #f0f7ff;
+  --success: #10b981;
+  --success-dark: #065f46;
+  --danger: #ef4444;
+}
+* { font-family: 'Poppins', sans-serif; }
+body { background: #f8fafc; color: #1e293b; padding-bottom: 90px; }
+@media (min-width: 992px) { body { padding-bottom: 100px; } }
+
+/* Navbar header */
+.navbar { background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.04); padding: 0.7rem 0; }
+.navbar-brand { font-weight: 700; font-size: 1.4rem; color: var(--primary-blue) !important; letter-spacing: -0.5px; margin-bottom: 0; }
+.navbar-brand span { background: var(--primary-blue); color: #fff; border-radius: 10px; padding: 0.1rem 0.5rem; margin-right: 0.3rem; font-size: 1.3rem; }
+
+/* User chip */
+.user-chip {
+  background: var(--bg-soft); border-radius: 30px;
+  padding: 0.35rem 0.9rem 0.35rem 0.4rem;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-size: 0.85rem; font-weight: 500;
+}
+.user-chip .avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--primary-blue); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 700;
+}
+
+/* Bottom nav — semua ukuran layar */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #fff;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
+  display: flex; justify-content: space-around; align-items: stretch;
+  padding: 0.5rem 0 calc(0.5rem + env(safe-area-inset-bottom, 0px));
+  z-index: 1030;
+  border-top: 1px solid #e2e8f0;
+  max-width: 640px;
+  margin: 0 auto;
+  border-radius: 20px 20px 0 0;
+}
+.bottom-nav a {
+  color: #94a3b8; text-decoration: none; text-align: center;
+  font-size: 0.72rem; font-weight: 500;
+  flex: 1; padding: 0.4rem 0.2rem;
+  transition: color 0.2s, background 0.2s, transform 0.15s;
+  border-radius: 14px;
+  margin: 0 0.15rem;
+}
+.bottom-nav a i {
+  font-size: 1.35rem; display: block; margin-bottom: 0.15rem;
+  transition: transform 0.2s;
+}
+.bottom-nav a:hover { color: var(--primary-blue); background: var(--bg-soft); }
+.bottom-nav a.active {
+  color: var(--primary-blue); background: var(--bg-soft); font-weight: 600;
+}
+.bottom-nav a.active i { transform: scale(1.1); }
+
+@media (min-width: 992px) {
+  .bottom-nav { padding: 0.7rem 0; max-width: 720px; }
+  .bottom-nav a { font-size: 0.78rem; padding: 0.5rem 0.3rem; }
+  .bottom-nav a i { font-size: 1.5rem; }
+}
+
+/* Buttons */
+.btn-primary { background: var(--primary-blue); border-color: var(--primary-blue); border-radius: 30px; font-weight: 500; padding: 0.5rem 1.4rem; }
+.btn-primary:hover { background: #152c6b; border-color: #152c6b; }
+.btn-outline-primary { border-color: var(--primary-blue); color: var(--primary-blue); border-radius: 30px; font-weight: 500; padding: 0.4rem 1.2rem; }
+.btn-outline-primary:hover { background: var(--primary-blue); color: #fff; }
+
+/* Cards */
+.card { border: none; border-radius: 20px; box-shadow: 0 6px 20px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; background: #fff; }
+.card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.08); }
+.card-body { padding: 1.4rem; }
+.cafe-card { cursor: pointer; border-left: 5px solid var(--primary-blue); height: 100%; }
+.cafe-card .card-title { font-weight: 600; color: #0f172a; font-size: 1.05rem; margin-bottom: 0.3rem; }
+
+/* Favorite */
+.favorite-icon { font-size: 1.4rem; cursor: pointer; color: #cbd5e1; transition: color 0.2s; }
+.favorite-icon.favorited { color: var(--danger); }
+.favorite-icon:hover { color: #f87171; }
+
+/* Sections */
+.section-title { font-weight: 700; color: #0f172a; margin-bottom: 0.4rem; font-size: 1.7rem; }
+.section-subtitle { color: #475569; margin-bottom: 1.6rem; font-size: 1rem; }
+.page-section { display: none; }
+.page-section.active { display: block; }
+
+/* Mood */
+.mood-option {
+  border: 2px solid #e2e8f0; border-radius: 20px; padding: 1.5rem 1rem;
+  text-align: center; cursor: pointer; transition: all 0.2s; background: #fff; height: 100%;
+}
+.mood-option:hover { border-color: var(--primary-blue); background: var(--bg-soft); }
+.mood-option.selected { border-color: var(--primary-blue); background: var(--bg-soft); box-shadow: 0 4px 16px rgba(30,58,138,0.15); }
+.mood-option i { font-size: 2rem; margin-bottom: 0.5rem; }
+.mood-option h6 { font-weight: 600; margin-bottom: 0.3rem; }
+.mood-option p { font-size: 0.82rem; color: #64748b; margin-bottom: 0; }
+
+/* Location */
+.loc-option {
+  border: 2px solid #e2e8f0; border-radius: 16px; padding: 1rem;
+  cursor: pointer; transition: all 0.2s; text-align: center;
+}
+.loc-option:hover { border-color: var(--primary-blue); background: var(--bg-soft); }
+.loc-option.selected { border-color: var(--primary-blue); background: var(--bg-soft); }
+.loc-option .count { font-size: 0.75rem; color: #94a3b8; }
+
+/* Facility */
+.fac-option {
+  border: 2px solid #e2e8f0; border-radius: 14px; padding: 0.8rem 1rem;
+  cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.6rem;
+}
+.fac-option:hover { border-color: var(--primary-blue); background: var(--bg-soft); }
+.fac-option.selected { border-color: var(--primary-blue); background: var(--bg-soft); }
+.fac-option i { font-size: 1.2rem; color: var(--primary-blue); }
+
+/* Progress */
+.progress { height: 6px; border-radius: 10px; background: #e2e8f0; }
+.progress-bar { background: var(--primary-blue); transition: width 0.3s; }
+
+/* Result */
+.result-card { border-left: 5px solid var(--primary-blue); }
+.match-badge {
+  background: var(--success); color: #fff; font-size: 0.75rem;
+  padding: 0.25rem 0.7rem; border-radius: 20px; font-weight: 600;
+}
+
+/* Profile */
+.profile-avatar {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: var(--primary-blue); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.2rem; font-weight: 700; margin: 0 auto 1rem;
+}
+.stat-box { text-align: center; padding: 1rem; background: var(--bg-soft); border-radius: 16px; }
+.stat-box .num { font-size: 1.6rem; font-weight: 700; color: var(--primary-blue); }
+.stat-box .label { font-size: 0.8rem; color: #64748b; }
+
+/* Empty */
+.empty-state { text-align: center; padding: 3rem 1rem; color: #94a3b8; }
+.empty-state i { font-size: 3.5rem; margin-bottom: 1rem; display: block; color: #cbd5e1; }
+
+/* Hero */
+.hero-home {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  color: #fff; border-radius: 24px; padding: 2rem; margin-bottom: 1.5rem;
+}
+.hero-home h1 { font-weight: 700; font-size: 1.6rem; margin-bottom: 0.5rem; }
+.hero-home p { opacity: 0.9; margin-bottom: 1.2rem; font-size: 0.95rem; }
+
+/* Login */
+.login-wrapper {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 2rem 1rem;
+}
+.login-card {
+  background: #fff; border-radius: 24px; padding: 2.5rem 2rem;
+  max-width: 420px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.login-logo { text-align: center; margin-bottom: 1.5rem; }
+.login-logo .brand { font-weight: 700; font-size: 1.8rem; color: var(--primary-blue); }
+.login-logo .brand span { background: var(--primary-blue); color: #fff; border-radius: 12px; padding: 0.1rem 0.6rem; margin-right: 0.3rem; }
+.login-logo p { color: #64748b; font-size: 0.9rem; margin-top: 0.4rem; }
+.login-card .form-control { border-radius: 14px; padding: 0.7rem 1rem; border: 2px solid #e2e8f0; }
+.login-card .form-control:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 0.2rem rgba(30,58,138,0.1); }
+.login-toggle { text-align: center; margin-top: 1.2rem; font-size: 0.9rem; color: #64748b; }
+.login-toggle a { color: var(--primary-blue); font-weight: 600; text-decoration: none; cursor: pointer; }
+.alert-error { background: #fee2e2; color: #991b1b; border: none; border-radius: 12px; padding: 0.7rem 1rem; font-size: 0.88rem; }
+.alert-success { background: #d1fae5; color: #065f46; border: none; border-radius: 12px; padding: 0.7rem 1rem; font-size: 0.88rem; }
+
+#cafeDetailHome .card, #cafeDetailMood .card, #cafeDetailFav .card { border-left: 8px solid var(--primary-blue); }
+
+@media (max-width: 768px) {
+  .section-title { font-size: 1.4rem; }
+  .hero-home h1 { font-size: 1.3rem; }
+}
+</style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg sticky-top">
-  <div class="container">
-    <a class="navbar-brand" href="#" onclick="switchPage('home')"><span>Nf</span> Ngafeeling</a>
-    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-      <i class="bi bi-list fs-2" style="color: var(--primary-blue);"></i>
-    </button>
-    <div class="collapse navbar-collapse" id="mainNav">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
-        <li class="nav-item"><a class="nav-link active" href="#" onclick="switchPage('home')" id="nav-home">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" onclick="switchPage('rekomendasi')" id="nav-rekomendasi">Rekomendasi</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" onclick="switchPage('about')" id="nav-about">About Us</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" onclick="switchPage('blog')" id="nav-blog">Blog</a></li>
-        <li class="nav-item ms-lg-3">
-          <a class="nav-link" href="#" onclick="switchPage('profil')" id="nav-profil">
-            <i class="bi bi-person-circle me-1"></i>Profil
-          </a>
-        </li>
+<!-- ============ PAGE: LOGIN ============ -->
+<section id="page-app-login" class="page-section active">
+  <div class="login-wrapper">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="brand"><span>Nf</span>Ngafeeling</div>
+        <p>Mood-Mu, Cafe-Mu.</p>
+      </div>
+
+      <ul class="nav nav-pills nav-fill mb-4" style="background:#f1f5f9;border-radius:30px;padding:4px;">
+        <li class="nav-item"><a class="nav-link active" data-auth-tab="login" style="border-radius:30px;cursor:pointer;">Masuk</a></li>
+        <li class="nav-item"><a class="nav-link" data-auth-tab="register" style="border-radius:30px;cursor:pointer;">Daftar</a></li>
       </ul>
+
+      <div id="authAlert"></div>
+
+      <form id="formLogin">
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Email</label>
+          <input type="email" class="form-control" id="loginEmail" placeholder="nama@email.com" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Password</label>
+          <input type="password" class="form-control" id="loginPassword" placeholder="Minimal 6 karakter" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100 py-2">
+          <i class="bi bi-box-arrow-in-right me-1"></i>Masuk
+        </button>
+      </form>
+
+      <form id="formRegister" class="d-none">
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Nama Lengkap</label>
+          <input type="text" class="form-control" id="regName" placeholder="Nama kamu" required maxlength="30">
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Email</label>
+          <input type="email" class="form-control" id="regEmail" placeholder="nama@email.com" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label small fw-semibold">Password</label>
+          <input type="password" class="form-control" id="regPassword" placeholder="Minimal 6 karakter" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary w-100 py-2">
+          <i class="bi bi-person-plus me-1"></i>Daftar
+        </button>
+      </form>
+
+      <div class="login-toggle">
+        <span id="toggleText">Belum punya akun? <a data-auth-tab="register">Daftar di sini</a></span>
+      </div>
     </div>
+  </div>
+</section>
+
+<!-- ============ HEADER ============ -->
+<nav class="navbar sticky-top" id="navbarTop" style="display:none;">
+  <div class="container d-flex justify-content-between align-items-center">
+    <a class="navbar-brand mb-0" href="#" data-nav="app-home"><span>Nf</span> Ngafeeling</a>
+    <span class="user-chip">
+      <span class="avatar" id="navAvatar">U</span>
+      <span id="navUserName" class="d-none d-md-inline">User</span>
+    </span>
   </div>
 </nav>
 
-<!-- ========== PAGE: HOME ========== -->
-<div id="page-home" class="page-section active">
-  <div class="container py-5">
-    <!-- Hero -->
-    <div class="row align-items-center g-5 mb-5">
-      <div class="col-lg-7">
-        <h1 class="display-5 fw-bold" style="color: #0f172a;">Ngafeeling: <span style="color: var(--primary-blue);">Mood-Mu, Cafe-Mu.</span></h1>
-        <p class="lead mt-3" style="color: #334155;">Ngafeeling adalah platform kurasi kafe di Soloraya yang mencocokkan tempat nongkrongmu dengan suasana hati, lalu memastikan fasilitas yang tertulis memang benar-benar ada di lapangan.</p>
-        <div class="mt-4">
-          <span class="mood-badge"><i class="bi bi-check-circle-fill me-1"></i> Kurasi berdasarkan mood</span>
-          <span class="mood-badge"><i class="bi bi-check-circle-fill me-1"></i> Validasi fasilitas nyata</span>
-          <span class="mood-badge"><i class="bi bi-check-circle-fill me-1"></i> 10 rekomendasi kafe</span>
-          <span class="mood-badge"><i class="bi bi-check-circle-fill me-1"></i> Solo, Sukoharjo, Karanganyar</span>
-        </div>
-      </div>
-      <div class="col-lg-5">
-        <div class="card p-4 text-center" style="background: var(--bg-soft); border-radius: 32px;">
-          <i class="bi bi-cup-hot fs-1" style="color: var(--primary-blue);"></i>
-          <h4 class="mt-3 fw-semibold">Lagi pengin suasana apa?</h4>
-          <p class="text-secondary">Pilih satu, kami tunjukkan arah kurasinya.</p>
-          <div class="row g-2">
-            <div class="col-6"><div class="mood-badge w-100"><i class="bi bi-laptop me-1"></i> Fokus kerja</div></div>
-            <div class="col-6"><div class="mood-badge w-100"><i class="bi bi-moon me-1"></i> Healing sendiri</div></div>
-            <div class="col-6"><div class="mood-badge w-100"><i class="bi bi-people me-1"></i> Nongkrong rame</div></div>
-            <div class="col-6"><div class="mood-badge w-100"><i class="bi bi-heart me-1"></i> Quality time</div></div>
-          </div>
-          <div class="mt-3 small text-start">
-            <p class="mb-1"><strong>Fokus kerja:</strong> area senyap, colokan, WiFi >40 Mbps.</p>
-            <p class="mb-1"><strong>Healing sendiri:</strong> musik pelan, cahaya hangat, meja tunggal.</p>
-            <p class="mb-1"><strong>Nongkrong rame:</strong> meja besar, jam tutup larut, parkir luas.</p>
-            <p class="mb-0"><strong>Quality time:</strong> meja berjarak, tenang, menu non-kopi lengkap.</p>
-          </div>
-        </div>
-      </div>
+<!-- ============ PAGE: APP-HOME ============ -->
+<section id="page-app-home" class="page-section">
+  <div class="container py-4">
+    <div class="hero-home">
+      <h1><i class="bi bi-cup-hot me-2"></i>Hai, <span id="heroName">User</span>! 👋</h1>
+      <p>Lagi pengin suasana apa hari ini? Pilih mood, kami tunjukkan 10 cafe terbaik.</p>
+      <a href="#" class="btn btn-light fw-semibold" data-nav="app-mood">
+        <i class="bi bi-magic me-1"></i>Cari Cafe Sesuai Mood
+      </a>
     </div>
 
-    <!-- 2 Blog Rekomendasi -->
-    <div class="mt-5">
-      <h3 class="section-title">Dari blog Ngafeeling</h3>
-      <p class="section-subtitle">Catatan ringan seputar kebiasaan ngafe, kurasi mood, dan cara memesan tanpa ribet.</p>
-      <div class="row g-4">
-        <div class="col-md-6">
-          <div class="card blog-card p-3" onclick="switchPage('blog')">
-            <div class="card-body">
-              <h5 class="fw-semibold">5 Tanda Kafe Cocok Buat Fokus Kerja</h5>
-              <p class="text-secondary small">Colokan, WiFi, dan kebisingan — ini yang paling menentukan.</p>
-              <span class="text-success fw-medium">Baca selengkapnya <i class="bi bi-arrow-right"></i></span>
-            </div>
-          </div>
+    <h3 class="section-title">Pilih Mood Cepat</h3>
+    <p class="section-subtitle">Klik salah satu mood, langsung tampil 10 rekomendasi cafe.</p>
+    <div class="row g-3 mb-4" id="shortcutMood"></div>
+
+    <div id="quickResult" class="d-none">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div>
+          <h4 class="fw-bold mb-0" id="quickResultTitle">Rekomendasi</h4>
+          <p class="text-secondary small mb-0" id="quickResultSubtitle"></p>
         </div>
-        <div class="col-md-6">
-          <div class="card blog-card p-3" onclick="switchPage('blog')">
-            <div class="card-body">
-              <h5 class="fw-semibold">Cara Memesan di Kafe Tanpa Ribet</h5>
-              <p class="text-secondary small">Split-bill otomatis dan tips memesan untuk rombongan.</p>
-              <span class="text-success fw-medium">Baca selengkapnya <i class="bi bi-arrow-right"></i></span>
-            </div>
-          </div>
-        </div>
+        <button class="btn btn-outline-primary btn-sm" id="closeQuickResult">
+          <i class="bi bi-x me-1"></i>Tutup
+        </button>
       </div>
-      <div class="mt-4 text-center">
-        <a href="#" onclick="switchPage('blog')" class="btn btn-outline-primary">Lihat 3 blog lainnya <i class="bi bi-arrow-right"></i></a>
-      </div>
+      <div class="row g-3" id="quickResultGrid"></div>
     </div>
 
-    <!-- CTA WhatsApp -->
-    <div class="row mt-5 pt-4">
-      <div class="col-12 text-center">
-        <div class="card p-5" style="background: var(--bg-soft); border-radius: 32px;">
-          <h3 class="fw-bold">Sudah tahu mood-mu hari ini?</h3>
-          <p class="lead">Kirim mood dan lokasimu, tim Ngafeeling bantu pilihkan kafenya untuk kamu.</p>
-          <a href="https://wa.me/6287705339063?text=Halo%20Ngafeeling%2C%20saya%20mau%20cari%20cafe%20sesuai%20mood%20saya" target="_blank" class="btn btn-primary btn-lg"><i class="bi bi-whatsapp me-2"></i>Chat WhatsApp — 0877-0533-9063</a>
-        </div>
-      </div>
-    </div>
+    <div id="cafeDetailHome" class="mt-4"></div>
   </div>
-</div>
+</section>
 
-<!-- ========== PAGE: REKOMENDASI ========== -->
-<div id="page-rekomendasi" class="page-section">
-  <div class="container py-5">
-    <h2 class="section-title">10 Rekomendasi Kafe Pilihan</h2>
-    <p class="section-subtitle">Klik salah satu kafe untuk melihat menu, suasana, dan kontak pemesanannya. Tampilan situs ini juga akan menyesuaikan warna kafe yang kamu pilih.</p>
-    <div class="row g-4" id="cafeGrid">
-      <!-- Diisi oleh JavaScript -->
+<!-- ============ PAGE: APP-MOOD ============ -->
+<section id="page-app-mood" class="page-section">
+  <div class="container py-4">
+    <h2 class="section-title">Cari Cafe Sesuai Mood</h2>
+    <p class="section-subtitle">Isi mood dan lokasimu, kami carikan cafe paling cocok.</p>
+
+    <div class="progress mb-4">
+      <div class="progress-bar" id="wizardProgress" style="width:33%;"></div>
     </div>
-    <div id="cafeDetail" class="mt-5"></div>
-  </div>
-</div>
+    <p class="text-secondary small mb-3" id="wizardStepLabel">Langkah 1 dari 3</p>
 
-<!-- ========== PAGE: ABOUT US ========== -->
-<div id="page-about" class="page-section">
-  <div class="container py-5">
-    <div class="row g-5">
-      <div class="col-lg-8 mx-auto">
-        <h2 class="section-title">Tentang Ngafeeling</h2>
-        <p class="lead">Ngafeeling lahir dari kebiasaan kecil yang sering bikin kesal: sudah jauh-jauh datang ke kafe, ternyata colokan penuh, WiFi lemot, atau suasananya terlalu ramai untuk mengerjakan tugas.</p>
-        <p>Kami mengkurasi kafe di Soloraya berdasarkan dua hal yang paling menentukan pengalaman: suasana yang kamu butuhkan hari itu, dan fasilitas yang benar-benar tersedia saat kami cek langsung. Setiap data punya tanggal validasi, jadi kamu tahu seberapa baru informasinya.</p>
-        <p>Setelah sampai di tempat, urusan pembayaran juga kami bantu rapikan lewat split-bill otomatis yang rinciannya bisa langsung dikirim ke grup.</p>
-        <p class="fst-italic fw-semibold fs-4 mt-4" style="color: var(--primary-blue);">“Mood-mu, Cafe-mu.”</p>
-        <div class="row mt-5 text-center g-4">
-          <div class="col-6 col-md-3"><div class="stat-number">3</div><div class="text-secondary">Kabupaten/Kota</div></div>
-          <div class="col-6 col-md-3"><div class="stat-number">4</div><div class="text-secondary">Mood utama</div></div>
-          <div class="col-6 col-md-3"><div class="stat-number">6</div><div class="text-secondary">Poin fasilitas</div></div>
-          <div class="col-6 col-md-3"><div class="stat-number">30 hr</div><div class="text-secondary">Siklus update</div></div>
-        </div>
-        <h4 class="mt-5 fw-semibold">Untuk siapa?</h4>
-        <p>Mahasiswa, pekerja remote, dan kelompok teman yang sering patungan, terutama di sekitar kampus dan pusat kota Solo.</p>
+    <div class="wizard-step" data-step="1">
+      <h5 class="fw-semibold mb-3">1. Lagi pengin suasana apa?</h5>
+      <div class="row g-3" id="moodOptions"></div>
+      <div class="mt-4">
+        <button class="btn btn-primary" data-wizard="next" id="btnNext1" disabled>Lanjut <i class="bi bi-arrow-right"></i></button>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- ========== PAGE: BLOG ========== -->
-<div id="page-blog" class="page-section">
-  <div class="container py-5">
-    <h2 class="section-title">Dari blog Ngafeeling</h2>
-    <p class="section-subtitle">Catatan ringan seputar kebiasaan ngafe, kurasi mood, dan cara memesan tanpa ribet. Klik judulnya untuk baca versi lengkapnya.</p>
-    <div class="row g-4" id="blogGrid">
-      <!-- Diisi oleh JavaScript -->
-    </div>
-  </div>
-</div>
-
-<!-- ========== PAGE: PROFIL ========== -->
-<div id="page-profil" class="page-section">
-  <div class="container py-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <div id="profilNotLogged">
-          <div class="card p-5 text-center">
-            <i class="bi bi-person-circle fs-1" style="color: var(--primary-blue);"></i>
-            <h3 class="mt-3 fw-semibold">Masuk ke Ngafeeling</h3>
-            <p class="text-secondary">Silakan login untuk mengakses fitur favorit, edit profil, dan lainnya.</p>
-            <button class="btn btn-primary btn-lg mt-2" onclick="loginPrompt()">Login</button>
-          </div>
-        </div>
-        <div id="profilLogged" style="display: none;">
-          <div class="card p-4 mb-4">
-            <div class="d-flex align-items-center gap-3">
-              <i class="bi bi-person-circle fs-1" style="color: var(--primary-blue);"></i>
-              <div>
-                <h4 class="fw-semibold mb-0" id="profilNama">User</h4>
-                <p class="text-secondary mb-0" id="profilEmail">user@email.com</p>
-              </div>
-            </div>
-            <hr>
-            <div class="d-flex flex-wrap gap-2">
-              <button class="btn btn-outline-primary" onclick="editProfil()"><i class="bi bi-pencil me-1"></i>Edit Profil</button>
-              <button class="btn btn-outline-primary" onclick="switchPage('favorit')"><i class="bi bi-heart me-1"></i>Cafe Favorit</button>
-              <button class="btn btn-outline-danger ms-auto" onclick="logout()"><i class="bi bi-box-arrow-right me-1"></i>Log Out</button>
-            </div>
-          </div>
-          <div id="favoritSection" style="display: none;">
-            <h4 class="fw-semibold mt-4">Cafe Favorit Kamu</h4>
-            <div id="favoritList" class="row g-3 mt-2"></div>
-          </div>
-        </div>
+    <div class="wizard-step d-none" data-step="2">
+      <h5 class="fw-semibold mb-3">2. Mau cari di mana?</h5>
+      <div class="row g-3" id="locationOptions"></div>
+      <div class="mt-4 d-flex gap-2">
+        <button class="btn btn-outline-primary" data-wizard="prev"><i class="bi bi-arrow-left"></i> Kembali</button>
+        <button class="btn btn-primary" data-wizard="next" id="btnNext2" disabled>Lanjut <i class="bi bi-arrow-right"></i></button>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <div class="row g-4">
+    <div class="wizard-step d-none" data-step="3">
+      <h5 class="fw-semibold mb-3">3. Fasilitas penting? <small class="text-secondary fw-normal">(opsional)</small></h5>
+      <div class="row g-3" id="facilityOptions"></div>
+      <div class="mt-4 d-flex gap-2">
+        <button class="btn btn-outline-primary" data-wizard="prev"><i class="bi bi-arrow-left"></i> Kembali</button>
+        <button class="btn btn-primary" data-wizard="submit"><i class="bi bi-search"></i> Tampilkan Rekomendasi</button>
+      </div>
+    </div>
+
+    <div id="hasilRekomendasi" class="mt-5 d-none">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div>
+          <h4 class="fw-bold mb-0">Hasil untukmu</h4>
+          <p class="text-secondary small mb-0" id="hasilSummary"></p>
+        </div>
+        <button class="btn btn-outline-primary btn-sm" data-wizard="reset">
+          <i class="bi bi-arrow-counterclockwise me-1"></i>Cari Lagi
+        </button>
+      </div>
+      <div class="row g-3" id="hasilGrid"></div>
+    </div>
+
+    <div id="cafeDetailMood" class="mt-4"></div>
+  </div>
+</section>
+
+<!-- ============ PAGE: APP-FAVORIT ============ -->
+<section id="page-app-favorit" class="page-section">
+  <div class="container py-4">
+    <h2 class="section-title">Favorit Saya</h2>
+    <p class="section-subtitle">Cafe yang sudah kamu simpan.</p>
+    <div class="row g-3" id="favoritGrid"></div>
+    <div id="cafeDetailFav" class="mt-4"></div>
+  </div>
+</section>
+
+<!-- ============ PAGE: APP-PROFIL ============ -->
+<section id="page-app-profil" class="page-section">
+  <div class="container py-4">
+    <h2 class="section-title">Profil</h2>
+    <p class="section-subtitle">Data dan preferensimu tersimpan di perangkat ini.</p>
+
+    <div class="row g-3">
       <div class="col-lg-4">
-        <div class="footer-logo"><span>Nf</span> Ngafeeling</div>
-        <p class="mt-3 small">Kurasi kafe berbasis mood dan fasilitas nyata untuk wilayah Soloraya, lengkap dengan split-bill otomatis.</p>
+        <div class="card p-4 text-center">
+          <div class="profile-avatar" id="profileAvatar">U</div>
+          <h5 class="fw-semibold mb-0" id="profileName">User</h5>
+          <p class="text-secondary small mb-3" id="profileEmail">email@example.com</p>
+          <button class="btn btn-outline-danger btn-sm" id="logoutBtn">
+            <i class="bi bi-box-arrow-right me-1"></i>Logout
+          </button>
+        </div>
       </div>
-      <div class="col-6 col-lg-2">
-        <h5>Navigasi</h5>
-        <ul class="list-unstyled">
-          <li><a href="#" onclick="switchPage('home')">Home</a></li>
-          <li><a href="#" onclick="switchPage('rekomendasi')">Rekomendasi</a></li>
-          <li><a href="#" onclick="switchPage('about')">About Us</a></li>
-          <li><a href="#" onclick="switchPage('blog')">Blog</a></li>
-          <li><a href="#" onclick="switchPage('profil')">Profil</a></li>
-        </ul>
+
+      <div class="col-lg-8">
+        <div class="row g-3">
+          <div class="col-6 col-md-3"><div class="stat-box"><div class="num" id="statFavorit">0</div><div class="label">Favorit</div></div></div>
+          <div class="col-6 col-md-3"><div class="stat-box"><div class="num" id="statPencarian">0</div><div class="label">Pencarian</div></div></div>
+          <div class="col-6 col-md-3"><div class="stat-box"><div class="num" id="statDilihat">0</div><div class="label">Dilihat</div></div></div>
+          <div class="col-6 col-md-3"><div class="stat-box"><div class="num" id="statChat">0</div><div class="label">Chat WA</div></div></div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="fw-semibold mb-3"><i class="bi bi-clock-history me-1"></i>Riwayat Pencarian</h5>
+            <div id="riwayatPencarian"></div>
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="fw-semibold mb-3"><i class="bi bi-gear me-1"></i>Pengaturan</h5>
+            <button class="btn btn-outline-danger btn-sm" id="resetDataBtn">
+              <i class="bi bi-trash me-1"></i>Reset Semua Data
+            </button>
+          </div>
+        </div>
+
+        <div class="card mt-3">
+          <div class="card-body">
+            <h5 class="fw-semibold mb-3"><i class="bi bi-info-circle me-1"></i>Tentang & Kontak</h5>
+            <p class="small text-secondary mb-2">Ngafeeling — kurasi cafe berbasis mood untuk Soloraya.</p>
+            <a href="https://wa.me/6287705339063" target="_blank" rel="noopener" class="btn btn-primary btn-sm me-1 mb-1">
+              <i class="bi bi-whatsapp me-1"></i>WhatsApp
+            </a>
+            <a href="https://instagram.com/ngafeeling.mu" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm mb-1">
+              <i class="bi bi-instagram me-1"></i>Instagram
+            </a>
+          </div>
+        </div>
       </div>
-      <div class="col-6 col-lg-3">
-        <h5>Hubungi</h5>
-        <ul class="list-unstyled">
-          <li><a href="https://wa.me/6287705339063" target="_blank">WhatsApp — 0877-0533-9063</a></li>
-          <li><a href="mailto:ngafeelingmu@gmail.com">ngafeelingmu@gmail.com</a></li>
-        </ul>
-      </div>
-      <div class="col-lg-3">
-        <h5>Sosial Media</h5>
-        <ul class="list-unstyled">
-          <li><a href="#">Instagram @ngafeeling.mu</a></li>
-          <li><a href="#">Facebook @Ngafeeling Mu</a></li>
-          <li><a href="#">TikTok @Ngafeeling</a></li>
-        </ul>
-      </div>
-    </div>
-    <hr class="mt-4 border-secondary">
-    <div class="d-flex flex-wrap justify-content-between small">
-      <span>062302025 — Shella</span>
-      <span>© 2026 Ngafeeling · Soloraya, Jawa Tengah</span>
     </div>
   </div>
-</footer>
+</section>
 
-<!-- Bootstrap JS -->
+<!-- ============ BOTTOM NAV ============ -->
+<nav class="bottom-nav" id="bottomNav" style="display:none;">
+  <a href="#" data-nav="app-home" class="active" id="bn-app-home"><i class="bi bi-house-door"></i>Home</a>
+  <a href="#" data-nav="app-mood" id="bn-app-mood"><i class="bi bi-magic"></i>Cari Cafe</a>
+  <a href="#" data-nav="app-favorit" id="bn-app-favorit"><i class="bi bi-heart"></i>Favorit</a>
+  <a href="#" data-nav="app-profil" id="bn-app-profil"><i class="bi bi-person"></i>Profil</a>
+</nav>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  // ========== DATA CAFE (10 rekomendasi, masih placeholder) ==========
-  const cafes = [
-    { id: 1, name: "Kopi Senja", location: "Solo", mood: "Fokus kerja", color: "#1e3a8a", desc: "Area senyap, colokan banyak, WiFi cepat.", menu: ["Kopi Susu 20k", "Americano 18k", "Croissant 15k"], contact: "0812-3456-7890" },
-    { id: 2, name: "Ruang Teduh", location: "Sukoharjo", mood: "Healing sendiri", color: "#0f766e", desc: "Musik pelan, cahaya hangat, meja tunggal.", menu: ["Matcha Latte 25k", "Teh Serai 15k", "Cheesecake 22k"], contact: "0813-9876-5432" },
-    { id: 3, name: "Titik Kumpul", location: "Karanganyar", mood: "Nongkrong rame", color: "#b45309", desc: "Meja besar, buka sampai larut, parkir luas.", menu: ["Kopi Tubruk 12k", "Pisang Goreng 10k", "Es Teh 8k"], contact: "0857-1234-5678" },
-    { id: 4, name: "Selasar", location: "Solo", mood: "Quality time", color: "#7e22ce", desc: "Meja berjarak, tenang, menu non-kopi lengkap.", menu: ["Coklat Panas 22k", "Lemon Tea 18k", "Pasta 35k"], contact: "0821-3344-5566" },
-    { id: 5, name: "Pustaka Kafe", location: "Solo", mood: "Fokus kerja", color: "#1e3a8a", desc: "WiFi 50 Mbps, colokan di tiap meja, AC dingin.", menu: ["Espresso 15k", "Latte 22k", "Donat 10k"], contact: "0812-9988-7766" },
-    { id: 6, name: "Halaman Belakang", location: "Sukoharjo", mood: "Healing sendiri", color: "#0f766e", desc: "Taman kecil, musik akustik, sepi.", menu: ["Kopi Kelapa 24k", "Es Jeruk 12k", "Pisang Bakar 15k"], contact: "0856-4433-2211" },
-    { id: 7, name: "Balkon Kota", location: "Solo", mood: "Nongkrong rame", color: "#b45309", desc: "Rooftop, live music, kapasitas 50 orang.", menu: ["Mocktail 30k", "French Fries 20k", "Kopi 25k"], contact: "0813-1122-3344" },
-    { id: 8, name: "Ruang Duduk", location: "Karanganyar", mood: "Quality time", color: "#7e22ce", desc: "Sofa empuk, pencahayaan redup, tenang.", menu: ["Red Velvet 28k", "Matcha 26k", "Brownies 18k"], contact: "0821-5566-7788" },
-    { id: 9, name: "Kedai Kopi 88", location: "Solo", mood: "Fokus kerja", color: "#1e3a8a", desc: "Colokan melimpah, WiFi stabil, buka 24 jam.", menu: ["Kopi Hitam 10k", "Susu 12k", "Roti Bakar 15k"], contact: "0857-9988-1122" },
-    { id: 10, name: "Tepi Sungai", location: "Sukoharjo", mood: "Healing sendiri", color: "#0f766e", desc: "View sungai, angin sepoi, tempat duduk kayu.", menu: ["Kopi Jahe 20k", "Wedang Uwuh 15k", "Singkong 10k"], contact: "0812-3344-7788" }
-  ];
+/* ============================== KONFIG ============================== */
+const CONFIG = { whatsappNumber: '6287705339063', scrollOffset: 90 };
+const STORAGE_KEYS = {
+  users: 'ngafeeling_users',
+  session: 'ngafeeling_session',
+  favorites: 'ngafeeling_favorites',
+  history: 'ngafeeling_history',
+  stats: 'ngafeeling_stats'
+};
 
-  // ========== DATA BLOG (5 blog) ==========
-  const blogs = [
-    { id: 1, title: "5 Tanda Kafe Cocok Buat Fokus Kerja", excerpt: "Colokan, WiFi, dan kebisingan — ini yang paling menentukan.", content: "Colokan yang banyak, WiFi di atas 40 Mbps, dan area senyap adalah tiga hal utama. Cek juga jam sibuk dan ketersediaan meja besar." },
-    { id: 2, title: "Cara Memesan di Kafe Tanpa Ribet", excerpt: "Split-bill otomatis dan tips memesan untuk rombongan.", content: "Gunakan fitur split-bill otomatis dari Ngafeeling untuk membagi tagihan secara adil. Pesan dulu sebelum ramai." },
-    { id: 3, title: "Mood Booster: Healing Sendiri di Kafe", excerpt: "Pilih tempat dengan musik pelan dan cahaya hangat.", content: "Cari kafe dengan pencahayaan warm, musik instrumental, dan meja tunggal yang tidak berdesakan." },
-    { id: 4, title: "Nongkrong Rame? Ini Kriteria Kafenya", excerpt: "Meja besar, jam tutup larut, parkir luas.", content: "Pastikan kafe punya area parkir yang cukup untuk rombongan, dan buka sampai jam 12 malam." },
-    { id: 5, title: "Quality Time: Kafe Tenang Tapi Tidak Sepi", excerpt: "Meja berjarak, menu non-kopi lengkap.", content: "Pilih kafe dengan tata letak meja berjarak, suasana tenang, dan variasi menu non-kopi yang banyak." }
-  ];
+/* ============================== DATA 40 CAFE ============================== */
+const CAFES = [
+  { id:1,  name:'Odds',             location:'Solo',        mood:'Fokus kerja', color:'#1e3a8a', desc:'Buka 24 jam, tangga spiral kuning ikonik. Cocok WFC kapan saja.',            menu:['Americano Peach 25k','Manual Brew 30k','Signature Latte 28k'], contact:'0812-1111-0001', facilities:['colokan','wifi','senyap','24jam','parkir'], rating:4.8, jamBuka:'24 Jam', lat:-7.5652, lng:110.8295 },
+  { id:2,  name:'Loske',            location:'Solo',        mood:'Fokus kerja', color:'#1e3a8a', desc:'Gaya industrial vintage, buka dari pagi. Menu Los Leboys terkenal.',          menu:['Los Leboys 22k','Kopi Susu 20k','Croissant 18k'], contact:'0812-1111-0002', facilities:['colokan','wifi','parkir','nonkopi'], rating:4.7, jamBuka:'08.00–23.00', lat:-7.5681, lng:110.8241 },
+  { id:3,  name:'Eighteen Grounds', location:'Solo',        mood:'Fokus kerja', color:'#1e3a8a', desc:'Dua lantai, banyak colokan, AC dingin. Ada photobox konsep lift.',            menu:['Espresso 15k','Latte 22k','Donat 10k'], contact:'0812-1111-0003', facilities:['colokan','wifi','senyap','parkir'], rating:4.6, jamBuka:'10.00–22.00', lat:-7.5591, lng:110.8189 },
+  { id:4,  name:'Headroom',         location:'Karanganyar', mood:'Fokus kerja', color:'#1e3a8a', desc:'Kafe modern dengan suasana tenang, cocok untuk kerja fokus.',                 menu:['Kopi Susu 20k','Americano 18k','Croffle 22k'], contact:'0812-1111-0004', facilities:['colokan','wifi','senyap'], rating:4.5, jamBuka:'09.00–22.00', lat:-7.5960, lng:110.9500 },
+  { id:5,  name:'28 Coffee',        location:'Solo',        mood:'Fokus kerja', color:'#1e3a8a', desc:'Kafe modern dengan WiFi stabil, cocok produktif seharian.',                   menu:['Latte 20k','Es Kopi Susu 18k','Roti Bakar 15k'], contact:'0812-1111-0005', facilities:['colokan','wifi','parkir'], rating:4.5, jamBuka:'08.00–23.00', lat:-7.5645, lng:110.8300 },
+  { id:6,  name:'Tetra',            location:'Solo',        mood:'Fokus kerja', color:'#1e3a8a', desc:'Suasana tenang, sering jadi tempat kerja remote worker.',                     menu:['Cappuccino 22k','Matcha Latte 25k','Pasta 30k'], contact:'0812-1111-0006', facilities:['colokan','wifi','senyap','nonkopi'], rating:4.6, jamBuka:'10.00–22.00', lat:-7.5600, lng:110.8250 },
+  { id:7,  name:'Sekutu Kopi',      location:'Solo',        mood:'Fokus kerja', color:'#1e3a8a', desc:'Konsep coworking-friendly, cocok untuk meeting atau kerja santai.',           menu:['Kopi Tubruk 12k','Es Kopi 18k','Pisang Goreng 10k'], contact:'0812-1111-0007', facilities:['colokan','wifi','parkir'], rating:4.4, jamBuka:'08.00–22.00', lat:-7.5670, lng:110.8210 },
+  { id:8,  name:'Mikerkoe Coffee',  location:'Tawangmangu', mood:'Fokus kerja', color:'#1e3a8a', desc:'Kafe dengan suasana cozy untuk kerja santai.',                                menu:['Kopi Susu 18k','Americano 17k','Donat 8k'], contact:'0812-1111-0008', facilities:['colokan','wifi','outdoor'], rating:4.4, jamBuka:'09.00–22.00', lat:-7.6690, lng:111.1290 },
+  { id:9,  name:'Demograficoffee',  location:'Karanganyar', mood:'Fokus kerja', color:'#1e3a8a', desc:'Konsep modern, WiFi stabil, cocok untuk produktif.',                          menu:['Latte 22k','Cold Brew 25k','Croissant 18k'], contact:'0812-1111-0009', facilities:['colokan','wifi','parkir','nonkopi'], rating:4.6, jamBuka:'08.00–23.00', lat:-7.5985, lng:110.9530 },
+  { id:10, name:'Heika Kopi',       location:'Solo',        mood:'Fokus kerja', color:'#1e3a8a', desc:'Tempat tenang untuk fokus kerja atau belajar.',                               menu:['Kopi Susu 18k','Matcha 22k','Roti Bakar 12k'], contact:'0812-1111-0010', facilities:['colokan','wifi','senyap'], rating:4.5, jamBuka:'09.00–22.00', lat:-7.5615, lng:110.8245 },
+  { id:11, name:'Joyoux',                   location:'Solo',        mood:'Healing sendiri', color:'#0f766e', desc:'Kafe kecil yang tenang, cocok untuk me time. Menu ropang mulai 5 ribuan.', menu:['Kopi Susu 18k','Ropang 5k','Matcha 22k'], contact:'0812-2222-0011', facilities:['wifi','senyap','nonkopi'], rating:4.7, jamBuka:'10.00–22.00', lat:-7.5660, lng:110.8280 },
+  { id:12, name:'MH Cafe (Mitis Highland)', location:'Tawangmangu', mood:'Healing sendiri', color:'#0f766e', desc:'Akses kereta gantung, view hijau pegunungan. Kopi pekat.',                  menu:['Kopi Hitam 15k','Latte 20k','Singkong 10k'], contact:'0812-2222-0012', facilities:['outdoor','parkir','nonkopi'], rating:4.6, jamBuka:'08.00–21.00', lat:-7.6690, lng:111.1290 },
+  { id:13, name:'2020mdpl',                 location:'Tawangmangu', mood:'Healing sendiri', color:'#0f766e', desc:'Kafe di ketinggian 2.020 mdpl, ada jembatan kaca. View Lawu.',              menu:['Kopi Jahe 20k','Wedang Uwuh 15k','Pisang Bakar 12k'], contact:'0812-2222-0013', facilities:['outdoor','parkir','nonkopi'], rating:4.7, jamBuka:'07.00–21.00', lat:-7.6710, lng:111.1320 },
+  { id:14, name:'Swargi',                   location:'Solo',        mood:'Healing sendiri', color:'#0f766e', desc:'Kafe dengan suasana menenangkan untuk refleksi diri.',                      menu:['Kopi Susu 20k','Teh Herbal 18k','Pisang Goreng 12k'], contact:'0812-2222-0014', facilities:['wifi','senyap','nonkopi'], rating:4.5, jamBuka:'08.00–20.00', lat:-7.5680, lng:110.8270 },
+  { id:15, name:'Tepi Langit',              location:'Tawangmangu', mood:'Healing sendiri', color:'#0f766e', desc:'Kafe di ketinggian dengan view langit & gunung, cocok healing.',            menu:['Kopi Hitam 18k','Wedang Jahe 15k','Singkong Goreng 12k'], contact:'0812-2222-0015', facilities:['outdoor','parkir'], rating:4.6, jamBuka:'07.00–21.00', lat:-7.6720, lng:111.1300 },
+  { id:16, name:'Lintang Lawu',             location:'Tawangmangu', mood:'Healing sendiri', color:'#0f766e', desc:'View Gunung Lawu, suasana tenang untuk me time.',                            menu:['Kopi Susu 20k','Teh Tarik 18k','Roti Bakar 15k'], contact:'0812-2222-0016', facilities:['outdoor','parkir'], rating:4.5, jamBuka:'08.00–21.00', lat:-7.6700, lng:111.1280 },
+  { id:17, name:'Latar Lawu',               location:'Tawangmangu', mood:'Healing sendiri', color:'#0f766e', desc:'Pemandangan Gunung Lawu, cocok untuk refleksi diri.',                        menu:['Kopi Hitam 15k','Latte 20k','Pisang Bakar 12k'], contact:'0812-2222-0017', facilities:['outdoor','parkir'], rating:4.5, jamBuka:'08.00–20.00', lat:-7.6695, lng:111.1265 },
+  { id:18, name:'Lawu Break',               location:'Tawangmangu', mood:'Healing sendiri', color:'#0f766e', desc:'Tempat rehat dengan view Lawu, cocok lepas penat.',                          menu:['Kopi Susu 18k','Wedang Uwuh 15k','Mendoan 10k'], contact:'0812-2222-0018', facilities:['outdoor','parkir','nonkopi'], rating:4.4, jamBuka:'08.00–21.00', lat:-7.6715, lng:111.1295 },
+  { id:19, name:'Sareh Coffee',             location:'Solo',        mood:'Healing sendiri', color:'#0f766e', desc:'"Sareh" berarti tenang/sabar — suasana kafe mendukung mindfulness.',          menu:['Kopi Susu 18k','Matcha 22k','Roti Bakar 12k'], contact:'0812-2222-0019', facilities:['wifi','senyap'], rating:4.6, jamBuka:'10.00–22.00', lat:-7.5640, lng:110.8265 },
+  { id:20, name:'Kopi Oemah Tentrem',       location:'Karanganyar', mood:'Healing sendiri', color:'#0f766e', desc:'"Tentrem" = damai. Suasana homey seperti di rumah sendiri.',                menu:['Kopi Tubruk 12k','Es Kopi 18k','Pisang Goreng 10k'], contact:'0812-2222-0020', facilities:['wifi','senyap','nonkopi'], rating:4.5, jamBuka:'09.00–22.00', lat:-7.5975, lng:110.9515 },
+  { id:21, name:'Kopikoperasi', location:'Karanganyar', mood:'Nongkrong rame', color:'#b45309', desc:'Suasana santai untuk ngobrol bareng teman.',           menu:['Kopi Tubruk 12k','Es Kopi 18k','Pisang Goreng 10k'], contact:'0812-3333-0021', facilities:['wifi','parkir','nonkopi'], rating:4.5, jamBuka:'10.00–24.00', lat:-7.5950, lng:110.9480 },
+  { id:22, name:'Vinz',         location:'Karanganyar', mood:'Nongkrong rame', color:'#b45309', desc:'Cocok untuk kumpul bareng teman, suasana hidup.',      menu:['Kopi Susu 18k','Mocktail 28k','French Fries 20k'], contact:'0812-3333-0022', facilities:['wifi','parkir','nonkopi'], rating:4.6, jamBuka:'11.00–24.00', lat:-7.5965, lng:110.9495 },
+  { id:23, name:'Whims',        location:'Solo',        mood:'Nongkrong rame', color:'#b45309', desc:'Konsep playful & colorful, cocok untuk kumpul rame-rame.', menu:['Kopi Susu 20k','Matcha 25k','Donat 12k'], contact:'0812-3333-0023', facilities:['wifi','parkir'], rating:4.5, jamBuka:'10.00–23.00', lat:-7.5610, lng:110.8290 },
+  { id:24, name:'Margi',        location:'Solo',        mood:'Nongkrong rame', color:'#b45309', desc:'Tempat luas, cocok untuk grup besar atau komunitas.',  menu:['Kopi Susu 18k','Es Teh 10k','Pisang Goreng 12k'], contact:'0812-3333-0024', facilities:['wifi','parkir','nonkopi'], rating:4.4, jamBuka:'10.00–23.00', lat:-7.5675, lng:110.8255 },
+  { id:25, name:'Slari Coffee', location:'Solo',        mood:'Nongkrong rame', color:'#b45309', desc:'Nama "Slari" (Solo Raya) — cocok jadi base komunitas.', menu:['Kopi Tubruk 12k','Es Kopi 18k','Roti Bakar 15k'], contact:'0812-3333-0025', facilities:['wifi','parkir'], rating:4.4, jamBuka:'10.00–23.00', lat:-7.5655, lng:110.8260 },
+  { id:26, name:'Almamater',    location:'Solo',        mood:'Nongkrong rame', color:'#b45309', desc:'Dekat area kampus, cocok untuk mahasiswa nongkrong.',  menu:['Kopi Susu 15k','Es Teh 8k','Indomie 12k'], contact:'0812-3333-0026', facilities:['wifi','parkir','nonkopi'], rating:4.5, jamBuka:'09.00–24.00', lat:-7.5600, lng:110.8230 },
+  { id:27, name:'Anak Panah',   location:'Solo',        mood:'Nongkrong rame', color:'#b45309', desc:'Konsep komunitas, sering ada event & live music.',     menu:['Kopi Susu 20k','Mocktail 25k','French Fries 18k'], contact:'0812-3333-0027', facilities:['wifi','parkir','nonkopi'], rating:4.6, jamBuka:'15.00–24.00', lat:-7.5635, lng:110.8250 },
+  { id:28, name:'Seperdua',     location:'Solo',        mood:'Nongkrong rame', color:'#b45309', desc:'Cocok untuk grup kecil hingga menengah.',              menu:['Kopi Susu 18k','Es Kopi 18k','Pisang Goreng 10k'], contact:'0812-3333-0028', facilities:['wifi','parkir'], rating:4.4, jamBuka:'10.00–23.00', lat:-7.5620, lng:110.8275 },
+  { id:29, name:'Teman Coffee', location:'Karanganyar', mood:'Nongkrong rame', color:'#b45309', desc:'"Teman" — tempat nongkrong bareng sahabat.',           menu:['Kopi Susu 18k','Es Teh 10k','Pisang Goreng 12k'], contact:'0812-3333-0029', facilities:['wifi','parkir','nonkopi'], rating:4.5, jamBuka:'10.00–24.00', lat:-7.5970, lng:110.9500 },
+  { id:30, name:'Ankara Cafe',  location:'Karanganyar', mood:'Nongkrong rame', color:'#b45309', desc:'Konsep hangat & intimate, cocok untuk kumpul bareng.', menu:['Latte 22k','Coklat 22k','Roti Bakar 15k'], contact:'0812-3333-0030', facilities:['wifi','parkir','nonkopi'], rating:4.6, jamBuka:'10.00–23.00', lat:-7.5980, lng:110.9490 },
+  { id:31, name:'Lekas Ngopi',     location:'Karanganyar', mood:'Quality time', color:'#7e22ce', desc:'Tempat hangat untuk ngobrol berdua.',              menu:['Latte 20k','Coklat 22k','Roti Bakar 15k'], contact:'0896-8412-6227', facilities:['wifi','senyap','nonkopi'], rating:4.6, jamBuka:'10.00–23.00', lat:-7.5955, lng:110.9485 },
+  { id:32, name:'Lawu Kala Senja', location:'Tawangmangu', mood:'Quality time', color:'#7e22ce', desc:'View 360° Gunung Lawu, bangunan piramida. Sunset terbaik.', menu:['Thai Tea 18k','Chicken Katsu 25k','Blackpepper Beef 30k'], contact:'0812-4444-0032', facilities:['outdoor','parkir','nonkopi'], rating:4.8, jamBuka:'10.00–21.00', lat:-7.6730, lng:111.1310 },
+  { id:33, name:'Lavana',          location:'Solo',        mood:'Quality time', color:'#7e22ce', desc:'Kafe dengan konsep elegan, cocok untuk quality time.', menu:['Latte 22k','Matcha 25k','Croissant 20k'], contact:'0812-4444-0033', facilities:['wifi','senyap','nonkopi'], rating:4.6, jamBuka:'10.00–22.00', lat:-7.5630, lng:110.8280 },
+  { id:34, name:'The Bridge',      location:'Tawangmangu', mood:'Quality time', color:'#7e22ce', desc:'View jembatan & alam, suasana romantis.',          menu:['Kopi Susu 20k','Thai Tea 18k','Chicken Wings 25k'], contact:'0812-4444-0034', facilities:['outdoor','parkir','nonkopi'], rating:4.6, jamBuka:'09.00–21.00', lat:-7.6705, lng:111.1285 },
+  { id:35, name:"Cold'n Brew",     location:'Tawangmangu', mood:'Quality time', color:'#7e22ce', desc:'Suasana modern & cozy untuk berdua.',              menu:['Cold Brew 25k','Latte 22k','Croissant 18k'], contact:'0812-4444-0035', facilities:['wifi','outdoor','parkir'], rating:4.5, jamBuka:'10.00–22.00', lat:-7.6700, lng:111.1275 },
+  { id:36, name:'Cruasan',         location:'Tawangmangu', mood:'Quality time', color:'#7e22ce', desc:'Konsep bakery-cafe, cocok untuk date santai.',     menu:['Latte 20k','Croissant 18k','Pain au Chocolat 20k'], contact:'0812-4444-0036', facilities:['wifi','outdoor','nonkopi'], rating:4.6, jamBuka:'08.00–21.00', lat:-7.6685, lng:111.1290 },
+  { id:37, name:'Terasenja',       location:'Tawangmangu', mood:'Quality time', color:'#7e22ce', desc:'"Teras Senja" — suasana romantis saat matahari terbenam.', menu:['Kopi Susu 18k','Thai Tea 18k','Pisang Goreng 12k'], contact:'0812-4444-0037', facilities:['outdoor','wifi','nonkopi'], rating:4.5, jamBuka:'15.00–23.00', lat:-7.6695, lng:111.1280 },
+  { id:38, name:'Hagia Coffee',    location:'Karanganyar', mood:'Quality time', color:'#7e22ce', desc:'"Hagia" (suci) — suasana tenang & khidmat.',       menu:['Kopi Susu 18k','Matcha 22k','Donat 10k'], contact:'0812-4444-0038', facilities:['wifi','senyap'], rating:4.5, jamBuka:'10.00–22.00', lat:-7.5960, lng:110.9505 },
+  { id:39, name:'Duor',            location:'Karanganyar', mood:'Quality time', color:'#7e22ce', desc:'"Duor" (duo) — dirancang untuk pengalaman berdua.', menu:['Latte 22k','Coklat 22k','Croissant 18k'], contact:'0812-4444-0039', facilities:['wifi','senyap','nonkopi'], rating:4.6, jamBuka:'10.00–22.00', lat:-7.5945, lng:110.9470 },
+  { id:40, name:'Bons Coffee',     location:'Kemuning',    mood:'Quality time', color:'#7e22ce', desc:'Tempat santai untuk kumpul bareng dengan view alam Kemuning.', menu:['Kopi Tubruk 12k','Es Kopi 18k','Roti Bakar 12k'], contact:'0812-4444-0040', facilities:['outdoor','parkir','nonkopi'], rating:4.4, jamBuka:'09.00–21.00', lat:-7.6280, lng:111.1230 }
+];
 
-  // ========== STATE ==========
-  let currentUser = null;
-  let favorites = [];
+const MOOD_GROUPS = [
+  { mood:'Fokus kerja',     color:'#1e3a8a', icon:'laptop', desc:'Area senyap, colokan banyak, WiFi cepat.',           cafeIds:[1,2,3,4,5,6,7,8,9,10] },
+  { mood:'Healing sendiri', color:'#0f766e', icon:'moon',   desc:'Musik pelan, cahaya hangat, meja tunggal.',          cafeIds:[11,12,13,14,15,16,17,18,19,20] },
+  { mood:'Nongkrong rame',  color:'#b45309', icon:'people', desc:'Meja besar, jam tutup larut, parkir luas.',          cafeIds:[21,22,23,24,25,26,27,28,29,30] },
+  { mood:'Quality time',    color:'#7e22ce', icon:'heart',  desc:'Meja berjarak, tenang, menu non-kopi lengkap.',      cafeIds:[31,32,33,34,35,36,37,38,39,40] }
+];
 
-  // ========== LOCALSTORAGE ==========
-  function loadFromStorage() {
-    const storedUser = localStorage.getItem('ngafeeling_user');
-    if (storedUser) currentUser = JSON.parse(storedUser);
-    const storedFav = localStorage.getItem('ngafeeling_favorites');
-    if (storedFav) favorites = JSON.parse(storedFav);
+const WILAYAH = [
+  { id:'solo',        label:'Solo',        count:18 },
+  { id:'karanganyar', label:'Karanganyar', count:11 },
+  { id:'tawangmangu', label:'Tawangmangu', count:10 },
+  { id:'kemuning',    label:'Kemuning',    count:1  }
+];
+
+const FASILITAS = [
+  { id:'colokan', label:'Colokan listrik',       icon:'plug' },
+  { id:'wifi',    label:'WiFi cepat (>40 Mbps)', icon:'wifi' },
+  { id:'senyap',  label:'Area senyap',           icon:'volume-mute' },
+  { id:'24jam',   label:'Buka 24 jam',           icon:'clock' },
+  { id:'parkir',  label:'Parkir luas',           icon:'car-front' },
+  { id:'outdoor', label:'Outdoor / view alam',   icon:'tree' },
+  { id:'nonkopi', label:'Menu non-kopi lengkap', icon:'cup-straw' }
+];
+
+/* ============================== STATE ============================== */
+const state = {
+  user: null,
+  favorites: [],
+  history: [],
+  stats: { pencarian: 0, dilihat: 0, chat: 0 },
+  filter: { mood: null, location: null, facilities: [] },
+  wizardStep: 1,
+  currentPage: 'app-login',
+  currentMoodQuick: null
+};
+
+/* ============================== UTIL ============================== */
+const $  = (s, c = document) => c.querySelector(s);
+const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+const findCafe = id => CAFES.find(c => c.id === Number(id));
+const escapeHtml = str => String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function scrollToEl(el, offset = CONFIG.scrollOffset) {
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+
+/* ============================== STORAGE ============================== */
+const storage = {
+  loadUsers() { try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.users) || '[]'); } catch { return []; } },
+  saveUsers(u) { localStorage.setItem(STORAGE_KEYS.users, JSON.stringify(u)); },
+  loadSession() { try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.session) || 'null'); } catch { return null; } },
+  saveSession(u) { localStorage.setItem(STORAGE_KEYS.session, JSON.stringify(u)); },
+  clearSession() { localStorage.removeItem(STORAGE_KEYS.session); },
+  loadFavorites() { try { state.favorites = JSON.parse(localStorage.getItem(STORAGE_KEYS.favorites) || '[]'); } catch { state.favorites = []; } },
+  saveFavorites() { localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(state.favorites)); },
+  loadHistory() { try { state.history = JSON.parse(localStorage.getItem(STORAGE_KEYS.history) || '[]'); } catch { state.history = []; } },
+  saveHistory() { localStorage.setItem(STORAGE_KEYS.history, JSON.stringify(state.history.slice(0, 10))); },
+  loadStats() { try { state.stats = JSON.parse(localStorage.getItem(STORAGE_KEYS.stats) || '{"pencarian":0,"dilihat":0,"chat":0}'); } catch { state.stats = { pencarian: 0, dilihat: 0, chat: 0 }; } },
+  saveStats() { localStorage.setItem(STORAGE_KEYS.stats, JSON.stringify(state.stats)); },
+  resetAll() { [STORAGE_KEYS.favorites, STORAGE_KEYS.history, STORAGE_KEYS.stats].forEach(k => localStorage.removeItem(k)); }
+};
+
+/* ============================== AUTH ============================== */
+function showAuthAlert(msg, type = 'error') {
+  const cls = type === 'error' ? 'alert-error' : 'alert-success';
+  $('#authAlert').innerHTML = `<div class="${cls} mb-3">${escapeHtml(msg)}</div>`;
+  setTimeout(() => { $('#authAlert').innerHTML = ''; }, 4000);
+}
+function switchAuthTab(tab) {
+  $$('[data-auth-tab]').forEach(el => {
+    if (el.classList.contains('nav-link')) el.classList.toggle('active', el.dataset.authTab === tab);
+  });
+  if (tab === 'login') {
+    $('#formLogin').classList.remove('d-none');
+    $('#formRegister').classList.add('d-none');
+    $('#toggleText').innerHTML = 'Belum punya akun? <a data-auth-tab="register">Daftar di sini</a>';
+  } else {
+    $('#formLogin').classList.add('d-none');
+    $('#formRegister').classList.remove('d-none');
+    $('#toggleText').innerHTML = 'Sudah punya akun? <a data-auth-tab="login">Masuk di sini</a>';
   }
-  function saveUser() {
-    if (currentUser) localStorage.setItem('ngafeeling_user', JSON.stringify(currentUser));
-    else localStorage.removeItem('ngafeeling_user');
-  }
-  function saveFavorites() {
-    localStorage.setItem('ngafeeling_favorites', JSON.stringify(favorites));
-  }
+  $('#authAlert').innerHTML = '';
+}
+function handleRegister(e) {
+  e.preventDefault();
+  const name = $('#regName').value.trim();
+  const email = $('#regEmail').value.trim().toLowerCase();
+  const password = $('#regPassword').value;
+  if (name.length < 3) return showAuthAlert('Nama minimal 3 karakter.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showAuthAlert('Format email tidak valid.');
+  if (password.length < 6) return showAuthAlert('Password minimal 6 karakter.');
+  const users = storage.loadUsers();
+  if (users.some(u => u.email === email)) return showAuthAlert('Email sudah terdaftar. Silakan masuk.');
+  users.push({ name, email, password });
+  storage.saveUsers(users);
+  showAuthAlert('Registrasi berhasil! Silakan masuk.', 'success');
+  switchAuthTab('login');
+  $('#loginEmail').value = email;
+  $('#regName').value = ''; $('#regEmail').value = ''; $('#regPassword').value = '';
+}
+function handleLogin(e) {
+  e.preventDefault();
+  const email = $('#loginEmail').value.trim().toLowerCase();
+  const password = $('#loginPassword').value;
+  const users = storage.loadUsers();
+  const user = users.find(u => u.email === email && u.password === password);
+  if (!user) return showAuthAlert('Email atau password salah.');
+  state.user = { name: user.name, email: user.email };
+  storage.saveSession(state.user);
+  enterApp();
+}
+function handleLogout() {
+  if (!confirm('Yakin ingin logout?')) return;
+  storage.clearSession();
+  state.user = null;
+  state.favorites = []; state.history = []; state.stats = { pencarian: 0, dilihat: 0, chat: 0 };
+  showAppShell(false);
+  switchPage('app-login');
+  $('#formLogin').reset(); $('#formRegister').reset();
+  switchAuthTab('login');
+}
+function showAppShell(show) {
+  $('#navbarTop').style.display = show ? '' : 'none';
+  $('#bottomNav').style.display = show ? '' : 'none';
+}
+function enterApp() {
+  storage.loadFavorites();
+  storage.loadHistory();
+  storage.loadStats();
+  const initial = state.user.name.charAt(0).toUpperCase();
+  $('#navAvatar').textContent = initial;
+  $('#navUserName').textContent = state.user.name.split(' ')[0];
+  $('#heroName').textContent = state.user.name.split(' ')[0];
+  showAppShell(true);
+  switchPage('app-home');
+}
 
-  // ========== PAGE SWITCHING ==========
-  function switchPage(page) {
-    document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-    document.getElementById('page-' + page).classList.add('active');
-    document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
-    const navMap = { home: 'nav-home', rekomendasi: 'nav-rekomendasi', about: 'nav-about', blog: 'nav-blog', profil: 'nav-profil' };
-    if (navMap[page]) document.getElementById(navMap[page]).classList.add('active');
-    if (page === 'profil') renderProfil();
-    if (page === 'rekomendasi') renderCafes();
-    if (page === 'blog') renderBlogs();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+/* ============================== NAVIGASI ============================== */
+const NAV_IDS = {
+  'app-home':    ['bn-app-home'],
+  'app-mood':    ['bn-app-mood'],
+  'app-favorit': ['bn-app-favorit'],
+  'app-profil':  ['bn-app-profil']
+};
+function switchPage(page) {
+  state.currentPage = page;
+  $$('.page-section').forEach(s => s.classList.remove('active'));
+  $(`#page-${page}`)?.classList.add('active');
+  $$('.bottom-nav a').forEach(l => l.classList.remove('active'));
+  (NAV_IDS[page] || []).forEach(id => $(`#${id}`)?.classList.add('active'));
+  if (page === 'app-favorit') renderFavorit();
+  if (page === 'app-profil')  renderProfil();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-  // ========== RENDER CAFE ==========
-  function renderCafes() {
-    const grid = document.getElementById('cafeGrid');
-    if (!grid) return;
-    grid.innerHTML = cafes.map(cafe => {
-      const isFav = favorites.includes(cafe.id);
-      return `
-        <div class="col-md-6 col-lg-4">
-          <div class="card cafe-card p-3" style="border-left-color: ${cafe.color};" onclick="showCafeDetail(${cafe.id})">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-start">
-                <h5 class="card-title">${cafe.name}</h5>
-                <i class="bi bi-heart${isFav ? '-fill' : ''} favorite-icon ${isFav ? 'favorited' : ''}" onclick="event.stopPropagation(); toggleFavorite(${cafe.id})"></i>
-              </div>
-              <p class="text-secondary small mb-1"><i class="bi bi-geo-alt me-1"></i>${cafe.location} · ${cafe.mood}</p>
-              <p class="small mb-0">${cafe.desc}</p>
-            </div>
+/* ============================== HOME ============================== */
+function shortcutMoodHTML(group) {
+  return `
+    <div class="col-6 col-md-3">
+      <div class="mood-option" data-shortcut-mood="${group.mood}">
+        <i class="bi bi-${group.icon}" style="color:${group.color};"></i>
+        <h6 style="color:${group.color};">${group.mood}</h6>
+        <p>${group.desc}</p>
+      </div>
+    </div>
+  `;
+}
+function renderShortcutMood() {
+  const el = $('#shortcutMood');
+  if (el) el.innerHTML = MOOD_GROUPS.map(shortcutMoodHTML).join('');
+}
+function quickCafeHTML(cafe, idx) {
+  const isFav = state.favorites.includes(cafe.id);
+  return `
+    <div class="col-md-6 col-lg-4">
+      <div class="card cafe-card" style="border-left-color:${cafe.color};">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-1">
+            <h6 class="card-title mb-0">${idx+1}. ${escapeHtml(cafe.name)}</h6>
+            <i class="bi bi-heart${isFav?'-fill':''} favorite-icon ${isFav?'favorited':''}"
+               data-favorite-id="${cafe.id}" role="button"></i>
+          </div>
+          <p class="text-secondary small mb-1"><i class="bi bi-geo-alt me-1"></i>${cafe.location} · ${cafe.mood}</p>
+          <p class="text-secondary small mb-2"><i class="bi bi-star-fill text-warning me-1"></i>${cafe.rating} · <i class="bi bi-clock ms-1 me-1"></i>${cafe.jamBuka}</p>
+          <p class="small mb-2">${escapeHtml(cafe.desc)}</p>
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-primary" data-order-id="${cafe.id}"><i class="bi bi-whatsapp"></i> Pesan</button>
+            <button class="btn btn-sm btn-outline-primary" data-cafe-id="${cafe.id}" data-source="home">Detail</button>
           </div>
         </div>
-      `;
+      </div>
+    </div>
+  `;
+}
+function showQuickResult(mood) {
+  const group = MOOD_GROUPS.find(g => g.mood === mood);
+  if (!group) return;
+  state.currentMoodQuick = mood;
+  const cafes = group.cafeIds.slice(0, 10).map(findCafe).filter(Boolean);
+  $('#quickResultTitle').innerHTML = `<i class="bi bi-${group.icon} me-2" style="color:${group.color};"></i>${group.mood}`;
+  $('#quickResultSubtitle').textContent = `10 rekomendasi terbaik untuk mood "${group.mood}".`;
+  $('#quickResultGrid').innerHTML = cafes.map(quickCafeHTML).join('');
+  $('#quickResult').classList.remove('d-none');
+  $('#cafeDetailHome').innerHTML = '';
+  scrollToEl($('#quickResult'));
+}
+function closeQuickResult() {
+  $('#quickResult').classList.add('d-none');
+  $('#cafeDetailHome').innerHTML = '';
+  state.currentMoodQuick = null;
+}
+function showQuickResultSilent(mood) {
+  const group = MOOD_GROUPS.find(g => g.mood === mood);
+  if (!group) return;
+  const cafes = group.cafeIds.slice(0, 10).map(findCafe).filter(Boolean);
+  $('#quickResultGrid').innerHTML = cafes.map(quickCafeHTML).join('');
+}
+
+/* ============================== DETAIL ============================== */
+function renderCafeDetail(cafeId, source) {
+  const cafe = findCafe(cafeId);
+  if (!cafe) return;
+  state.stats.dilihat++;
+  storage.saveStats();
+  const isFav = state.favorites.includes(cafe.id);
+  const menuItems = cafe.menu.map(m => `<li class="col-md-4 mb-1"><i class="bi bi-check-circle-fill me-2" style="color:${cafe.color};"></i>${escapeHtml(m)}</li>`).join('');
+  const facBadges = cafe.facilities.map(f => {
+    const fas = FASILITAS.find(x => x.id === f);
+    if (!fas) return '';
+    return `<span class="badge rounded-pill me-1 mb-1" style="background:#e6efff;color:${cafe.color};"><i class="bi bi-${fas.icon} me-1"></i>${fas.label}</span>`;
+  }).join('');
+  let targetId = '#cafeDetailHome';
+  if (source === 'mood') targetId = '#cafeDetailMood';
+  if (source === 'fav')  targetId = '#cafeDetailFav';
+  const target = $(targetId);
+  if (!target) return;
+  ['#cafeDetailHome', '#cafeDetailMood', '#cafeDetailFav'].forEach(id => { if (id !== targetId) $(id).innerHTML = ''; });
+  target.innerHTML = `
+    <div class="card p-4" style="border-left:8px solid ${cafe.color};">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <div>
+          <h3 class="fw-bold mb-1">${escapeHtml(cafe.name)}</h3>
+          <p class="text-secondary mb-1"><i class="bi bi-geo-alt me-1"></i>${cafe.location} · Mood: ${cafe.mood}</p>
+          <p class="text-secondary small mb-0"><i class="bi bi-star-fill text-warning me-1"></i>${cafe.rating} · <i class="bi bi-clock ms-1 me-1"></i>${cafe.jamBuka}</p>
+        </div>
+        <i class="bi bi-heart${isFav?'-fill':''} favorite-icon fs-2 ${isFav?'favorited':''}" data-favorite-id="${cafe.id}" role="button"></i>
+      </div>
+      <p class="mt-2">${escapeHtml(cafe.desc)}</p>
+      <h6 class="mt-3 mb-2">Fasilitas</h6>
+      <div>${facBadges || '<span class="text-secondary small">Belum ada info fasilitas.</span>'}</div>
+      <h6 class="mt-4 mb-2">Menu Andalan</h6>
+      <ul class="list-unstyled row mb-3">${menuItems}</ul>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="#" class="btn btn-primary" data-order-id="${cafe.id}"><i class="bi bi-whatsapp me-1"></i>Kontak Pesan — ${escapeHtml(cafe.contact)}</a>
+        <a href="https://www.google.com/maps?q=${cafe.lat},${cafe.lng}" target="_blank" rel="noopener" class="btn btn-outline-primary"><i class="bi bi-geo-alt me-1"></i>Buka di Maps</a>
+        <button class="btn btn-outline-primary" data-close-detail="${targetId}"><i class="bi bi-x me-1"></i>Tutup</button>
+      </div>
+    </div>
+  `;
+  scrollToEl(target);
+}
+
+/* ============================== WIZARD ============================== */
+function moodOptionHTML(group) {
+  return `<div class="col-6 col-md-3"><div class="mood-option ${state.filter.mood === group.mood ? 'selected' : ''}" data-mood-pick="${group.mood}"><i class="bi bi-${group.icon}" style="color:${group.color};"></i><h6 style="color:${group.color};">${group.mood}</h6><p>${group.desc}</p></div></div>`;
+}
+function locOptionHTML(w) {
+  return `<div class="col-6 col-md-3"><div class="loc-option ${state.filter.location === w.label ? 'selected' : ''}" data-loc-pick="${w.label}"><div class="fw-semibold">${w.label}</div><div class="count">${w.count} cafe</div></div></div>`;
+}
+function facOptionHTML(f) {
+  const sel = state.filter.facilities.includes(f.id);
+  return `<div class="col-6 col-md-4"><div class="fac-option ${sel ? 'selected' : ''}" data-fac-pick="${f.id}"><i class="bi bi-${f.icon}"></i><span class="small">${f.label}</span></div></div>`;
+}
+function renderWizard() {
+  $('#moodOptions').innerHTML     = MOOD_GROUPS.map(moodOptionHTML).join('');
+  $('#locationOptions').innerHTML = WILAYAH.map(locOptionHTML).join('');
+  $('#facilityOptions').innerHTML = FASILITAS.map(facOptionHTML).join('');
+  $('#btnNext1').disabled = !state.filter.mood;
+  $('#btnNext2').disabled = !state.filter.location;
+  $$('.wizard-step').forEach(s => s.classList.add('d-none'));
+  $(`.wizard-step[data-step="${state.wizardStep}"]`)?.classList.remove('d-none');
+  $('#wizardProgress').style.width = (state.wizardStep / 3) * 100 + '%';
+  $('#wizardStepLabel').textContent = `Langkah ${state.wizardStep} dari 3`;
+}
+
+/* ============================== HASIL ============================== */
+function getRecommendations() {
+  const { mood, location, facilities } = state.filter;
+  return CAFES.map(cafe => {
+    let score = 0;
+    if (cafe.mood === mood) score += 60;
+    if (location && cafe.location === location) score += 25;
+    if (facilities.length > 0) {
+      const cocok = facilities.filter(f => cafe.facilities.includes(f)).length;
+      score += (cocok / facilities.length) * 15;
+    } else { score += 15; }
+    return { ...cafe, score: Math.round(score) };
+  }).filter(c => c.score > 0).sort((a, b) => b.score - a.score).slice(0, 10);
+}
+function hasilCardHTML(cafe, idx) {
+  const isFav = state.favorites.includes(cafe.id);
+  const matchColor = cafe.score >= 90 ? '#10b981' : cafe.score >= 70 ? '#3b82f6' : '#f59e0b';
+  return `
+    <div class="col-md-6 col-lg-4">
+      <div class="card cafe-card result-card" style="border-left-color:${cafe.color};">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-1">
+            <h6 class="card-title mb-0">${idx+1}. ${escapeHtml(cafe.name)}</h6>
+            <i class="bi bi-heart${isFav?'-fill':''} favorite-icon ${isFav?'favorited':''}" data-favorite-id="${cafe.id}" role="button"></i>
+          </div>
+          <span class="match-badge" style="background:${matchColor};"><i class="bi bi-graph-up-arrow me-1"></i>${cafe.score}% cocok</span>
+          <p class="text-secondary small mt-2 mb-1"><i class="bi bi-geo-alt me-1"></i>${cafe.location} · ${cafe.mood}</p>
+          <p class="text-secondary small mb-2"><i class="bi bi-star-fill text-warning me-1"></i>${cafe.rating}</p>
+          <p class="small mb-2">${escapeHtml(cafe.desc)}</p>
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-primary" data-order-id="${cafe.id}"><i class="bi bi-whatsapp"></i> Pesan</button>
+            <button class="btn btn-sm btn-outline-primary" data-cafe-id="${cafe.id}" data-source="mood">Detail</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function renderHasil() {
+  const list = getRecommendations();
+  const summary = $('#hasilSummary');
+  const grid = $('#hasilGrid');
+  const moodText = state.filter.mood || 'semua mood';
+  const locText  = state.filter.location || 'semua wilayah';
+  const facText  = state.filter.facilities.length > 0 ? state.filter.facilities.length + ' fasilitas dipilih' : 'tanpa filter fasilitas';
+  summary.textContent = `${list.length} cafe untuk mood "${moodText}" di ${locText} (${facText}).`;
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="col-12"><div class="empty-state"><i class="bi bi-emoji-frown"></i><p>Belum ada cafe yang cocok. Coba ubah mood atau lokasi.</p></div></div>`;
+  } else {
+    grid.innerHTML = list.map(hasilCardHTML).join('');
+  }
+  $('#hasilRekomendasi').classList.remove('d-none');
+  $('#cafeDetailMood').innerHTML = '';
+  scrollToEl($('#hasilRekomendasi'));
+  state.stats.pencarian++;
+  state.history.unshift({ mood: state.filter.mood, location: state.filter.location, facilities: [...state.filter.facilities], time: new Date().toISOString() });
+  storage.saveStats();
+  storage.saveHistory();
+}
+function renderHasilSilent() {
+  const list = getRecommendations();
+  if (list.length === 0) return;
+  $('#hasilGrid').innerHTML = list.map(hasilCardHTML).join('');
+}
+
+/* ============================== FAVORIT ============================== */
+function renderFavorit() {
+  const grid = $('#favoritGrid');
+  const list = state.favorites.map(findCafe).filter(Boolean);
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="col-12"><div class="empty-state"><i class="bi bi-heart"></i><h5>Belum ada cafe favorit</h5><p>Yuk cari cafe yang cocok dengan mood-mu!</p><a href="#" class="btn btn-primary mt-2" data-nav="app-mood"><i class="bi bi-magic me-1"></i>Cari Cafe</a></div></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(cafe => `
+    <div class="col-md-6 col-lg-4">
+      <div class="card cafe-card" style="border-left-color:${cafe.color};">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-1">
+            <h6 class="card-title mb-0">${escapeHtml(cafe.name)}</h6>
+            <i class="bi bi-heart-fill favorite-icon favorited" data-favorite-id="${cafe.id}" role="button"></i>
+          </div>
+          <p class="text-secondary small mb-1"><i class="bi bi-geo-alt me-1"></i>${cafe.location} · ${cafe.mood}</p>
+          <p class="small mb-3">${escapeHtml(cafe.desc)}</p>
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-primary" data-order-id="${cafe.id}"><i class="bi bi-whatsapp"></i> Pesan</button>
+            <button class="btn btn-sm btn-outline-primary" data-cafe-id="${cafe.id}" data-source="fav">Detail</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ============================== PROFIL ============================== */
+function renderProfil() {
+  if (!state.user) return;
+  $('#profileAvatar').textContent = state.user.name.charAt(0).toUpperCase();
+  $('#profileName').textContent = state.user.name;
+  $('#profileEmail').textContent = state.user.email;
+  $('#statFavorit').textContent   = state.favorites.length;
+  $('#statPencarian').textContent = state.stats.pencarian;
+  $('#statDilihat').textContent   = state.stats.dilihat;
+  $('#statChat').textContent      = state.stats.chat;
+  const hist = $('#riwayatPencarian');
+  if (state.history.length === 0) {
+    hist.innerHTML = `<p class="text-secondary small mb-0">Belum ada riwayat pencarian.</p>`;
+  } else {
+    hist.innerHTML = state.history.slice(0, 5).map(h => {
+      const tgl = new Date(h.time).toLocaleString('id-ID', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+      const fas = h.facilities.length ? ` · ${h.facilities.length} fasilitas` : '';
+      return `<div class="border-bottom py-2 small"><i class="bi bi-search me-1 text-primary"></i><strong>${escapeHtml(h.mood || '-')}</strong> di ${escapeHtml(h.location || 'semua')}${fas}<span class="text-secondary float-end">${tgl}</span></div>`;
     }).join('');
   }
+}
 
-  function showCafeDetail(id) {
-    const cafe = cafes.find(c => c.id === id);
-    if (!cafe) return;
-    document.documentElement.style.setProperty('--cafe-accent', cafe.color);
-    document.documentElement.style.setProperty('--primary-blue', cafe.color);
-    const detailDiv = document.getElementById('cafeDetail');
-    detailDiv.innerHTML = `
-      <div class="card p-4" style="border-left: 8px solid ${cafe.color};">
-        <div class="d-flex justify-content-between align-items-start">
-          <div>
-            <h3 class="fw-bold">${cafe.name}</h3>
-            <p class="text-secondary"><i class="bi bi-geo-alt me-1"></i>${cafe.location} · Mood: ${cafe.mood}</p>
-          </div>
-          <i class="bi bi-heart${favorites.includes(cafe.id) ? '-fill' : ''} favorite-icon fs-2 ${favorites.includes(cafe.id) ? 'favorited' : ''}" onclick="toggleFavorite(${cafe.id})"></i>
-        </div>
-        <p>${cafe.desc}</p>
-        <h5 class="mt-3">Menu Andalan</h5>
-        <ul class="list-unstyled row">
-          ${cafe.menu.map(m => `<li class="col-md-4"><i class="bi bi-check-circle-fill me-2" style="color:${cafe.color};"></i>${m}</li>`).join('')}
-        </ul>
-        <div class="mt-3">
-          <a href="#" class="btn btn-primary" onclick="event.preventDefault(); handlePesan(${cafe.id})"><i class="bi bi-whatsapp me-2"></i>Kontak Pesan — ${cafe.contact}</a>
-        </div>
-      </div>
-    `;
-    detailDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  // ========== FAVORIT ==========
-  function toggleFavorite(id) {
-    const idx = favorites.indexOf(id);
-    if (idx === -1) favorites.push(id);
-    else favorites.splice(idx, 1);
-    saveFavorites();
-    renderCafes();
-    const detailDiv = document.getElementById('cafeDetail');
-    if (detailDiv && detailDiv.innerHTML.includes('card')) {
-      const match = detailDiv.innerHTML.match(/<h3 class="fw-bold">([^<]+)<\/h3>/);
-      if (match) {
-        const cafeName = match[1];
-        const cafe = cafes.find(c => c.name === cafeName);
-        if (cafe) showCafeDetail(cafe.id);
-      }
-    }
-    if (document.getElementById('page-profil').classList.contains('active')) renderProfil();
-  }
-
-  // ========== HANDLE PESAN ==========
-  function handlePesan(cafeId) {
-    if (!currentUser) {
-      alert('Silakan login terlebih dahulu untuk memesan.');
-      switchPage('profil');
-      return;
-    }
-    const cafe = cafes.find(c => c.id === cafeId);
-    const pesan = `Halo ${cafe.name}, saya ${currentUser.name} ingin memesan menu. Mohon info ketersediaan.`;
-    window.open(`https://wa.me/62${cafe.contact.replace(/\D/g, '')}?text=${encodeURIComponent(pesan)}`, '_blank');
-  }
-
-  // ========== RENDER BLOG ==========
-  function renderBlogs() {
-    const grid = document.getElementById('blogGrid');
-    if (!grid) return;
-    grid.innerHTML = blogs.map(blog => `
-      <div class="col-md-6">
-        <div class="card blog-card p-3" onclick="alert('Fitur baca lengkap segera hadir!')">
-          <div class="card-body">
-            <h5 class="fw-semibold">${blog.title}</h5>
-            <p class="text-secondary small">${blog.excerpt}</p>
-            <span class="text-success fw-medium">Baca selengkapnya <i class="bi bi-arrow-right"></i></span>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // ========== LOGIN / PROFIL ==========
-  function loginPrompt() {
-    const name = prompt('Masukkan nama kamu:');
-    if (!name) return;
-    const email = prompt('Masukkan email kamu:');
-    if (!email) return;
-    currentUser = { name, email };
-    saveUser();
-    renderProfil();
-  }
-
-  function editProfil() {
-    if (!currentUser) return;
-    const name = prompt('Nama baru:', currentUser.name);
-    if (name) currentUser.name = name;
-    const email = prompt('Email baru:', currentUser.email);
-    if (email) currentUser.email = email;
-    saveUser();
-    renderProfil();
-  }
-
-  function logout() {
-    currentUser = null;
-    saveUser();
-    renderProfil();
-  }
-
-  function renderProfil() {
-    const notLogged = document.getElementById('profilNotLogged');
-    const logged = document.getElementById('profilLogged');
-    if (!notLogged || !logged) return;
-    if (currentUser) {
-      notLogged.style.display = 'none';
-      logged.style.display = 'block';
-      document.getElementById('profilNama').textContent = currentUser.name;
-      document.getElementById('profilEmail').textContent = currentUser.email;
-      const favList = document.getElementById('favoritList');
-      if (favList) {
-        if (favorites.length === 0) {
-          favList.innerHTML = '<p class="text-secondary">Belum ada cafe favorit.</p>';
-        } else {
-          favList.innerHTML = favorites.map(id => {
-            const cafe = cafes.find(c => c.id === id);
-            if (!cafe) return '';
-            return `<div class="col-md-6"><div class="card p-3" style="border-left: 5px solid ${cafe.color};"><h6 class="fw-semibold mb-1">${cafe.name}</h6><p class="small text-secondary mb-0">${cafe.location} · ${cafe.mood}</p></div></div>`;
-          }).join('');
+/* ============================== AKSI ============================== */
+function toggleFavorite(cafeId) {
+  const id = Number(cafeId);
+  const idx = state.favorites.indexOf(id);
+  if (idx === -1) state.favorites.push(id);
+  else state.favorites.splice(idx, 1);
+  storage.saveFavorites();
+  if (state.currentMoodQuick && !$('#quickResult').classList.contains('d-none')) showQuickResultSilent(state.currentMoodQuick);
+  if (state.currentPage === 'app-favorit') renderFavorit();
+  if (state.currentPage === 'app-profil')  renderProfil();
+  if (!$('#hasilRekomendasi').classList.contains('d-none')) renderHasilSilent();
+  ['#cafeDetailHome', '#cafeDetailMood', '#cafeDetailFav'].forEach(sel => {
+    const el = $(sel);
+    if (el && el.innerHTML.trim()) {
+      const nameEl = el.querySelector('h3');
+      if (nameEl) {
+        const cafe = CAFES.find(c => c.name === nameEl.textContent);
+        if (cafe) {
+          const src = sel === '#cafeDetailHome' ? 'home' : sel === '#cafeDetailMood' ? 'mood' : 'fav';
+          renderCafeDetail(cafe.id, src);
         }
       }
-    } else {
-      notLogged.style.display = 'block';
-      logged.style.display = 'none';
     }
-  }
-
-  function showFavoritSection() {
-    const sec = document.getElementById('favoritSection');
-    if (sec) sec.style.display = sec.style.display === 'none' ? 'block' : 'none';
-  }
-
-  const originalSwitchPage = switchPage;
-  switchPage = function(page) {
-    if (page === 'favorit') {
-      originalSwitchPage('profil');
-      document.getElementById('favoritSection').style.display = 'block';
-      renderProfil();
-      return;
-    }
-    originalSwitchPage(page);
-  };
-
-  // ========== INISIALISASI ==========
-  document.addEventListener('DOMContentLoaded', () => {
-    loadFromStorage();
-    renderCafes();
-    renderBlogs();
-    switchPage('home');
-    const favBtn = document.querySelector('button[onclick="switchPage(\'favorit\')"]');
-    if (favBtn) favBtn.onclick = () => { switchPage('favorit'); };
   });
+}
+function handleOrder(cafeId) {
+  const cafe = findCafe(cafeId);
+  if (!cafe) return;
+  state.stats.chat++;
+  storage.saveStats();
+  const message = `Halo ${cafe.name}, saya menemukan cafe ini lewat Ngafeeling (mood: ${cafe.mood}). Mohon info ketersediaan dan menu. Terima kasih!`;
+  const phone = cafe.contact.replace(/\D/g, '').replace(/^0/, '62');
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+}
+function pickMood(m) { state.filter.mood = m; renderWizard(); }
+function pickLoc(l)  { state.filter.location = l; renderWizard(); }
+function pickFac(f) {
+  const i = state.filter.facilities.indexOf(f);
+  if (i === -1) state.filter.facilities.push(f);
+  else state.filter.facilities.splice(i, 1);
+  renderWizard();
+}
+function resetWizard() {
+  state.filter = { mood: null, location: null, facilities: [] };
+  state.wizardStep = 1;
+  $('#hasilRekomendasi').classList.add('d-none');
+  $('#cafeDetailMood').innerHTML = '';
+  renderWizard();
+}
+function nextStep() {
+  if (state.wizardStep === 1 && !state.filter.mood) return;
+  if (state.wizardStep === 2 && !state.filter.location) return;
+  if (state.wizardStep < 3) { state.wizardStep++; renderWizard(); scrollToEl($('.wizard-step:not(.d-none)')); }
+}
+function prevStep() {
+  if (state.wizardStep > 1) { state.wizardStep--; renderWizard(); scrollToEl($('.wizard-step:not(.d-none)')); }
+}
+function submitWizard() { renderHasil(); }
+
+/* ============================== EVENTS ============================== */
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-nav],[data-cafe-id],[data-favorite-id],[data-order-id],[data-shortcut-mood],[data-mood-pick],[data-loc-pick],[data-fac-pick],[data-wizard],[data-close-detail],[data-auth-tab]');
+  if (!t) return;
+  if (t.dataset.authTab) { e.preventDefault(); switchAuthTab(t.dataset.authTab); return; }
+  if (t.dataset.nav) {
+    e.preventDefault();
+    if (!state.user) { switchPage('app-login'); return; }
+    switchPage(t.dataset.nav);
+    return;
+  }
+  if (t.dataset.shortcutMood) { e.preventDefault(); showQuickResult(t.dataset.shortcutMood); return; }
+  if (t.dataset.favoriteId) { e.preventDefault(); e.stopPropagation(); toggleFavorite(t.dataset.favoriteId); return; }
+  if (t.dataset.orderId) { e.preventDefault(); handleOrder(t.dataset.orderId); return; }
+  if (t.dataset.cafeId) { e.preventDefault(); renderCafeDetail(t.dataset.cafeId, t.dataset.source || 'home'); return; }
+  if (t.dataset.closeDetail) { e.preventDefault(); $(t.dataset.closeDetail).innerHTML = ''; return; }
+  if (t.dataset.moodPick) { pickMood(t.dataset.moodPick); return; }
+  if (t.dataset.locPick)  { pickLoc(t.dataset.locPick); return; }
+  if (t.dataset.facPick)  { pickFac(t.dataset.facPick); return; }
+  if (t.dataset.wizard) {
+    e.preventDefault();
+    const a = t.dataset.wizard;
+    if (a === 'next')   nextStep();
+    if (a === 'prev')   prevStep();
+    if (a === 'submit') submitWizard();
+    if (a === 'reset')  resetWizard();
+    return;
+  }
+});
+document.addEventListener('submit', (e) => {
+  if (e.target.id === 'formLogin') { e.preventDefault(); handleLogin(e); }
+  if (e.target.id === 'formRegister') { e.preventDefault(); handleRegister(e); }
+});
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#logoutBtn')) { e.preventDefault(); handleLogout(); }
+  if (e.target.closest('#closeQuickResult')) { e.preventDefault(); closeQuickResult(); }
+  if (e.target.closest('#resetDataBtn')) {
+    if (confirm('Yakin ingin reset semua data? Favorit, riwayat, dan statistik akan dihapus.')) {
+      storage.resetAll();
+      state.favorites = []; state.history = []; state.stats = { pencarian: 0, dilihat: 0, chat: 0 };
+      renderProfil();
+      alert('Data berhasil direset.');
+    }
+  }
+});
+
+/* ============================== INIT ============================== */
+function init() {
+  const session = storage.loadSession();
+  if (session) { state.user = session; enterApp(); }
+  else { showAppShell(false); switchPage('app-login'); }
+  renderShortcutMood();
+  renderWizard();
+}
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
